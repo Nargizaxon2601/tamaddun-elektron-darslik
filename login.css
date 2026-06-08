@@ -1,0 +1,193 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Nunito", sans-serif;
+}
+
+body {
+  min-height: 100vh;
+
+  background: url("../images/login-bg.png");
+
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  position: relative;
+  overflow: hidden;
+}
+
+/* Overlay */
+
+.overlay {
+  position: absolute;
+  inset: 0;
+
+  background: rgba(255, 255, 255, 0.08);
+
+  backdrop-filter: blur(3px);
+}
+
+/* Login Card */
+
+.login-card {
+  width: 100%;
+  max-width: 600px;
+
+  background: rgba(255, 255, 255, 0.92);
+
+  border-radius: 35px;
+
+  padding: 50px;
+
+  text-align: center;
+
+  position: relative;
+  z-index: 10;
+
+  box-shadow: 0 25px 70px rgba(0, 0, 0, 0.18);
+}
+
+/* Logo */
+
+.logo {
+  width: 90px;
+
+  display: block;
+
+  margin: 0 auto 15px;
+}
+
+.login-card h1 {
+  font-size: 70px;
+
+  color: #153b7a;
+
+  font-weight: 900;
+
+  margin-bottom: 10px;
+}
+
+.login-card h3 {
+  font-size: 32px;
+
+  color: #2ea76d;
+
+  margin-bottom: 30px;
+}
+
+/* Error */
+
+.error {
+  background: #ffe6e6;
+
+  color: #d00000;
+
+  padding: 12px;
+
+  border-radius: 12px;
+
+  margin-bottom: 20px;
+}
+
+/* Form */
+
+.login-card form {
+  display: flex;
+  flex-direction: column;
+
+  gap: 18px;
+}
+
+.login-card input {
+  width: 100%;
+
+  padding: 18px 20px;
+
+  border: none;
+
+  border-radius: 15px;
+
+  background: #f5f7fb;
+
+  font-size: 18px;
+
+  outline: none;
+
+  transition: 0.3s;
+}
+
+.login-card input:focus {
+  background: #ffffff;
+
+  box-shadow: 0 0 0 4px rgba(33, 150, 243, 0.2);
+}
+
+/* Button */
+
+.login-card button {
+  border: none;
+
+  border-radius: 15px;
+
+  padding: 18px;
+
+  font-size: 24px;
+
+  font-weight: 800;
+
+  color: white;
+
+  cursor: pointer;
+
+  background: linear-gradient(135deg, #2dbd74, #42d98b);
+
+  transition: 0.3s;
+}
+
+.login-card button:hover {
+  transform: translateY(-3px);
+
+  box-shadow: 0 12px 25px rgba(45, 189, 116, 0.35);
+}
+
+/* Bottom Text */
+
+.login-card p {
+  margin-top: 25px;
+
+  font-size: 18px;
+
+  color: #444;
+}
+
+.login-card a {
+  color: #2962ff;
+
+  text-decoration: none;
+
+  font-weight: 800;
+}
+
+/* Responsive */
+
+@media (max-width: 768px) {
+  .login-card {
+    width: 95%;
+
+    padding: 30px;
+  }
+
+  .login-card h1 {
+    font-size: 48px;
+  }
+
+  .login-card h3 {
+    font-size: 26px;
+  }
+}

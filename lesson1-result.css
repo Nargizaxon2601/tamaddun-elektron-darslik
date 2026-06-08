@@ -1,0 +1,408 @@
+/* ==========================
+   LESSON 1 RESULT
+========================== */
+
+.result-container {
+  max-width: 1500px;
+  margin: 30px auto;
+  padding: 0 20px;
+}
+
+.result-card {
+  background: #fff;
+
+  border-radius: 30px;
+
+  overflow: hidden;
+
+  display: flex;
+
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+
+  border: 1px solid #e7eef7;
+}
+
+.result-left {
+  width: 42%;
+
+  padding: 40px;
+}
+
+.result-right {
+  width: 58%;
+}
+
+.result-right img {
+  width: 100%;
+
+  height: 100%;
+
+  object-fit: cover;
+
+  display: block;
+}
+
+/* ==========================
+   BADGE
+========================== */
+
+.result-badge {
+  display: inline-flex;
+
+  align-items: center;
+
+  gap: 12px;
+
+  background: #eef9ee;
+
+  border: 2px solid #d9efd9;
+
+  color: #15803d;
+
+  padding: 14px 24px;
+
+  border-radius: 20px;
+
+  font-size: 18px;
+
+  font-weight: 800;
+
+  margin-bottom: 30px;
+}
+
+/* ==========================
+   TITLE
+========================== */
+
+.result-title {
+  display: flex;
+
+  align-items: center;
+
+  gap: 15px;
+
+  color: #15803d;
+
+  font-size: 44px;
+
+  font-weight: 900;
+
+  margin-bottom: 20px;
+}
+
+.result-icon {
+  width: 70px;
+
+  height: 70px;
+
+  border-radius: 50%;
+
+  background: #16a34a;
+
+  color: #fff;
+
+  display: flex;
+
+  justify-content: center;
+
+  align-items: center;
+
+  font-size: 34px;
+}
+
+.result-subtitle {
+  color: #15803d;
+
+  font-size: 30px;
+
+  font-weight: 900;
+
+  margin-bottom: 20px;
+}
+
+.result-text {
+  font-size: 22px;
+
+  line-height: 1.8;
+
+  color: #333;
+
+  margin-bottom: 30px;
+}
+
+/* ==========================
+   VALUE
+========================== */
+
+.value-box {
+  background: #f8fff8;
+
+  border: 2px solid #d9efd9;
+
+  border-radius: 25px;
+
+  padding: 25px;
+
+  display: flex;
+
+  gap: 20px;
+
+  align-items: center;
+
+  margin-bottom: 25px;
+}
+
+.value-icon {
+  width: 90px;
+
+  height: 90px;
+
+  border-radius: 50%;
+
+  background: #16a34a;
+
+  color: #fff;
+
+  display: flex;
+
+  justify-content: center;
+
+  align-items: center;
+
+  font-size: 42px;
+
+  flex-shrink: 0;
+}
+
+.value-content h3 {
+  color: #15803d;
+
+  font-size: 24px;
+
+  margin-bottom: 10px;
+}
+
+.value-content p {
+  font-size: 20px;
+
+  line-height: 1.6;
+}
+
+/* ==========================
+   SCORE
+========================== */
+
+.score-box {
+  background: #fff9e7;
+
+  border: 2px solid #f4d56b;
+
+  border-radius: 25px;
+
+  padding: 25px;
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 20px;
+}
+
+.score-icon {
+  font-size: 80px;
+}
+
+.score-text h3 {
+  font-size: 22px;
+
+  color: #5b3c00;
+}
+
+.score-number {
+  font-size: 70px;
+
+  font-weight: 900;
+
+  line-height: 1;
+
+  color: #16a34a;
+}
+
+.score-name {
+  font-size: 24px;
+
+  font-weight: 800;
+
+  color: #15803d;
+}
+
+/* ==========================
+   MOTIVATSIYA
+========================== */
+
+.motivation-box {
+  margin-top: 20px;
+
+  background: #fffdf5;
+
+  border: 2px solid #f5e4a4;
+
+  border-radius: 25px;
+
+  padding: 25px;
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 20px;
+}
+
+.motivation-icon {
+  width: 80px;
+
+  height: 80px;
+
+  border-radius: 50%;
+
+  background: #fff3c4;
+
+  display: flex;
+
+  justify-content: center;
+
+  align-items: center;
+
+  font-size: 40px;
+
+  flex-shrink: 0;
+}
+
+.motivation-text h3 {
+  font-size: 28px;
+
+  color: #7c4a00;
+
+  margin-bottom: 5px;
+}
+
+.motivation-text p {
+  font-size: 22px;
+}
+
+/* ==========================
+   PASTKI NAVIGATSIYA
+========================== */
+
+.bottom-nav {
+  margin-top: 20px;
+
+  background: #fff;
+
+  border-radius: 25px;
+
+  padding: 18px 25px;
+
+  display: flex;
+
+  justify-content: space-between;
+
+  align-items: center;
+
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+}
+
+.back-btn {
+  border: 2px solid #d9b7ff;
+
+  color: #8b3fd6;
+
+  text-decoration: none;
+
+  padding: 18px 30px;
+
+  border-radius: 20px;
+
+  font-size: 22px;
+
+  font-weight: 900;
+}
+
+.next-btn {
+  background: #16a34a;
+
+  color: #fff;
+
+  text-decoration: none;
+
+  padding: 18px 40px;
+
+  border-radius: 20px;
+
+  font-size: 22px;
+
+  font-weight: 900;
+}
+
+.progress {
+  display: flex;
+
+  gap: 18px;
+
+  align-items: center;
+}
+
+.step {
+  width: 60px;
+
+  height: 60px;
+
+  border-radius: 50%;
+
+  background: #edf1f5;
+
+  color: #64748b;
+
+  display: flex;
+
+  justify-content: center;
+
+  align-items: center;
+
+  font-size: 28px;
+
+  font-weight: 900;
+}
+
+.step.done {
+  background: #dff5df;
+
+  color: #15803d;
+}
+
+.step.active {
+  background: #1d74ff;
+
+  color: #fff;
+}
+
+/* ==========================
+   RESPONSIVE
+========================== */
+
+@media (max-width: 1100px) {
+  .result-card {
+    flex-direction: column;
+  }
+
+  .result-left,
+  .result-right {
+    width: 100%;
+  }
+
+  .bottom-nav {
+    flex-direction: column;
+
+    gap: 20px;
+  }
+}
