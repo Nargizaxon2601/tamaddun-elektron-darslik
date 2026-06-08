@@ -96,20 +96,11 @@
 
         <div class="finish-right">
 
-    <img
-    src="images/lesson1-finish.png"
-    alt="Motivatsiya"
-    style="
-        width:1000px;
-        max-width:100%;
-        height:auto;
-        max-height:500px;
-        object-fit:contain;
-        display:block;
-        margin:auto;
-    ">
+            <img
+            src="images/lesson1-finish.png"
+            alt="Motivatsiya">
 
-</div>
+        </div>
 
     </div>
 
@@ -135,13 +126,13 @@
 
         </div>
 
-       <a
-href="lesson1-theory.php"
-class="next-btn">
+        <a
+        href="index.php"
+        class="next-btn">
 
-    DARSNI O‘QISH →
+            BOSH SAHIFA →
 
-</a>
+        </a>
 
     </div>
 
