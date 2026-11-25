@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="uz">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>TAMADDUN — Interaktiv dars</title>
+    <link rel="stylesheet" href="darslar.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <a href="index.html" class="brand">
+        <span class="brand-logo">📚</span>
+        <span><b>TAMADDUN</b><small>Bilim va qadriyatlar olami</small></span>
+      </a>
+      <nav class="main-nav">
+        <a href="index.html">🏠 Bosh sahifa</a>
+        <a href="darslar.html" class="active">📖 Darslar</a>
+        <a href="#">⭐ Yutuqlar</a>
+        <a href="#">▥ Mening natijam</a>
+      </nav>
+      <div class="user-grade">👦 <span id="topGrade">1-sinf</span></div>
+    </header>
+
+    <!-- FAN VA SINF TANLASH -->
+    <section class="catalog-screen" id="catalogScreen">
+      <div class="catalog-intro">
+        <span>TAMADDUN BILAN O‘RGANAMIZ</span>
+        <h1>Bilimlar olamiga xush kelibsiz!</h1>
+        <p>Avval sinfni, keyin o‘rganmoqchi bo‘lgan fanni tanlang.</p>
+      </div>
+
+      <div class="catalog-content">
+        <section class="catalog-card">
+          <h2>🎒 Sinfni tanlang</h2>
+          <div class="grade-list">
+            <button class="grade-choice active" data-grade="1">1-sinf</button>
+            <button class="grade-choice" data-grade="2">2-sinf</button>
+            <button class="grade-choice" data-grade="3">3-sinf</button>
+            <button class="grade-choice" data-grade="4">4-sinf</button>
+          </div>
+        </section>
+
+        <section class="catalog-card">
+          <span class="eyebrow">KEYINGI QADAM</span>
+          <h2>Qaysi fan darsligini ochamiz?</h2>
+          <div class="subject-options">
+            <button
+              class="subject-choice tarbiya-choice"
+              data-subject="tarbiya"
+            >
+              <span class="subject-art">💛</span>
+              <b>Tarbiya</b>
+              <small
+                >Yaxshi odatlar, ezgu fazilatlar va hayotiy ko‘nikmalar</small
+              >
+              <span class="choose-label">Fanni tanlash →</span>
+            </button>
+            <button
+              class="subject-choice technology-choice"
+              data-subject="texnologiya"
+            >
+              <span class="subject-art">✂️</span>
+              <b>Texnologiya</b>
+              <small>Mehnat, ijodiy g‘oyalar va foydali buyumlar</small>
+              <span class="choose-label">Fanni tanlash →</span>
+            </button>
+          </div>
+        </section>
+      </div>
+    </section>
+
+
+<main class="adventure-screen hidden" id="quarterScreen"><section class="adventure-heading"><a class="adventure-back" href="index.html">← Bosh sahifa</a><span class="eyebrow">TAMADDUN SARGUZASHTI</span><h1 id="adventureTitle"></h1><p id="adventureSubtitle"></p></section><section class="adventure-map-board" id="quarterGrid" aria-label="Chorak tanlash xaritasi"></section><p class="map-hint">Davom etish uchun xaritadagi chorak nomini bosing.</p></main>
+<main class="adventure-screen hidden" id="quarterMapScreen"><section class="adventure-heading map-heading" id="quarterMapHeading"><button class="adventure-back" id="backToQuarters">← Choraklar xaritasi</button><span class="eyebrow">TEXNOLOGIYA · 1-SINF</span><h1 id="quarterMapTitle"></h1><p id="quarterMapDescription"></p></section><div class="map-controls"><button class="map-action secondary" id="previousQuarter">← Oldingi chorak</button><button class="map-action secondary" id="nextQuarter">Keyingi chorak →</button></div><section class="adventure-map" id="adventureMap"></section></main>
+    <main class="lesson-intro-screen hidden" id="lessonIntroScreen" aria-label="1-darsga kirish">
+      <div class="lesson-intro-art">
+        <img src="images/1_tex_1s_1dars_kirish.png" alt="1-dars: Texnologiyaga ilk qadam — sarguzasht boshlanishi" />
+        <button type="button" class="lesson-intro-control intro-back-control" id="introBackToMap" aria-label="Xaritaga qaytish"><span class="intro-control-icon" aria-hidden="true">←</span><span class="intro-control-label">Xaritaga qaytish</span></button>
+        <button type="button" class="lesson-intro-control intro-continue-control" id="introContinue" aria-label="Darsning birinchi bosqichini boshlash"><span class="intro-control-icon" aria-hidden="true">→</span><span class="intro-control-label">Darsni boshlash</span></button>
+      </div>
+    </main>
+    <main class="lesson-intro-screen lesson-problem-screen hidden" id="problemSituationScreen" aria-label="Muammoli vaziyat: xavfsiz ish usulini tanlang">
+      <div class="problem-scene">
+        <img src="images/1_tex_1s_1dars_muammoli_vaziyat.png" alt="Muammoli vaziyat: ish qurollaridan xavfsiz va tartibli foydalanish" />
+        <button type="button" class="problem-choice unsafe-choice" data-problem-choice="unsafe" aria-label="Noto‘g‘ri holat: qaychi bilan ehtiyotsiz ishlash"><span class="sr-only">Noto‘g‘ri holatni tanlash</span></button>
+        <button type="button" class="problem-choice safe-choice" data-problem-choice="safe" aria-label="To‘g‘ri holat: qaychidan xavfsiz foydalanish"><span class="sr-only">To‘g‘ri holatni tanlash</span></button>
+        <button type="button" class="problem-mascot-hotspot robot-hotspot" aria-label="Robotchani ajratib ko‘rish" aria-pressed="false"><img class="character-cutout robot-cutout" src="images/1_tex_1s_1dars_muammoli_vaziyat.png" alt="" aria-hidden="true" /></button>
+        <button type="button" class="problem-mascot-hotspot fox-hotspot" aria-label="Tulkini ajratib ko‘rish" aria-pressed="false"><img class="character-cutout fox-cutout" src="images/1_tex_1s_1dars_muammoli_vaziyat.png" alt="" aria-hidden="true" /></button>
+        <button type="button" class="lesson-intro-control problem-back-control" id="problemBackToIntro" aria-label="Kirish sahifasiga qaytish"><span class="intro-control-icon" aria-hidden="true">←</span><span class="intro-control-label">Kirishga qaytish</span></button>
+        <button type="button" class="lesson-intro-control intro-continue-control problem-continue-control" id="problemContinue" aria-label="Keyingi bosqichga o‘tish" disabled><span class="intro-control-icon" aria-hidden="true">→</span><span class="intro-control-label">Davom etish</span></button>
+      </div>
+      <p class="problem-feedback" id="problemFeedback" aria-live="polite">Ikki holatni solishtiring. Qaysi biri xavfsiz?</p>
+    </main>
+    <!-- INTERAKTIV DARSLIK -->
+    <main class="learning-screen hidden" id="learningScreen">
+      <aside class="lesson-sidebar">
+        <button class="map-action secondary return-map" id="returnToMap">← Xarita</button>
+        <div class="sidebar-title">
+          <span class="sidebar-subject-icon" id="sidebarIcon">✂️</span>
+          <div>
+            <h2 id="sidebarSubject">Texnologiya</h2>
+            <p id="sidebarGrade">1-sinf</p>
+          </div>
+        </div>
+        <div class="lesson-menu" id="lessonMenu"></div>
+        <div class="sidebar-decoration">🌳 🏡 🌼</div>
+      </aside>
+
+      <section class="lesson-center">
+        <section class="lesson-hero">
+          <div class="hero-topline">
+            <span class="lesson-number" id="lessonNumber">💡 1-BOSQICH</span>
+            <div class="hero-goal">
+              <span>🎯</span>
+              <div>
+                <b>Bugungi maqsad</b>
+                <p id="heroGoal"></p>
+              </div>
+            </div>
+          </div>
+
+          <div class="hero-main">
+            <div class="hero-copy">
+              <h1 id="heroTitle">Darsga kirish</h1>
+              <div class="speech-bubble">
+                <p id="heroGreeting"></p>
+              </div>
+            </div>
+            <div class="hero-picture">
+              <img
+                id="heroImage"
+                src="images/_hero_banner.png"
+                alt="Dars tasviri"
+              />
+            </div>
+          </div>
+
+          <div class="hero-bottom">
+            <h3 id="heroQuestionTitle">Bugungi darsimiz</h3>
+            <div class="object-strip" id="objectStrip"></div>
+          </div>
+        </section>
+
+        <section class="stage-workspace">
+          <div class="workspace-heading">
+            <div>
+              <span class="eyebrow" id="stageEyebrow">1-BOSQICH</span>
+              <h2 id="stageTitle">Darsga kirish</h2>
+            </div>
+            <span class="stage-count" id="stageCount">1 / 8</span>
+          </div>
+
+          <div class="workspace-body">
+            <div class="workspace-image">
+              <img
+                id="stageImage"
+                src="images/_hero_banner.png"
+                alt="Bosqich rasmi"
+              />
+            </div>
+            <div class="workspace-content" id="stageContent"></div>
+          </div>
+
+          <div class="workspace-controls">
+            <button class="control-btn previous-btn" id="previousStage">
+              ← Oldingi
+            </button>
+            <button class="control-btn done-btn" id="doneStage">
+              Bajardim ✓
+            </button>
+            <button class="control-btn next-btn" id="nextStage">
+              Keyingi →
+            </button>
+          </div>
+        </section>
+
+        <div class="bottom-stage-nav" id="bottomStageNav"></div>
+      </section>
+
+      <aside class="lesson-rightbar">
+        <div class="mascot-card">
+          <img src="images/robot.png" alt="Robot yordamchi" />
+          <div class="mascot-message">
+            <b>Ajoyib!</b>
+            <p>Birgalikda yangi bilimlarni kashf qilamiz!</p>
+          </div>
+        </div>
+
+        <div class="right-card progress-card">
+          <div class="right-card-heading">
+            <h3>Dars jarayoni</h3>
+            <b id="progressFraction">0 / 8</b>
+          </div>
+          <div class="progress-track"><div id="progressFill"></div></div>
+          <div class="achievement-row">
+            <div>⭐<b id="scoreValue">0</b><small>Ballar</small></div>
+            <div>👑<b id="completedValue">0</b><small>Yutuqlar</small></div>
+            <div>🔥<b id="streakValue">0</b><small>Ketma-ketlik</small></div>
+          </div>
+        </div>
+
+        <div class="right-card advice-card">
+          <span>💡</span>
+          <div>
+            <h3>Bilimdon maslahati</h3>
+            <p id="adviceText">Diqqat bilan o‘rganing!</p>
+          </div>
+        </div>
+      </aside>
+    </main>
+
+    <script src="darslar.js"></script>
+  </body>
+</html>

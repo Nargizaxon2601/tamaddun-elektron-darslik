@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="uz">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>TAMADDUN | Texnologiyaga ilk qadam</title>
+    <link rel="stylesheet" href="dars-sahifa.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <header class="topbar">
+      <a class="brand" href="index.html">
+        <span class="brand-icon">📖</span>
+        <span><b>TAMADDUN</b><small>Bilim va qadriyatlar olami</small></span>
+      </a>
+      <nav>
+        <a href="index.html">🏠 Bosh sahifa</a>
+        <a class="active" href="darslar.html">📚 Darslar</a>
+        <a href="#">⭐ Yutuqlar</a>
+        <a href="#">📊 Natijalar</a>
+      </nav>
+      <div class="student">
+        <span class="avatar">👦🏻</span>
+        <span><b>Shahzod</b><small>1-sinf</small></span>
+      </div>
+    </header>
+
+    <main class="layout">
+      <aside class="left-panel">
+        <a class="back-link" href="darslar.html?subject=texnologiya">← Barcha darslarga</a>
+        <div class="subject">
+          <span>✂️</span>
+          <div><b>Texnologiya</b><small>1-sinf</small></div>
+        </div>
+        <div class="lesson-menu">
+          <p>1-SINF DARSLARI</p>
+          <a class="lesson active" href="texnologiya-1-dars-01.html">
+            <span>01</span><b>Texnologiyaga ilk qadam</b>
+          </a>
+          <a class="lesson locked" href="#"
+            ><span>02</span><b>Keyingi dars</b><i>🔒</i></a
+          >
+          <a class="lesson locked" href="#"
+            ><span>03</span><b>Keyingi dars</b><i>🔒</i></a
+          >
+          <a class="lesson locked" href="#"
+            ><span>04</span><b>Keyingi dars</b><i>🔒</i></a
+          >
+        </div>
+        <div class="sidebar-mascot">🦊</div>
+        <div class="sidebar-tip">
+          <b>Bilasanmi?</b
+          ><small>Har bir yangi bilim seni yanada mohir qiladi!</small>
+        </div>
+      </aside>
+
+      <section class="center">
+        <section class="hero">
+          <div class="hero-label">✂️ TEXNOLOGIYA · 1-SINF</div>
+          <div class="hero-content">
+            <span class="lesson-tag">1-DARS</span>
+            <h1>Texnologiyaga<br />ilk qadam</h1>
+            <p>
+              Yangi bilimlar, qiziqarli mashg‘ulotlar va ijodkorlik olamiga xush
+              kelibsan!
+            </p>
+            <button class="primary-btn" id="startBtn">
+              🚀 Darsni boshlash
+            </button>
+          </div>
+          <div class="hero-art">
+            <div class="floating f1">⭐</div>
+            <div class="floating f2">✂️</div>
+            <div class="floating f3">🎨</div>
+            <div class="hero-kids">👧🏻　👦🏻</div>
+            <div class="hero-books">📚 🖍️ 📐</div>
+          </div>
+        </section>
+
+        <div class="section-title">
+          <div>
+            <small>BIRGALIKDA O‘RGANAMIZ</small>
+            <h2>Dars bosqichlari</h2>
+          </div>
+          <span class="step-counter" id="stepCounter">0 / 8 bajarildi</span>
+        </div>
+
+        <section class="stages" id="stages">
+          <button class="stage s1" data-step="0">
+            <span class="num">1</span><span class="emoji">💡</span
+            ><b>Darsga kirish</b><small>Qiziqarli boshlanish</small>
+          </button>
+          <button class="stage s2" data-step="1">
+            <span class="num">2</span><span class="emoji">💬</span
+            ><b>Vaziyat va tahlil</b><small>O‘yla va javob ber</small>
+          </button>
+          <button class="stage s3" data-step="2">
+            <span class="num">3</span><span class="emoji">🧠</span
+            ><b>Takrorlash o‘yini</b><small>Bilimingni esla</small>
+          </button>
+          <button class="stage s4" data-step="3">
+            <span class="num">4</span><span class="emoji">📖</span
+            ><b>Yangi mavzu</b><small>Darslik bilan tanishuv</small>
+          </button>
+          <button class="stage s5" data-step="4">
+            <span class="num">5</span><span class="emoji">🏃</span
+            ><b>Jismoniy daqiqa</b><small>Birga harakat qilamiz</small>
+          </button>
+          <button class="stage s6" data-step="5">
+            <span class="num">6</span><span class="emoji">✂️</span
+            ><b>Amaliy mashg‘ulot</b><small>O‘z qo‘ling bilan bajar</small>
+          </button>
+          <button class="stage s7" data-step="6">
+            <span class="num">7</span><span class="emoji">🎮</span
+            ><b>Mustahkamlash</b><small>Qiziqarli o‘yin</small>
+          </button>
+          <button class="stage s8" data-step="7">
+            <span class="num">8</span><span class="emoji">🏆</span
+            ><b>Yakun va rag‘bat</b><small>Yutuqlaringni ko‘r</small>
+          </button>
+        </section>
+
+        <section class="work-area" id="workArea">
+          <div class="work-heading">
+            <span class="work-icon">🌟</span>
+            <div>
+              <small>BUGUNGI MASHG‘ULOT</small>
+              <h2 id="workTitle">Darsni boshlashga tayyormisan?</h2>
+            </div>
+          </div>
+          <p id="workDescription">
+            Yuqoridagi “Darsni boshlash” tugmasini bos. Biz seni sakkizta
+            qiziqarli bosqich orqali olib boramiz.
+          </p>
+          <div class="work-bottom">
+            <span id="workStatus">Hozircha bosqich tanlanmagan</span>
+            <button class="next-btn" id="nextBtn">Boshlash →</button>
+          </div>
+        </section>
+
+        <section class="goal">
+          <span>🎯</span>
+          <div>
+            <b>Dars maqsadi</b>
+            <p>
+              Texnologiya darsidagi ish qurollari, xavfsizlik qoidalari va
+              tabiiy materiallar bilan tanishish.
+            </p>
+          </div>
+          <span class="goal-decoration">🌈</span>
+        </section>
+      </section>
+
+      <aside class="right-panel">
+        <section class="progress-card">
+          <div class="panel-title">
+            <b>Dars jarayoni</b><span id="percent">0%</span>
+          </div>
+          <div class="progress"><span id="progressFill"></span></div>
+          <div class="stats">
+            <div><span>⭐</span><b id="points">0</b><small>Ballar</small></div>
+            <div>
+              <span>🏆</span><b id="completed">0</b><small>Yutuqlar</small>
+            </div>
+            <div><span>🔥</span><b>1</b><small>Kun</small></div>
+          </div>
+        </section>
+
+        <section class="robot-card">
+          <div class="robot">🤖</div>
+          <div class="robot-message">
+            <b>Salom, do‘stim!</b>
+            <p>Har bir bosqichni bajarsang, yulduzchalar to‘playsan. Omad!</p>
+            💚
+          </div>
+        </section>
+
+        <section class="rules-card">
+          <span>🛡️</span>
+          <b>Xavfsizlikni unutma!</b>
+          <p>
+            Qaychi, yelim va boshqa ish qurollaridan ehtiyotkorlik bilan
+            foydalan.
+          </p>
+        </section>
+      </aside>
+    </main>
+
+    <script src="dars-sahifa.js"></script>
+  </body>
+</html>

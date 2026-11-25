@@ -1,0 +1,19 @@
+# Tizim fayllari
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Muharrir sozlamalari
+.vscode/
+.idea/
+*.swp
+
+# Maxfiy sozlamalar
+.env
+.env.*
+config.local.*
+
+# Vaqtinchalik fayllar
+*.log
+*.tmp
+node_modules/

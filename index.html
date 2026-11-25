@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="uz">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>TAMADDUN — Har hikoya bir saboq</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <header class="navbar">
+      <a class="brand" href="#home">
+        <span class="brand-icon">📚</span>
+        <span
+          ><strong>TAMADDUN</strong><small>Har hikoya — bir saboq!</small></span
+        >
+      </a>
+
+      <button class="menu-toggle" id="menuToggle">☰</button>
+
+      <nav id="navLinks">
+        <a class="active" href="#home">Bosh sahifa</a>
+        <a href="#about">Loyiha haqida</a>
+        <a href="darslar.html">Darslar</a>
+        <a href="#values">Qadriyatlar</a>
+        <a href="#rewards">Mukofotlar</a>
+      </nav>
+
+      <div class="nav-actions">
+        <button class="btn login" id="loginBtn">Kirish</button>
+        <button class="btn register" id="registerBtn">Ro‘yxatdan o‘tish</button>
+      </div>
+    </header>
+
+    <main id="home">
+      <section class="hero">
+        <div class="cloud cloud-a"></div>
+        <div class="cloud cloud-b"></div>
+
+        <div class="hero-inner">
+          <div class="hero-copy">
+            <div class="eyebrow">🌟 O‘RGANISH · IZLANISH · YARATISH</div>
+            <div class="hero-brand">TAMADDUN</div>
+
+            <h1>
+              Har hikoya — bir saboq,<br />
+              har qaror — bir qadriyat!
+            </h1>
+
+            <p>
+              Tarbiya va Texnologiya darsliklarini bir joyda toping. Sinfni
+              tanlang, kitob mavzularini ketma-ket o‘rganing.
+            </p>
+
+            <div class="hero-buttons">
+              <a class="btn primary" href="#subjects">🚀 Darslarni boshlash</a>
+              <a class="btn secondary" href="#about">📖 Loyiha haqida</a>
+            </div>
+
+            <div class="hero-stats">
+              <span>📚 <b>2 fan</b></span>
+              <span>🧩 <b>Interaktiv topshiriqlar</b></span>
+              <span>🏆 <b>Yutuqlar</b></span>
+            </div>
+          </div>
+
+          <div class="hero-picture">
+            <img
+              src="hero-illustration.jpg"
+              alt="Bolalar ochiq kitob orqali bilim olmoqda"
+            />
+            <span class="float-tag idea">✨ Yangi g‘oya!</span>
+            <span class="float-tag points">⭐ +10 ball</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- FANLAR -->
+      <section class="subjects section-wrap" id="subjects">
+        <div class="section-heading">
+          <div>
+            <span class="eyebrow">BILIM OLAMIGA XUSH KELIBSIZ</span>
+            <h2>Qaysi fan darsligini ochamiz?</h2>
+          </div>
+          <p>O‘zingizga yoqqan fanni tanlang</p>
+        </div>
+
+        <div class="subject-grid">
+          <article class="subject-card tarbiya">
+            <div class="subject-symbol">💛</div>
+            <div class="subject-text">
+              <span class="tag yellow">Qadriyatlar olami</span>
+              <h3>Tarbiya</h3>
+              <p>Yaxshi odatlar, ezgu fazilatlar va hayotiy ko‘nikmalar.</p>
+              <button class="arrow-btn" data-subject="Tarbiya">›</button>
+            </div>
+            <div class="card-art">🤗</div>
+          </article>
+
+          <article class="subject-card texnologiya">
+            <div class="subject-symbol">🛠️</div>
+            <div class="subject-text">
+              <span class="tag blue">Yaratish va kashf etish</span>
+              <h3>Texnologiya</h3>
+              <p>Amaliy ko‘nikmalar, ijodiy g‘oyalar va foydali loyihalar.</p>
+              <button class="arrow-btn" data-subject="Texnologiya">›</button>
+            </div>
+            <div class="card-art">✂️</div>
+          </article>
+        </div>
+      </section>
+
+      <!-- O‘RGANISH USULLARI -->
+      <section class="features section-wrap" id="about">
+        <div class="section-heading">
+          <div>
+            <span class="eyebrow">QANDAY O‘RGANAMIZ?</span>
+            <h2>Har bir dars — kichik sarguzasht</h2>
+          </div>
+        </div>
+
+        <div class="feature-grid">
+          <article tabindex="0" role="button" data-feature="O‘qi va tushun">
+            <span>📖</span>
+            <h3>O‘qi va tushun</h3>
+            <p>Mavzu bilan tanishib, yangi bilimlarni kashf et.</p>
+          </article>
+
+          <article tabindex="0" role="button" data-feature="Fikr yurit">
+            <span>💭</span>
+            <h3>Fikr yurit</h3>
+            <p>Vaziyatni tahlil qil va o‘z qaroringni tanla.</p>
+          </article>
+
+          <article tabindex="0" role="button" data-feature="Amalda bajar">
+            <span>✋</span>
+            <h3>Amalda bajar</h3>
+            <p>Bilimingni mashq va ijodiy topshiriqlarda sinab ko‘r.</p>
+          </article>
+
+          <article tabindex="0" role="button" data-feature="Yutuqqa erish">
+            <span>🏆</span>
+            <h3>Yutuqqa erish</h3>
+            <p>Ball to‘pla va o‘z yutuqlaringni ko‘r.</p>
+          </article>
+        </div>
+      </section>
+
+      <!-- QADRIYATLAR -->
+      <section class="values" id="values">
+        <div class="section-wrap">
+          <div class="section-heading">
+            <div>
+              <span class="eyebrow">BIZNING QADRIYATLARIMIZ</span>
+              <h2>Yaxshilikni birga o‘rganamiz</h2>
+            </div>
+            <p>Har kuni bir yaxshi amal!</p>
+          </div>
+
+          <div class="value-list">
+            <button class="value-chip" data-value="🤝 Mehr-shafqat">
+              🤝 Mehr-shafqat
+            </button>
+            <button class="value-chip" data-value="🫶 Do‘stlik">
+              🫶 Do‘stlik
+            </button>
+            <button class="value-chip" data-value="🇺🇿 Vatanparvarlik">
+              Vatanparvarlik
+            </button>
+            <button class="value-chip" data-value="🙏 Hurmat">🙏 Hurmat</button>
+            <button class="value-chip" data-value="🌱 Mas’uliyat">
+              🌱 Mas’uliyat
+            </button>
+            <button class="value-chip" data-value="💡 Bilimga intilish">
+              💡 Bilimga intilish
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- YAKUNIY TAKLIF -->
+      <section class="bottom-cta section-wrap" id="rewards">
+        <div>
+          <span class="eyebrow">TAYYORMISIZ?</span>
+          <h2>Bilim sari ilk qadamingizni qo‘ying!</h2>
+          <p>
+            Fan va sinfni tanlang. Darslik mavzularini keyingi bosqichda kitob
+            asosida birma-bir qo‘shamiz.
+          </p>
+        </div>
+        <a class="btn primary" href="#subjects">Darslarni boshlash →</a>
+      </section>
+    </main>
+
+    <footer>
+      <div class="footer-inner">
+        <a class="brand" href="#home">
+          <span class="brand-icon">📚</span>
+          <span
+            ><strong>TAMADDUN</strong
+            ><small>Bilim va qadriyatlar olami</small></span
+          >
+        </a>
+        <span>© 2026 TAMADDUN · Ta’lim uchun yaratilgan loyiha</span>
+      </div>
+    </footer>
+
+    <!-- XABAR OYNASI -->
+    <div class="modal-backdrop" id="modal" hidden>
+      <div class="modal" role="dialog" aria-modal="true">
+        <button class="modal-close" id="modalClose">×</button>
+        <div class="modal-icon">🎒</div>
+        <h2 id="modalTitle">TAMADDUN’ga xush kelibsiz!</h2>
+        <p id="modalText"></p>
+        <button class="btn primary" id="modalOk">Tushunarli</button>
+      </div>
+    </div>
+
+    <script src="app.js"></script>
+  </body>
+</html>
