@@ -616,6 +616,18 @@ body.lesson-problem-active .topbar { display: none; }
 .l2-scene.fold-cutting > .fold-cut { animation: fold-cut .9s ease-in-out var(--d) forwards; }
 @keyframes fold-cut { to { transform: scaleX(1); } }
 .l2-scene > .fold-restart.hidden { display: none; }
+/* 2-dars 4-bosqich 3/4: tasmadan shakllar */
+.l2-scene > .shape-step { z-index: 3; border-radius: 1.6cqw; transition: transform .2s cubic-bezier(.2,.8,.2,1.4), box-shadow .18s, background .18s; }
+.l2-scene > .shape-step:hover, .l2-scene > .shape-step:focus-visible { transform: translateY(-4px) scale(1.03); background: rgba(255,255,255,.14) !important; box-shadow: 0 0 0 .3cqw #fff, 0 0 0 .6cqw rgba(124,77,255,.45); outline: none; }
+.l2-scene > .shape-step.is-done { box-shadow: 0 0 0 .3cqw #4cd964, 0 0 1.4cqw rgba(76,217,100,.6); }
+.l2-scene > .shape-step.is-current { box-shadow: 0 0 0 .35cqw #ffb21a, 0 0 2cqw rgba(255,178,26,.85); animation: l2-bob 1.2s ease-in-out infinite; }
+.l2-scene > .shape-step.is-wrong { animation: fold-shake .45s; box-shadow: 0 0 0 .3cqw #ff5252; }
+.l2-scene > .shape-step.is-target { box-shadow: 0 0 0 .4cqw #4cd964, 0 0 2.4cqw rgba(76,217,100,.9); animation: l2-bob 1s ease-in-out infinite; }
+.l2-scene > .shape-badge { width: 2.8cqw; height: 2.8cqw; font-size: 1.5cqw; }
+.l2-scene > .shape-name { position: absolute; z-index: 4; pointer-events: none; transform: translate(-50%, -50%) scale(0); white-space: nowrap; padding: .45cqw 1.1cqw; border-radius: 99px;
+  background: linear-gradient(180deg,#ffd54a,#ffb21a); color: #5a3a00; font-family: inherit; font-weight: 900; font-size: 1.25cqw; box-shadow: 0 0 0 .22cqw #fff, 0 .3cqw .8cqw rgba(0,0,0,.25);
+  transition: transform .4s cubic-bezier(.2,.8,.2,1.6); }
+.l2-scene > .shape-name.is-on { transform: translate(-50%, -50%) scale(1); }
 @media (max-width: 600px) {
   .lesson-intro-screen { padding: 6px; }
   .lesson-intro-art { width: min(100%, calc((100vh - 12px) * 1.7779)); }

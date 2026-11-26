@@ -1870,6 +1870,88 @@ document.addEventListener("DOMContentLoaded", () => {
     });
     restart.addEventListener("click", reset);
   })();
+  // 2-dars 4-bosqich 3/4: har qatorda qadamlarni tartib bilan bosib shakl yasash, so'ng «Shaklni top»
+  (function setupShapeSteps() {
+    const steps = Array.from(document.querySelectorAll(".shape-step"));
+    if (!steps.length) return;
+    const scene = steps[0].parentElement;
+    const page = scene.closest("[data-l2-page]");
+    const feedback = page.querySelector(".l2-feedback");
+    const quizBtn = document.getElementById("shapeQuiz");
+    const ROWS = ["rect", "square", "circle"];
+    const next = { rect: 1, square: 1, circle: 1 };
+    let quiz = null;
+    const rowSteps = (row) => steps.filter((s) => s.dataset.row === row);
+    const lastOf = (row) => rowSteps(row)[rowSteps(row).length - 1];
+    const doneRows = () => ROWS.filter((r) => next[r] > rowSteps(r).length);
+    function clearQuiz() { steps.forEach((s) => s.classList.remove("is-target")); }
+    function ask() {
+      const row = quiz.order[quiz.i];
+      quizBtn.textContent = "Toping: " + lastOf(row).dataset.shape;
+      feedback.textContent = "🎯 " + (quiz.i + 1) + "/3: tayyor «" + lastOf(row).dataset.shape + "» shaklini bosing!";
+    }
+    function startQuiz() {
+      const order = ROWS.slice();
+      for (let i = order.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [order[i], order[j]] = [order[j], order[i]]; }
+      quiz = { order, i: 0, score: 0, miss: false };
+      quizBtn.classList.add("is-running");
+      clearQuiz();
+      ask();
+    }
+    function answerQuiz(step) {
+      const want = quiz.order[quiz.i];
+      const isFinal = step === lastOf(step.dataset.row);
+      if (isFinal && step.dataset.row === want) {
+        if (!quiz.miss) quiz.score++;
+        quiz.miss = false;
+        clearQuiz();
+        step.classList.add("is-target");
+        quiz.i++;
+        if (quiz.i >= ROWS.length) {
+          feedback.textContent = "🏆 Barakalla! Hamma shakllarni topdingiz: " + quiz.score + " / 3. Yana o‘ynash uchun tugmani bosing.";
+          quizBtn.textContent = "↻ Yana o‘ynash";
+          quizBtn.classList.remove("is-running");
+          quiz = null;
+          return;
+        }
+        ask();
+        feedback.textContent = "✅ To‘g‘ri! " + feedback.textContent;
+      } else {
+        quiz.miss = true;
+        step.classList.remove("is-wrong"); void step.offsetWidth; step.classList.add("is-wrong");
+        setTimeout(() => step.classList.remove("is-wrong"), 500);
+        feedback.textContent = "🤔 Bu emas. Tayyor «" + lastOf(want).dataset.shape + "» qaysi rasmda? Har qatorning oxirgi rasmiga qarang!";
+      }
+    }
+    steps.forEach((step) => {
+      step.addEventListener("click", () => {
+        if (quiz) { answerQuiz(step); return; }
+        const row = step.dataset.row;
+        const n = Number(step.dataset.step);
+        const shape = step.dataset.shape;
+        if (n < next[row]) { feedback.textContent = "✅ " + shape[0].toUpperCase() + shape.slice(1) + ", " + n + "-qadam: " + step.dataset.say; return; }
+        if (n !== next[row]) {
+          step.classList.remove("is-wrong"); void step.offsetWidth; step.classList.add("is-wrong");
+          setTimeout(() => step.classList.remove("is-wrong"), 500);
+          feedback.textContent = "🤔 Shoshilmang! Bu qatorda avval " + next[row] + "-rasmni bosing.";
+          return;
+        }
+        steps.forEach((s) => s.classList.remove("is-current"));
+        step.classList.add("is-done", "is-current");
+        scene.querySelector('.shape-badge[data-row="' + row + '"][data-step="' + n + '"]').classList.add("is-on");
+        next[row]++;
+        if (next[row] > rowSteps(row).length) {
+          scene.querySelector('.shape-name[data-row="' + row + '"]').classList.add("is-on");
+          const d = doneRows().length;
+          feedback.textContent = "🎉 " + step.dataset.say + " " + shape[0].toUpperCase() + shape.slice(1) + " hosil bo‘ldi! " +
+            (d === ROWS.length ? "Uchala shaklni yasadingiz! Endi «🎯 Shaklni top!» tugmasini bosing." : "Yasalgan shakllar: " + d + " / 3.");
+        } else {
+          feedback.textContent = "✅ " + n + "-qadam: " + step.dataset.say + " Endi shu qatordagi " + next[row] + "-rasmni bosing.";
+        }
+      });
+    });
+    quizBtn.addEventListener("click", startQuiz);
+  })();
   $("backToQuarters").addEventListener("click",()=>{$("quarterMapScreen").classList.add("hidden");$("quarterScreen").classList.remove("hidden");renderQuarterHub();window.scrollTo(0,0)});
   $("previousQuarter").addEventListener("click",()=>{if(activeQuarter>0)openQuarter(activeMapCourse.quarters[activeQuarter-1].id)});$("nextQuarter").addEventListener("click",()=>{if(activeQuarter<3)openQuarter(activeMapCourse.quarters[activeQuarter+1].id)});
   $("returnToMap").addEventListener("click",()=>{document.body.classList.remove("lesson-intro-active","lesson-problem-active");$("problemSituationScreen").classList.add("hidden");hideKnowledgeScreen();hideSafetyScreen();hideExerciseScreen();$("lessonIntroScreen").classList.add("hidden");$("learningScreen").classList.add("hidden");$("quarterMapScreen").classList.remove("hidden");renderQuarterMap();window.scrollTo(0,0)});
