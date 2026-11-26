@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>TAMADDUN — Interaktiv dars</title>
-    <link rel="stylesheet" href="darslar.css?v=22" />
+    <link rel="stylesheet" href="darslar.css?v=24" />
   </head>
   <body>
     <header class="topbar">
@@ -480,6 +480,38 @@
       </div>
       <p class="problem-feedback l2-feedback" data-hint="Shakllarni bosib nomini bilib oling. So‘ng savollar ustida o‘ylab, ularni belgilang." aria-live="polite">Shakllarni bosib nomini bilib oling. So‘ng savollar ustida o‘ylab, ularni belgilang.</p>
     </main>
+    <main class="lesson-intro-screen lesson-problem-screen l2-screen hidden" id="l2Screen3" data-l2-page="3" aria-label="2-dars, 3-bosqich: O‘tilgan mavzuni takrorlash">
+      <div class="problem-scene knowledge-scene l2-scene" style="aspect-ratio:1670 / 942">
+        <img src="images/1_tex_1s_2dars_3bosqich.webp" alt="2-dars, 3-bosqich: Oldingi darsni esga olamiz — «Sehrli ustaning xaltasi» o‘yini va «Savol–javob» metodi" />
+        <button type="button" class="knowledge-dot" data-l2-dot="0" style="left:31.497%;top:90.021%" aria-label="1-bosqich"></button>
+        <button type="button" class="knowledge-dot" data-l2-dot="1" style="left:36.647%;top:90.021%" aria-label="2-bosqich"></button>
+        <button type="button" class="knowledge-dot" data-l2-dot="2" style="left:41.796%;top:90.021%" aria-label="3-bosqich"></button>
+        <button type="button" class="knowledge-dot" data-l2-dot="3" style="left:46.826%;top:90.021%" aria-label="4-bosqich"></button>
+        <button type="button" class="knowledge-dot" data-l2-dot="4" style="left:51.617%;top:90.021%" aria-label="5-bosqich"></button>
+        <button type="button" class="knowledge-dot" data-l2-dot="5" style="left:56.407%;top:90.021%" aria-label="6-bosqich"></button>
+        <button type="button" class="knowledge-dot" data-l2-dot="6" style="left:61.198%;top:90.021%" aria-label="7-bosqich"></button>
+        <button type="button" class="knowledge-dot" data-l2-dot="7" style="left:66.048%;top:90.021%" aria-label="8-bosqich"></button>
+        <button type="button" class="knowledge-hero" data-hero="robot" style="left:5.689%;top:13.270%;width:14.970%;height:18.577%;clip-path:polygon(18.0% 0.0%, 26.0% 2.9%, 28.0% 20.0%, 58.0% 22.9%, 76.0% 37.1%, 82.0% 51.4%, 90.0% 42.9%, 100.0% 57.1%, 98.0% 77.1%, 86.0% 94.3%, 62.0% 100.0%, 22.0% 100.0%, 6.0% 88.6%, 0.0% 65.7%, 2.0% 42.9%, 12.0% 25.7%)" aria-label="Robotcha" aria-pressed="false"></button>
+        <button type="button" class="knowledge-hero" data-hero="tulki" style="left:77.365%;top:2.654%;width:19.341%;height:29.193%;clip-path:polygon(27.2% 12.7%, 39.6% 5.5%, 58.2% 0.0%, 76.8% 1.8%, 92.3% 12.7%, 100.0% 30.9%, 95.4% 49.1%, 92.3% 70.9%, 98.5% 96.4%, 64.4% 100.0%, 39.6% 100.0%, 21.1% 92.7%, 14.9% 81.8%, 2.5% 74.5%, 0.0% 63.6%, 5.6% 52.7%, 14.9% 52.7%, 19.5% 38.2%)" aria-label="Tulki" aria-pressed="false"></button>
+        <button type="button" class="knowledge-nav knowledge-back l2-back" style="left:1.497%;top:85.456%;width:10.479%;height:12.208%" aria-label="Orqaga"><span class="intro-control-label">Orqaga</span></button>
+        <button type="button" class="knowledge-nav knowledge-next l2-next" style="left:87.725%;top:85.456%;width:10.479%;height:12.208%" aria-label="Keyingi sahifa"><span class="intro-control-label">Davom etish</span></button>
+        <div class="bag-game" id="bagGame">
+          <button type="button" class="bag-sack" style="left:5.689%;top:41.932%;width:24.251%;height:40.658%" aria-label="Sehrli xaltadan buyum chiqarish"></button>
+          <button type="button" class="bag-cat" data-cat="tool" style="left:31.138%;top:58.386%;width:22.275%;height:6.476%" aria-label="Ish qurollari"></button>
+          <button type="button" class="bag-cat" data-cat="material" style="left:31.138%;top:65.817%;width:22.275%;height:6.688%" aria-label="Materiallar"></button>
+          <button type="button" class="bag-cat" data-cat="safety" style="left:31.138%;top:73.461%;width:22.275%;height:6.688%" aria-label="Xavfsizlik qoidalari"></button>
+          <div class="bag-score" style="left:4.192%;top:41.932%;width:8.683%;height:4.777%" aria-live="polite">⭐ 0</div>
+        </div>
+        <button type="button" class="qa-open" id="qaOpen" style="left:57.605%;top:41.614%;width:39.521%;height:42.038%" aria-label="Savol–javob metodini boshlash"></button>
+        <div class="qa-panel hidden" id="qaPanel" role="dialog" aria-labelledby="qaText" style="left:57.964%;top:42.038%;width:38.802%;height:40.977%">
+          <div class="qa-head"><span id="qaCount">Savol 1 / 7</span><span id="qaScore">⭐ 0</span></div>
+          <p class="qa-text" id="qaText"></p>
+          <div class="qa-options" id="qaOptions"></div>
+          <button type="button" class="qa-next hidden" id="qaNext">Keyingi savol →</button>
+        </div>
+      </div>
+      <p class="problem-feedback l2-feedback" data-hint="Sehrli xaltani bosing: chiqqan buyumni mos guruhga surib olib boring. «Savol–javob» uchun o‘ngdagi oynani bosing." aria-live="polite">Sehrli xaltani bosing: chiqqan buyumni mos guruhga surib olib boring. «Savol–javob» uchun o‘ngdagi oynani bosing.</p>
+    </main>
     <!-- INTERAKTIV DARSLIK -->
     <main class="learning-screen hidden" id="learningScreen">
       <aside class="lesson-sidebar">
@@ -598,6 +630,6 @@
       </aside>
     </main>
 
-    <script src="darslar.js?v=22"></script>
+    <script src="darslar.js?v=24"></script>
   </body>
 </html>

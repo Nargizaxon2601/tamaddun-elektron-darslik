@@ -1301,7 +1301,6 @@ document.addEventListener("DOMContentLoaded", () => {
         b.textContent = opt.text;
         b.addEventListener("click", () => {
           if (opt.right) {
-            box.querySelectorAll("button").forEach((x) => { x.disabled = true; });
             b.classList.add("is-right");
             answered.add(k);
             if (stars < 3) stars++;
@@ -1316,7 +1315,6 @@ document.addEventListener("DOMContentLoaded", () => {
             $("drumAgain").focus();
           } else {
             b.classList.add("is-wrong");
-            b.disabled = true;
             feedback.textContent = "🤔 Bu javob to‘g‘ri emas. Yana bir bor o‘ylab ko‘ring!";
           }
         });
@@ -1597,6 +1595,157 @@ document.addEventListener("DOMContentLoaded", () => {
       else feedback.textContent = "Keyingi bosqich tez orada qo‘shiladi! Hozircha ← tugmasi bilan orqaga qaytishingiz mumkin.";
     });
   });
+  // 2-dars 3-bosqich: «Sehrli ustaning xaltasi» (surib saralash) va «Savol–javob»
+  (function setupBagAndQa() {
+    const game = document.getElementById("bagGame");
+    if (!game) return;
+    const page = game.closest("[data-l2-page]");
+    const scene = page.querySelector(".l2-scene");
+    const feedback = page.querySelector(".l2-feedback");
+    const W = 1670, H = 942;
+    const BAG_POS = { x: 300, y: 470 };
+    const CATS = { tool: "Ish qurollari", material: "Materiallar", safety: "Xavfsizlik qoidalari" };
+    const ITEMS = [
+      ["✂️", "Qaychi", "tool"], ["🧴", "Yelim", "tool"], ["✏️", "Qalam", "tool"], ["🔪", "Steklar", "tool"],
+      ["🟫", "Plastilin", "material"], ["📦", "Karton", "material"], ["📄", "Rangli qog‘oz", "material"], ["🌰", "G‘udda", "material"], ["🍁", "Barg", "material"],
+      ["✋", "Qaychini ehtiyot bo‘lib ishlataman", "safety"], ["🚫", "Yelimni tatib ko‘rmayman", "safety"], ["🧹", "Dars tugagach anjomlarni joyiga qo‘yaman", "safety"]
+    ];
+    let deck = [];
+    let item = null; // {el, data, x, y}
+    let score = 0, done = 0;
+    let drag = null;
+    const scoreEl = game.querySelector(".bag-score");
+    const sack = game.querySelector(".bag-sack");
+    const cats = Array.from(game.querySelectorAll(".bag-cat"));
+    const toImg = (e) => { const r = scene.getBoundingClientRect(); return { x: (e.clientX - r.left) / r.width * W, y: (e.clientY - r.top) / r.height * H }; };
+    const place = () => { item.el.style.left = (item.x / W * 100) + "%"; item.el.style.top = (item.y / H * 100) + "%"; };
+    function shuffle(a) { a = a.slice(); for (let i = a.length - 1; i > 0; i--) { const r = Math.floor(Math.random() * (i + 1)); [a[i], a[r]] = [a[r], a[i]]; } return a; }
+    function newRound() { deck = shuffle(ITEMS); score = 0; done = 0; scoreEl.textContent = "⭐ 0"; }
+    function pull() {
+      if (item) { feedback.textContent = "Avval chiqqan buyumni mos guruhga olib boring!"; flash(item.el); return; }
+      if (!deck.length) newRound();
+      const data = deck.pop();
+      sack.classList.remove("is-shake"); void sack.offsetWidth; sack.classList.add("is-shake");
+      const el = document.createElement("div");
+      el.className = "bag-item";
+      el.dataset.cat = data[2];
+      el.setAttribute("role", "button");
+      el.setAttribute("tabindex", "0");
+      el.setAttribute("aria-label", data[1] + ". Mos guruhga olib boring");
+      el.innerHTML = "<b>" + data[0] + "</b>" + data[1];
+      scene.appendChild(el);
+      item = { el, data, x: BAG_POS.x, y: BAG_POS.y };
+      place();
+      bindItem();
+      feedback.textContent = "Xaltadan «" + data[1] + "» chiqdi! Uni mos guruhga surib olib boring yoki guruhni bosing.";
+    }
+    function flash(el) { el.classList.remove("is-wrong"); void el.offsetWidth; el.classList.add("is-wrong"); setTimeout(() => el.classList.remove("is-wrong"), 450); }
+    function judge(cat) {
+      if (!item) { feedback.textContent = "Avval sehrli xaltani bosing!"; return; }
+      const right = item.data[2] === cat.dataset.cat;
+      if (right) {
+        score++; done++;
+        scoreEl.textContent = "⭐ " + score;
+        cat.classList.add("is-right"); setTimeout(() => cat.classList.remove("is-right"), 700);
+        item.el.remove(); item = null;
+        feedback.textContent = done === ITEMS.length
+          ? "🎉 Barakalla! Xaltadagi hamma " + ITEMS.length + " ta buyumni to‘g‘ri joyladingiz! Yana o‘ynash uchun xaltani bosing."
+          : "✅ To‘g‘ri! Bu — " + CATS[cat.dataset.cat].toLowerCase() + ". Yulduzchalar: " + score + ". Xaltani yana bosing!";
+        if (done === ITEMS.length) deck = [];
+      } else {
+        flash(cat);
+        item.el.classList.add("is-back"); item.x = BAG_POS.x; item.y = BAG_POS.y; place();
+        setTimeout(() => item && item.el.classList.remove("is-back"), 400);
+        feedback.textContent = "🤔 «" + item.data[1] + "» bu guruhga mos emas. Yana o‘ylab ko‘ring!";
+      }
+    }
+    function bindItem() {
+      const el = item.el;
+      el.addEventListener("pointerdown", (e) => {
+        if (e.button > 0) return;
+        e.preventDefault();
+        drag = { id: e.pointerId, moved: false, start: toImg(e) };
+        el.classList.add("is-dragging");
+        try { el.setPointerCapture(e.pointerId); } catch (err) {}
+      });
+      el.addEventListener("pointermove", (e) => {
+        if (!drag || drag.id !== e.pointerId || !item) return;
+        const p = toImg(e);
+        if (Math.hypot(p.x - drag.start.x, p.y - drag.start.y) > 6) drag.moved = true;
+        item.x = p.x; item.y = p.y; place();
+        cats.forEach((c) => c.classList.remove("is-target"));
+        const over = document.elementsFromPoint(e.clientX, e.clientY).find((n) => n.classList && n.classList.contains("bag-cat"));
+        if (over) over.classList.add("is-target");
+      });
+      const end = (e) => {
+        if (!drag || drag.id !== e.pointerId) return;
+        const moved = drag.moved; drag = null;
+        el.classList.remove("is-dragging");
+        cats.forEach((c) => c.classList.remove("is-target"));
+        if (!item) return;
+        const over = document.elementsFromPoint(e.clientX, e.clientY).find((n) => n.classList && n.classList.contains("bag-cat"));
+        if (over) { judge(over); return; }
+        if (moved) { item.el.classList.add("is-back"); item.x = BAG_POS.x; item.y = BAG_POS.y; place(); setTimeout(() => item && item.el.classList.remove("is-back"), 400); }
+        feedback.textContent = "«" + item.data[1] + "»ni guruhlardan biriga olib boring: ish qurollari, materiallar yoki xavfsizlik qoidalari.";
+      };
+      el.addEventListener("pointerup", end);
+      el.addEventListener("pointercancel", end);
+    }
+    sack.addEventListener("click", pull);
+    cats.forEach((cat) => cat.addEventListener("click", () => judge(cat)));
+    newRound();
+
+    // «Savol–javob»
+    const QA = [
+      ["Qog‘ozni qirqish uchun nima kerak?", ["Qaychi", "Yelim", "Plastilin"]],
+      ["Partani iflos qilmaslik uchun ustiga nima to‘shaymiz?", ["Qog‘oz yoki kleyonka", "Barg", "Paxta"]],
+      ["Tabiiy materiallarni toping.", ["G‘udda va barglar", "Qaychi va yelim", "Qalam va daftar"]],
+      ["Mo‘yqalamni ishlatib bo‘lgach nima qilamiz?", ["Suvda yuvib, quritib qo‘yamiz", "Partaga tashlab qo‘yamiz", "Yelimga botirib qo‘yamiz"]],
+      ["Plastilin bilan ishlaganda partani nima asraydi?", ["Plastilin taxtachasi", "Qaychi", "Paxta"]],
+      ["«Kuzgi kirpicha»ni nimalardan yasadik?", ["G‘udda va plastilindan", "Faqat qog‘ozdan", "Kartondan"]],
+      ["Darsda yordam kerak bo‘lsa nima qilamiz?", ["Qo‘limizni ko‘taramiz", "Baqiramiz", "O‘rnimizdan turib ketamiz"]]
+    ];
+    const panel = $("qaPanel");
+    let qi = 0, qScore = 0, order = [];
+    function showQ() {
+      const [q, answers] = QA[order[qi]];
+      $("qaCount").textContent = "Savol " + (qi + 1) + " / " + QA.length;
+      $("qaScore").textContent = "⭐ " + qScore;
+      $("qaText").textContent = q;
+      $("qaNext").classList.add("hidden");
+      const box = $("qaOptions");
+      box.innerHTML = "";
+      let firstTry = true, answered = false;
+      shuffle(answers.map((t, i) => ({ t, right: i === 0 }))).forEach((opt) => {
+        const b = document.createElement("button");
+        b.type = "button";
+        b.textContent = opt.t;
+        b.addEventListener("click", () => {
+          if (answered) { feedback.textContent = opt.right ? "✅ To‘g‘ri javob! «Keyingi savol» tugmasini bosing." : "Bu savolning to‘g‘ri javobi yashil rangda belgilangan."; return; }
+          if (opt.right) {
+            answered = true;
+            if (firstTry) qScore++;
+            $("qaScore").textContent = "⭐ " + qScore;
+            b.classList.add("is-right");
+            const last = qi === QA.length - 1;
+            $("qaNext").textContent = last ? "↻ Qaytadan boshlash" : "Keyingi savol →";
+            $("qaNext").classList.remove("hidden");
+            feedback.textContent = last
+              ? "🎉 Savol–javob tugadi! Birinchi urinishda topilgan javoblar: " + qScore + " / " + QA.length + "."
+              : "✅ To‘g‘ri javob! Keyingi savolga o‘ting.";
+          } else {
+            firstTry = false;
+            b.classList.add("is-wrong");
+            feedback.textContent = "🤔 Bu javob to‘g‘ri emas. Yana o‘ylab ko‘ring!";
+          }
+        });
+        box.appendChild(b);
+      });
+    }
+    function startQa() { order = shuffle(QA.map((_, i) => i)); qi = 0; qScore = 0; panel.classList.remove("hidden"); showQ(); feedback.textContent = "Savolni o‘qing va to‘g‘ri javobni tanlang."; }
+    $("qaOpen").addEventListener("click", startQa);
+    $("qaNext").addEventListener("click", () => { if (qi < QA.length - 1) { qi++; showQ(); } else startQa(); });
+  })();
   $("backToQuarters").addEventListener("click",()=>{$("quarterMapScreen").classList.add("hidden");$("quarterScreen").classList.remove("hidden");renderQuarterHub();window.scrollTo(0,0)});
   $("previousQuarter").addEventListener("click",()=>{if(activeQuarter>0)openQuarter(activeMapCourse.quarters[activeQuarter-1].id)});$("nextQuarter").addEventListener("click",()=>{if(activeQuarter<3)openQuarter(activeMapCourse.quarters[activeQuarter+1].id)});
   $("returnToMap").addEventListener("click",()=>{document.body.classList.remove("lesson-intro-active","lesson-problem-active");$("problemSituationScreen").classList.add("hidden");hideKnowledgeScreen();hideSafetyScreen();hideExerciseScreen();$("lessonIntroScreen").classList.add("hidden");$("learningScreen").classList.add("hidden");$("quarterMapScreen").classList.remove("hidden");renderQuarterMap();window.scrollTo(0,0)});
