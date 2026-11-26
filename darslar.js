@@ -9,6 +9,8 @@ document.addEventListener("DOMContentLoaded", () => {
   let stageIndex = 0;
   let situationChoice = "";
   const knownTools = new Set();
+  const hasKnowledgeScreen = () => Boolean(document.getElementById("knowledgeScreen"));
+  const hideKnowledgeScreen = () => { if (hasKnowledgeScreen()) $("knowledgeScreen").classList.add("hidden"); };
   const knowledgeTools = [["Qaychi", "Qaychi qog‘oz va kartonni qirqish uchun kerak. U bilan ehtiyot bo‘lib ishlaymiz!"], ["Yelim", "Yelim qog‘oz va karton bo‘laklarini bir-biriga yopishtiradi."], ["Qalam", "Qalam bilan chizamiz, belgi qo‘yamiz va shakllarni chizib olamiz."], ["Bo‘yoq", "Bo‘yoq bilan rasm va buyumlarimizni rang-barang qilamiz."], ["Mo‘yqalam", "Mo‘yqalam bo‘yoqni qog‘ozga surtish uchun ishlatiladi."], ["Plastilin", "Plastilindan turli shakl va hayvonchalar yasaymiz."], ["Qog‘oz", "Rangli qog‘ozdan applikatsiya va o‘yinchoqlar yasaymiz."], ["Karton", "Karton qalin va mustahkam, undan qutichalar yasash mumkin."]];
   let score = 0;
   let completed = new Set();
@@ -500,7 +502,7 @@ document.addEventListener("DOMContentLoaded", () => {
   function startLesson(id) {
     if (!activeMapCourse.lessons.some((lesson) => lesson.id === id && lesson.openable)) return;
     document.body.classList.remove("lesson-problem-active");
-    $("problemSituationScreen").classList.add("hidden");$("knowledgeScreen").classList.add("hidden");
+    $("problemSituationScreen").classList.add("hidden");hideKnowledgeScreen();
     lessonIndex = 0;
     resetLesson();
     $("quarterScreen").classList.add("hidden");
@@ -518,7 +520,7 @@ document.addEventListener("DOMContentLoaded", () => {
     document.body.classList.add("lesson-problem-active");
     $("lessonIntroScreen").classList.add("hidden");
     $("learningScreen").classList.add("hidden");
-    $("knowledgeScreen").classList.add("hidden");
+    hideKnowledgeScreen();
     $("problemSituationScreen").classList.remove("hidden");
     document.querySelectorAll("[data-problem-choice]").forEach((button) => {
       const selected = button.dataset.problemChoice === situationChoice;
@@ -535,7 +537,7 @@ document.addEventListener("DOMContentLoaded", () => {
   function openLessonContent() {
     document.body.classList.remove("lesson-intro-active", "lesson-problem-active");
     $("lessonIntroScreen").classList.add("hidden");
-    $("problemSituationScreen").classList.add("hidden");$("knowledgeScreen").classList.add("hidden");
+    $("problemSituationScreen").classList.add("hidden");hideKnowledgeScreen();
     $("quarterScreen").classList.add("hidden");
     $("quarterMapScreen").classList.add("hidden");
     $("learningScreen").classList.remove("hidden");
@@ -549,7 +551,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   $("introBackToMap").addEventListener("click", () => {
     document.body.classList.remove("lesson-intro-active", "lesson-problem-active");
-    $("problemSituationScreen").classList.add("hidden");$("knowledgeScreen").classList.add("hidden");
+    $("problemSituationScreen").classList.add("hidden");hideKnowledgeScreen();
     $("lessonIntroScreen").classList.add("hidden");
     $("quarterMapScreen").classList.remove("hidden");
     renderQuarterMap();
@@ -559,7 +561,7 @@ document.addEventListener("DOMContentLoaded", () => {
   $("problemBackToIntro").addEventListener("click", () => {
     document.body.classList.remove("lesson-problem-active");
     document.body.classList.add("lesson-intro-active");
-    $("problemSituationScreen").classList.add("hidden");$("knowledgeScreen").classList.add("hidden");
+    $("problemSituationScreen").classList.add("hidden");hideKnowledgeScreen();
     $("lessonIntroScreen").classList.remove("hidden");
     window.scrollTo(0, 0);
   });
@@ -588,6 +590,7 @@ document.addEventListener("DOMContentLoaded", () => {
   $("problemContinue").addEventListener("click", () => {
     if (situationChoice !== "safe") return;
     if (!completed.has(1)) completeStage(1);
+    if (!hasKnowledgeScreen()) { stageIndex = 2; openLessonContent(); return; }
     openKnowledgeCheck();
   });
 
@@ -665,12 +668,14 @@ document.addEventListener("DOMContentLoaded", () => {
       else if (i >= 3) leaveKnowledgeCheck(i - 1);
     });
   });
-  $("knowledgeBack").addEventListener("click", openProblemSituation);
-  $("knowledgeContinue").addEventListener("click", () => leaveKnowledgeCheck(2));
+  if (hasKnowledgeScreen()) {
+    $("knowledgeBack").addEventListener("click", openProblemSituation);
+    $("knowledgeContinue").addEventListener("click", () => leaveKnowledgeCheck(2));
+  }
 
   $("backToQuarters").addEventListener("click",()=>{$("quarterMapScreen").classList.add("hidden");$("quarterScreen").classList.remove("hidden");renderQuarterHub();window.scrollTo(0,0)});
   $("previousQuarter").addEventListener("click",()=>{if(activeQuarter>0)openQuarter(activeMapCourse.quarters[activeQuarter-1].id)});$("nextQuarter").addEventListener("click",()=>{if(activeQuarter<3)openQuarter(activeMapCourse.quarters[activeQuarter+1].id)});
-  $("returnToMap").addEventListener("click",()=>{document.body.classList.remove("lesson-intro-active","lesson-problem-active");$("problemSituationScreen").classList.add("hidden");$("knowledgeScreen").classList.add("hidden");$("lessonIntroScreen").classList.add("hidden");$("learningScreen").classList.add("hidden");$("quarterMapScreen").classList.remove("hidden");renderQuarterMap();window.scrollTo(0,0)});
+  $("returnToMap").addEventListener("click",()=>{document.body.classList.remove("lesson-intro-active","lesson-problem-active");$("problemSituationScreen").classList.add("hidden");hideKnowledgeScreen();$("lessonIntroScreen").classList.add("hidden");$("learningScreen").classList.add("hidden");$("quarterMapScreen").classList.remove("hidden");renderQuarterMap();window.scrollTo(0,0)});
   function chooseGrade(value, openWhenReady = false) {
     grade = Number(value);
     document
@@ -1020,7 +1025,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   $("previousStage").addEventListener("click", () => {
-    if (stageIndex === 2) {
+    if (stageIndex === 2 && hasKnowledgeScreen()) {
       openKnowledgeCheck();
       return;
     }
