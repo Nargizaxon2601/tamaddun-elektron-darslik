@@ -1596,7 +1596,7 @@ document.addEventListener("DOMContentLoaded", () => {
     page.querySelectorAll("[data-l2-dot]").forEach((dot) => {
       dot.addEventListener("click", () => openLesson2Stage(Number(dot.dataset.l2Dot), feedback));
     });
-    page.querySelector(".l2-back").addEventListener("click", () => (k === 0 ? lesson2ToMap() : openLesson2Page(k - 1)));
+    page.querySelector(".l2-back").addEventListener("click", () => (k === 0 || page.querySelector(".l2-back").dataset.home ? lesson2ToMap() : openLesson2Page(k - 1)));
     page.querySelector(".l2-next").addEventListener("click", () => {
       if (k < lesson2Pages().length - 1) openLesson2Page(k + 1);
       else feedback.textContent = "Keyingi bosqich tez orada qo‘shiladi! Hozircha ← tugmasi bilan orqaga qaytishingiz mumkin.";
@@ -2308,6 +2308,105 @@ document.addEventListener("DOMContentLoaded", () => {
       slots.forEach((s) => { s.piece = null; });
       update("🗑 Ish maydoni tozalandi. Qaytadan boshlang!");
     });
+  })();
+  // 2-dars 7-bosqich: «Arqon tortish» — ikki jamoa, to'g'ri javob arqonni o'z tomoniga tortadi
+  (function setupTugOfWar() {
+    const field = document.getElementById("tugField");
+    if (!field) return;
+    const scene = field.parentElement;
+    const page = scene.closest("[data-l2-page]");
+    const feedback = page.querySelector(".l2-feedback");
+    const bar = document.getElementById("tugBar");
+    const mark = document.getElementById("tugMark");
+    const win = document.getElementById("tugWin");
+    const GOAL = 5;
+    const BANK = [
+      ["Qog‘ozning nechta tomoni bor?", ["4 ta", "2 ta", "3 ta"]],
+      ["Qog‘oz varag‘ining nechta burchagi bor?", ["4 ta", "3 ta", "5 ta"]],
+      ["Qog‘ozni teng ikkiga buklaganda nima hosil bo‘ladi?", ["To‘g‘ri to‘rtburchak", "Doira", "Uchburchak"]],
+      ["Kvadratni diagonali bo‘ylab kessak, nima hosil bo‘ladi?", ["Ikkita uchburchak", "Ikkita doira", "Oval"]],
+      ["Doirani teng ikkiga bo‘lsak, nima hosil bo‘ladi?", ["Ikkita yarimdoira", "Ikkita kvadrat", "Uchburchak"]],
+      ["Kvadratning burchaklarini yumaloq qirqsak, nima hosil bo‘ladi?", ["Doira", "Uchburchak", "Kvadrat"]],
+      ["Ikkita bir xil kvadratni yonma-yon qo‘ysak, nima hosil bo‘ladi?", ["To‘g‘ri to‘rtburchak", "Doira", "Uchburchak"]],
+      ["To‘g‘ri to‘rtburchakning burchaklarini qirqsak, nima hosil bo‘ladi?", ["Oval", "Kvadrat", "Uchburchak"]],
+      ["Buklangan joyni nima bilan tekislaymiz?", ["Barmoq bilan", "Qaychi bilan", "Yelim bilan"]],
+      ["Qog‘ozni nima bilan qirqamiz?", ["Qaychi bilan", "Qalam bilan", "Chizg‘ich bilan"]],
+      ["Shakllarni albomga nima bilan yopishtiramiz?", ["Yelim bilan", "Suv bilan", "Plastilin bilan"]],
+      ["Qaychini qanday ishlatamiz?", ["Ehtiyot bo‘lib", "Yugurib", "O‘ynab"]],
+      ["Qog‘ozni buklaganda nimaga e’tibor beramiz?", ["Chetlari mos tushishiga", "Rangiga", "Hidiga"]],
+      ["Qog‘oz tasmasini ikki marta buklab qirqsak, nechta bo‘lak chiqadi?", ["4 ta", "2 ta", "6 ta"]],
+      ["Ishlaganda qanday bo‘lishimiz kerak?", ["Tartibli va e’tiborli", "Shoshqaloq", "Beparvo"]],
+      ["Doiraning nechta burchagi bor?", ["Burchagi yo‘q", "4 ta", "3 ta"]],
+      ["Uchburchakning nechta burchagi bor?", ["3 ta", "4 ta", "2 ta"]],
+      ["Qog‘oz varag‘ining tepa tomoni qayerda?", ["Yuqorida", "Pastda", "Chapda"]]
+    ];
+    const shuffle = (a) => { a = a.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
+    const teams = {};
+    let pos = 0, over = false;
+    const NAMES = { 1: "Ko‘k jamoa", 2: "To‘q sariq jamoa" };
+    function draw() {
+      const m = 50 + pos * (44 / GOAL);
+      bar.style.setProperty("--m", m + "%");
+      mark.style.left = m + "%";
+      field.style.setProperty("--p", pos * 1);
+    }
+    function ask(t) {
+      const team = teams[t];
+      if (!team.deck.length) team.deck = shuffle(BANK.map((_, i) => i));
+      const [q, answers] = BANK[team.deck.pop()];
+      team.q.textContent = q;
+      team.opts.innerHTML = "";
+      team.busy = false;
+      shuffle(answers.map((text, i) => ({ text, right: i === 0 }))).forEach((o, i) => {
+        const b = document.createElement("button");
+        b.type = "button";
+        b.innerHTML = "<i>" + "ABC"[i] + "</i>";
+        b.appendChild(document.createTextNode(o.text));
+        if (o.right) b.dataset.r = "1";
+        b.addEventListener("click", () => answer(t, b, o.right));
+        team.opts.appendChild(b);
+      });
+      team.panel.classList.remove("is-flash"); void team.panel.offsetWidth; team.panel.classList.add("is-flash");
+    }
+    function answer(t, btn, right) {
+      const team = teams[t];
+      if (over) { feedback.textContent = "O‘yin tugadi! «↻ Yana o‘ynash» tugmasini bosing."; return; }
+      if (team.busy) return;
+      team.busy = true;
+      if (right) {
+        btn.classList.add("is-right");
+        team.score++;
+        team.scoreEl.textContent = "⭐ " + team.score;
+        pos += t === "1" ? -1 : 1;
+        draw();
+        field.classList.remove("is-pull"); void field.offsetWidth; field.classList.add("is-pull");
+        if (Math.abs(pos) >= GOAL) { finish(t); return; }
+        feedback.textContent = "💪 " + NAMES[t] + " to‘g‘ri javob berdi — arqon " + (t === "1" ? "chapga" : "o‘ngga") + " siljidi!";
+      } else {
+        btn.classList.add("is-wrong");
+        feedback.textContent = "😮 " + NAMES[t] + ", bu javob noto‘g‘ri! Keyingi savolga tayyorlaning.";
+      }
+      setTimeout(() => { if (!over) ask(t); }, right ? 900 : 1400);
+    }
+    function finish(t) {
+      over = true;
+      document.getElementById("tugWinText").textContent = (t === "1" ? "1-jamoa (Ko‘k jamoa)" : "2-jamoa (To‘q sariq jamoa)") + " g‘olib! Tabriklaymiz! 🎉";
+      win.classList.remove("hidden");
+      feedback.textContent = "🏆 " + NAMES[t] + " arqonni o‘z tomoniga tortib, bellashuvda g‘olib bo‘ldi! Ikkala jamoa ham barakalla!";
+    }
+    function reset() {
+      pos = 0; over = false;
+      win.classList.add("hidden");
+      ["1", "2"].forEach((t) => {
+        const panel = scene.querySelector('.tug-panel[data-team="' + t + '"]');
+        teams[t] = { panel, q: panel.querySelector(".tug-q"), opts: panel.querySelector(".tug-opts"), scoreEl: panel.querySelector(".tug-score"), deck: shuffle(BANK.map((_, i) => i)), score: 0, busy: false };
+        teams[t].scoreEl.textContent = "⭐ 0";
+        ask(t);
+      });
+      draw();
+    }
+    document.getElementById("tugAgain").addEventListener("click", () => { reset(); feedback.textContent = "↻ Yangi bellashuv boshlandi! Omad, jamoalar!"; });
+    reset();
   })();
   $("backToQuarters").addEventListener("click",()=>{$("quarterMapScreen").classList.add("hidden");$("quarterScreen").classList.remove("hidden");renderQuarterHub();window.scrollTo(0,0)});
   $("previousQuarter").addEventListener("click",()=>{if(activeQuarter>0)openQuarter(activeMapCourse.quarters[activeQuarter-1].id)});$("nextQuarter").addEventListener("click",()=>{if(activeQuarter<3)openQuarter(activeMapCourse.quarters[activeQuarter+1].id)});

@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>TAMADDUN — Interaktiv dars</title>
-    <link rel="stylesheet" href="darslar.css?v=38" />
+    <link rel="stylesheet" href="darslar.css?v=41" />
   </head>
   <body>
     <header class="topbar">
@@ -781,6 +781,37 @@
       </div>
       <p class="problem-feedback l2-feedback" data-hint="Chapdagi «Tayyorlanadigan shakllar»dan shaklni ish maydoniga surib olib boring. Chap tomonga binafsha, o‘ng tomonga ko‘k shakllarni namunadagi kabi joylang!" aria-live="polite">Chapdagi «Tayyorlanadigan shakllar»dan shaklni ish maydoniga surib olib boring. Chap tomonga binafsha, o‘ng tomonga ko‘k shakllarni namunadagi kabi joylang!</p>
     </main>
+    <main class="lesson-intro-screen lesson-problem-screen l2-screen hidden" id="l2Screen10" data-l2-page="10" data-l2-stage="6" aria-label="2-dars, 7-bosqich: Arqon tortish o‘yini">
+      <div class="problem-scene knowledge-scene l2-scene" style="aspect-ratio:1672 / 941">
+        <img src="images/1_tex_1s_2dars_7bosqich.webp" alt="2-dars, 7-bosqich: Bilimlar bellashuvi — «Arqon tortish» o‘yini" />
+        <button type="button" class="l2-item" data-say="🤖 Har bir to‘g‘ri javob — arqon o‘sha jamoa tomoniga siljiydi!" style="left:40.670%;top:17.003%;width:20.455%;height:14.878%" aria-pressed="false" aria-label="Robotcha aytadi"></button>
+        <button type="button" class="l2-item" data-say="🦊 Tez javob bering, jamoangizni g‘alabaga olib chiqing!" style="left:70.873%;top:6.376%;width:15.849%;height:20.191%" aria-pressed="false" aria-label="Tulkivoy aytadi"></button>
+        <button type="button" class="l2-item" data-say="📋 Qoidalar: savolga tez va to‘g‘ri javob bering. Har bir to‘g‘ri javobdan keyin arqon siljiydi. Arqonni birinchi bo‘lib o‘z tomoniga 5 marta tortgan jamoa g‘olib bo‘ladi!" style="left:30.203%;top:79.915%;width:39.474%;height:18.066%" aria-pressed="false" aria-label="Qoidalar"></button>
+        <button type="button" class="knowledge-hero" data-hero="robot" style="left:23.923%;top:13.815%;width:16.148%;height:27.630%;clip-path:polygon(7.4% 7.7%, 37.0% 0.0%, 59.3% 15.4%, 74.1% 11.5%, 100.0% 23.1%, 92.6% 50.0%, 74.1% 65.4%, 59.3% 76.9%, 37.0% 100.0%, 14.8% 96.2%, 3.7% 76.9%, 7.4% 50.0%, 0.0% 30.8%)" aria-label="Robotcha" aria-pressed="false"></button>
+        <button type="button" class="knowledge-hero" data-hero="fox" style="left:86.124%;top:2.657%;width:13.158%;height:24.442%;clip-path:polygon(13.6% 15.2%, 45.5% 0.0%, 81.8% 6.5%, 100.0% 37.0%, 90.9% 71.7%, 72.7% 100.0%, 27.3% 97.8%, 0.0% 82.6%, 4.5% 54.3%)" aria-label="Tulkivoy" aria-pressed="false"></button>
+        <button type="button" class="knowledge-nav knowledge-back l2-back" data-home="1" style="left:1.495%;top:86.291%;width:9.390%;height:12.009%" aria-label="Bosh sahifa — 1-chorak xaritasi"><span class="intro-control-label">Xaritaga</span></button>
+        <button type="button" class="knowledge-nav knowledge-next l2-next" style="left:88.816%;top:86.291%;width:9.988%;height:12.009%" aria-label="Keyingi sahifa"><span class="intro-control-label">Davom etish</span></button>
+        <div class="tug-field" id="tugField" style="left:15.670%;top:44.421%;width:68.780%;height:34.431%"></div>
+        <div class="tug-bar" id="tugBar" style="left:30.622%;top:37.407%;width:39.115%;height:6.589%"><span class="tug-mark" id="tugMark"></span></div>
+        <div class="tug-panel tug-panel-1" data-team="1" style="left:1.196%;top:37.407%;width:15.550%;height:38.257%" aria-live="polite" aria-label="1-jamoa (Ko‘k) savoli">
+          <div class="tug-head"><b>Savol:</b><span class="tug-score">⭐ 0</span></div>
+          <p class="tug-q"></p>
+          <div class="tug-opts"></div>
+        </div>
+        <div class="tug-panel tug-panel-2" data-team="2" style="left:83.134%;top:37.407%;width:15.789%;height:38.257%" aria-live="polite" aria-label="2-jamoa (To‘q sariq) savoli">
+          <div class="tug-head"><b>Savol:</b><span class="tug-score">⭐ 0</span></div>
+          <p class="tug-q"></p>
+          <div class="tug-opts"></div>
+        </div>
+        <div class="tug-win hidden" id="tugWin" style="left:33.493%;top:46.759%;width:33.014%;height:26.567%" role="dialog">
+          <div class="tug-win-cup">🏆</div>
+          <p id="tugWinText"></p>
+          <button type="button" id="tugAgain">↻ Yana o‘ynash</button>
+        </div>
+
+      </div>
+      <p class="problem-feedback l2-feedback" data-hint="Ikki jamoa bir vaqtda o‘ynaydi: chapdagi savolga Ko‘k jamoa, o‘ngdagi savolga To‘q sariq jamoa javob beradi. To‘g‘ri javob — arqon sizning tomonga!" aria-live="polite">Ikki jamoa bir vaqtda o‘ynaydi: chapdagi savolga Ko‘k jamoa, o‘ngdagi savolga To‘q sariq jamoa javob beradi. To‘g‘ri javob — arqon sizning tomonga!</p>
+    </main>
     <!-- INTERAKTIV DARSLIK -->
     <main class="learning-screen hidden" id="learningScreen">
       <aside class="lesson-sidebar">
@@ -899,6 +930,6 @@
       </aside>
     </main>
 
-    <script src="darslar.js?v=38"></script>
+    <script src="darslar.js?v=41"></script>
   </body>
 </html>
