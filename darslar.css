@@ -600,6 +600,22 @@ body.lesson-problem-active .topbar { display: none; }
 .l2-scene > .paper-quiz.is-running { animation: none; background: linear-gradient(180deg,#ffb21a,#ff8a00); box-shadow: 0 .35cqw 0 #c25e00; font-size: 1.05cqw; line-height: 1.15; padding: 0 .6cqw; }
 .l2-scene > .paper-score { position: absolute; z-index: 5; display: grid; place-items: center; border-radius: 99px; background: #fff7d6; color: #8a5a00; font-family: inherit; font-weight: 800; font-size: 1.3cqw; line-height: 1; box-shadow: 0 0 0 .25cqw #ffcf4a; }
 .l2-scene > .paper-score.hidden { display: none; }
+/* 2-dars 4-bosqich 2/4: buklash ketma-ketligi */
+.l2-scene > .fold-step { z-index: 3; border-radius: 1.6cqw; transition: transform .2s cubic-bezier(.2,.8,.2,1.4), box-shadow .18s, background .18s; }
+.l2-scene > .fold-step:hover, .l2-scene > .fold-step:focus-visible { transform: translateY(-4px) scale(1.03); background: rgba(255,255,255,.14) !important; box-shadow: 0 0 0 .3cqw #fff, 0 0 0 .6cqw rgba(124,77,255,.45); outline: none; }
+.l2-scene > .fold-step.is-done { box-shadow: 0 0 0 .3cqw #4cd964, 0 0 1.6cqw rgba(76,217,100,.7); }
+.l2-scene > .fold-step.is-current { box-shadow: 0 0 0 .35cqw #ffb21a, 0 0 2cqw rgba(255,178,26,.85); animation: l2-bob 1.2s ease-in-out infinite; }
+.l2-scene > .fold-step.is-wrong { animation: fold-shake .45s; box-shadow: 0 0 0 .3cqw #ff5252; }
+@keyframes fold-shake { 20%,60% { transform: translateX(-1cqw); } 40%,80% { transform: translateX(1cqw); } }
+.l2-scene > .fold-badge { position: absolute; z-index: 4; pointer-events: none; width: 3.4cqw; height: 3.4cqw; display: grid; place-items: center; border-radius: 50%;
+  background: linear-gradient(180deg,#5fe07a,#26b14a); color: #fff; font-family: inherit; font-weight: 900; font-size: 1.8cqw; box-shadow: 0 0 0 .25cqw #fff, 0 .3cqw .8cqw rgba(0,0,0,.25);
+  transform: scale(0); transition: transform .35s cubic-bezier(.2,.8,.2,1.6); }
+.l2-scene > .fold-badge.is-on { transform: scale(1); }
+.l2-scene > .fold-cut { position: absolute; z-index: 2; pointer-events: none; transform-origin: left center; transform: scaleX(0); border-radius: 99px; background: #ff5252; box-shadow: 0 0 .8cqw rgba(255,82,82,.8); }
+.l2-scene > .fold-cut::after { content: "✂️"; position: absolute; right: -1.4cqw; top: 50%; transform: translateY(-50%) rotate(180deg); font-size: 1.6cqw; }
+.l2-scene.fold-cutting > .fold-cut { animation: fold-cut .9s ease-in-out var(--d) forwards; }
+@keyframes fold-cut { to { transform: scaleX(1); } }
+.l2-scene > .fold-restart.hidden { display: none; }
 @media (max-width: 600px) {
   .lesson-intro-screen { padding: 6px; }
   .lesson-intro-art { width: min(100%, calc((100vh - 12px) * 1.7779)); }

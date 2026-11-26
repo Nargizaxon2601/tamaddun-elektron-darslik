@@ -1526,16 +1526,23 @@ document.addEventListener("DOMContentLoaded", () => {
   // ===== 2-DARS: "Qog‘oz varag‘i bilan ishlash" — rasmli interaktiv sahifalar =====
   let lesson2Index = 0;
   function hideLesson2() { lesson2Pages().forEach((page) => page.classList.add("hidden")); }
+  // Nuqtalar darsning 8 bosqichini ko'rsatadi; bir bosqichda bir nechta sahifa bo'lishi mumkin (data-l2-stage)
+  const lesson2Stage = (page, k) => (page.dataset.l2Stage !== undefined ? Number(page.dataset.l2Stage) : k);
   function updateLesson2Dots(k) {
     const page = lesson2Pages()[k];
-    const total = lesson2Pages().length;
+    const stage = lesson2Stage(page, k);
     page.querySelectorAll("[data-l2-dot]").forEach((dot) => {
       const i = Number(dot.dataset.l2Dot);
-      dot.classList.toggle("is-done", i < k);
-      dot.classList.toggle("is-current", i === k);
-      dot.disabled = i >= total;
-      if (i === k) dot.setAttribute("aria-current", "step"); else dot.removeAttribute("aria-current");
+      dot.classList.toggle("is-done", i < stage);
+      dot.classList.toggle("is-current", i === stage);
+      if (i === stage) dot.setAttribute("aria-current", "step"); else dot.removeAttribute("aria-current");
     });
+  }
+  function openLesson2Stage(i, feedback) {
+    const pages = lesson2Pages();
+    const k = pages.findIndex((page, j) => lesson2Stage(page, j) === i);
+    if (k >= 0) openLesson2Page(k);
+    else if (feedback) feedback.textContent = (i + 1) + "-bosqich tez orada qo‘shiladi!";
   }
   function openLesson2Page(k) {
     const pages = lesson2Pages();
@@ -1587,7 +1594,7 @@ document.addEventListener("DOMContentLoaded", () => {
       });
     });
     page.querySelectorAll("[data-l2-dot]").forEach((dot) => {
-      dot.addEventListener("click", () => openLesson2Page(Number(dot.dataset.l2Dot)));
+      dot.addEventListener("click", () => openLesson2Stage(Number(dot.dataset.l2Dot), feedback));
     });
     page.querySelector(".l2-back").addEventListener("click", () => (k === 0 ? lesson2ToMap() : openLesson2Page(k - 1)));
     page.querySelector(".l2-next").addEventListener("click", () => {
@@ -1820,6 +1827,48 @@ document.addEventListener("DOMContentLoaded", () => {
       if (quiz) { feedback.textContent = "🎯 Qog‘ozdagi «" + NAMES[quiz.order[quiz.i]] + "»ni bosing! Qaytadan boshlash uchun yana bir marta bosing."; quiz.restart = (quiz.restart || 0) + 1; if (quiz.restart > 1) startQuiz(); return; }
       startQuiz();
     });
+  })();
+  // 2-dars 4-bosqich 2/4: qadamlarni to'g'ri tartibda bosish
+  (function setupFoldSteps() {
+    const steps = Array.from(document.querySelectorAll(".fold-step"));
+    if (!steps.length) return;
+    const scene = steps[0].parentElement;
+    const page = scene.closest("[data-l2-page]");
+    const feedback = page.querySelector(".l2-feedback");
+    const restart = document.getElementById("foldRestart");
+    let next = 1;
+    function reset() {
+      next = 1;
+      steps.forEach((s) => s.classList.remove("is-done", "is-current", "is-wrong"));
+      scene.querySelectorAll(".fold-badge").forEach((b) => b.classList.remove("is-on"));
+      scene.classList.remove("fold-cutting");
+      restart.classList.add("hidden");
+      feedback.textContent = feedback.dataset.hint;
+    }
+    steps.forEach((step) => {
+      step.addEventListener("click", () => {
+        const n = Number(step.dataset.step);
+        if (n < next) { feedback.textContent = "✅ " + n + "-qadam: " + step.dataset.say + (next > steps.length ? "" : " Endi " + next + "-qadamni toping!"); return; }
+        if (n !== next) {
+          step.classList.remove("is-wrong"); void step.offsetWidth; step.classList.add("is-wrong");
+          setTimeout(() => step.classList.remove("is-wrong"), 500);
+          feedback.textContent = "🤔 Shoshilmang! Bu " + next + "-qadam emas. Avval nima qilinishini o‘ylab ko‘ring.";
+          return;
+        }
+        steps.forEach((s) => s.classList.remove("is-current"));
+        step.classList.add("is-done", "is-current");
+        scene.querySelector('.fold-badge[data-step="' + n + '"]').classList.add("is-on");
+        next++;
+        if (next > steps.length) {
+          scene.classList.remove("fold-cutting"); void scene.offsetWidth; scene.classList.add("fold-cutting");
+          feedback.textContent = "✂️ " + n + "-qadam: " + step.dataset.say + " 🎉 Barakalla! Siz qog‘ozni to‘g‘ri buklab, 4 ta tasma qirqdingiz!";
+          restart.classList.remove("hidden");
+        } else {
+          feedback.textContent = "✅ " + n + "-qadam: " + step.dataset.say + " Endi " + next + "-qadamni toping!";
+        }
+      });
+    });
+    restart.addEventListener("click", reset);
   })();
   $("backToQuarters").addEventListener("click",()=>{$("quarterMapScreen").classList.add("hidden");$("quarterScreen").classList.remove("hidden");renderQuarterHub();window.scrollTo(0,0)});
   $("previousQuarter").addEventListener("click",()=>{if(activeQuarter>0)openQuarter(activeMapCourse.quarters[activeQuarter-1].id)});$("nextQuarter").addEventListener("click",()=>{if(activeQuarter<3)openQuarter(activeMapCourse.quarters[activeQuarter+1].id)});
