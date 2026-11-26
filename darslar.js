@@ -34,7 +34,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const stageNames = [
     "Darsga kirish",
     "Vaziyat va tahlil",
-    "Kuzatish",
+    "Kundalik bilimlar",
     "Yangi mavzu",
     "Jismoniy daqiqa",
     "Amaliy ish",
@@ -249,14 +249,11 @@ document.addEventListener("DOMContentLoaded", () => {
           <div id="situationFeedback" class="feedback-box"></div>`,
       },
       {
-        title: "Ish qurollarini kuzatamiz",
-        image: "technology-tools-game.png",
-        advice: "Har bir ish qurolining o‘z vazifasi bor.",
-        content: `
-          <h3>Usta yordamchilarini topamiz!</h3>
-          <p>Rasmga diqqat bilan qarang. Usta o‘z ishini bajarish uchun qanday buyumlardan foydalanadi?</p>
-          <p>Rasmdagi qaychi, yelim, qalam, bo‘yoq va boshqa qurollarni toping.</p>
-          <div class="homework-box">🔎 Har bir ish qurolining nomini ovoz chiqarib ayting.</div>`,
+        // Bu bosqich alohida rasmli sahifada ochiladi (#knowledgeScreen)
+        title: "Kundalik bilimlarni aniqlash",
+        image: "",
+        advice: "",
+        content: "",
       },
       {
         title: "Yangi mavzu bayoni",
