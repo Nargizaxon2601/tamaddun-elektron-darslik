@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>TAMADDUN — Interaktiv dars</title>
-    <link rel="stylesheet" href="darslar.css?v=15" />
+    <link rel="stylesheet" href="darslar.css?v=16" />
   </head>
   <body>
     <header class="topbar">
@@ -335,6 +335,37 @@
       </div>
       <p class="problem-feedback" id="exerciseFeedback" data-hint="Mashq kartochkasini bosing va tulki bilan birga sanab bajaring!" aria-live="polite">Mashq kartochkasini bosing va tulki bilan birga sanab bajaring!</p>
     </main>
+    <main class="lesson-intro-screen lesson-problem-screen build-screen hidden" id="buildScreen" aria-label="6-bosqich: Amaliy ish — Kuzgi kirpicha">
+      <div class="problem-scene knowledge-scene build-scene" id="buildScene" style="aspect-ratio:1671 / 941">
+        <img src="images/1_tex_1s_1dars_6bosqich.webp" alt="Amaliy ish: materiallarni ish maydoniga olib borib, kuzgi kirpicha yasang" />
+        <button type="button" class="build-source" data-piece="gudda" style="left:18.432%;top:14.346%;width:8.318%;height:13.496%" aria-label="G‘uddani ish maydoniga olib borish"></button>
+        <button type="button" class="build-source" data-piece="plastilin" style="left:27.528%;top:14.346%;width:8.259%;height:13.496%" aria-label="Plastilinni ish maydoniga olib borish"></button>
+        <button type="button" class="build-source" data-piece="koz" style="left:18.432%;top:29.330%;width:8.318%;height:11.583%" aria-label="Ko‘zlarni ish maydoniga olib borish"></button>
+        <button type="button" class="build-source" data-piece="burun" style="left:27.528%;top:29.330%;width:8.259%;height:11.583%" aria-label="Burunni ish maydoniga olib borish"></button>
+        <button type="button" class="build-source" data-piece="barg" style="left:18.432%;top:42.189%;width:8.318%;height:12.859%" aria-label="Barglarni ish maydoniga olib borish"></button>
+        <button type="button" class="build-source" data-piece="meva" style="left:27.528%;top:42.189%;width:8.259%;height:12.859%" aria-label="Mevalarni ish maydoniga olib borish"></button>
+        <div class="build-board" style="left:39.198%;top:13.603%;width:29.623%;height:39.532%" aria-label="Ish maydoni"></div>
+        <div class="build-step" data-step="0" style="left:72.113%;top:14.028%;width:23.938%;height:8.077%" aria-hidden="true"><span class="build-step-tick" style="left:9.25%;top:50.00%"></span></div>
+        <div class="build-step" data-step="1" style="left:72.113%;top:23.379%;width:23.938%;height:8.289%" aria-hidden="true"><span class="build-step-tick" style="left:9.25%;top:48.72%"></span></div>
+        <div class="build-step" data-step="2" style="left:72.113%;top:32.731%;width:23.938%;height:8.289%" aria-hidden="true"><span class="build-step-tick" style="left:9.25%;top:50.00%"></span></div>
+        <div class="build-step" data-step="3" style="left:72.113%;top:42.295%;width:23.938%;height:10.202%" aria-hidden="true"><span class="build-step-tick" style="left:9.25%;top:40.62%"></span></div>
+        <button type="button" class="build-btn" id="buildReset" style="left:29.922%;top:58.236%;width:18.552%;height:6.801%" aria-label="Qayta boshlash"></button>
+        <button type="button" class="build-btn" id="buildCheck" style="left:51.765%;top:57.917%;width:20.646%;height:7.333%" aria-label="Tekshirish"></button>
+        <button type="button" class="knowledge-dot" data-build-dot="0" style="left:33.214%;top:79.809%" aria-label="1-bosqich"></button>
+        <button type="button" class="knowledge-dot" data-build-dot="1" style="left:37.582%;top:79.809%" aria-label="2-bosqich"></button>
+        <button type="button" class="knowledge-dot" data-build-dot="2" style="left:42.011%;top:79.809%" aria-label="3-bosqich"></button>
+        <button type="button" class="knowledge-dot" data-build-dot="3" style="left:46.379%;top:79.809%" aria-label="4-bosqich"></button>
+        <button type="button" class="knowledge-dot" data-build-dot="4" style="left:50.808%;top:79.809%" aria-label="5-bosqich"></button>
+        <button type="button" class="knowledge-dot" data-build-dot="5" style="left:55.236%;top:79.809%" aria-label="6-bosqich"></button>
+        <button type="button" class="knowledge-dot" data-build-dot="6" style="left:59.665%;top:79.809%" aria-label="7-bosqich"></button>
+        <button type="button" class="knowledge-dot" data-build-dot="7" style="left:64.093%;top:79.809%" aria-label="8-bosqich"></button>
+        <button type="button" class="knowledge-hero" data-hero="robot" style="left:2.693%;top:35.919%;width:13.585%;height:35.282%;clip-path:polygon(17.6% 0.0%, 24.2% 2.1%, 26.4% 11.1%, 55.1% 12.7%, 72.7% 18.7%, 79.3% 27.7%, 90.3% 23.2%, 100.0% 30.7%, 96.9% 39.8%, 83.7% 45.8%, 77.1% 54.8%, 79.3% 72.9%, 90.3% 84.9%, 94.7% 98.5%, 59.5% 100.0%, 33.0% 98.5%, 15.4% 94.0%, 17.6% 78.9%, 11.0% 66.9%, 0.0% 57.8%, 0.0% 39.8%, 6.6% 24.7%, 15.4% 17.2%)" aria-label="Robotcha" aria-pressed="false"></button>
+        <button type="button" class="knowledge-hero" data-hero="tulki" style="left:82.286%;top:49.947%;width:17.355%;height:28.693%;clip-path:polygon(29.3% 11.1%, 43.1% 1.9%, 63.8% 0.0%, 84.5% 11.1%, 98.3% 25.9%, 100.0% 48.1%, 94.8% 70.4%, 91.4% 92.6%, 70.7% 100.0%, 43.1% 98.1%, 29.3% 85.2%, 27.6% 63.0%, 25.9% 48.1%, 15.5% 44.4%, 1.7% 42.6%, 0.0% 35.2%, 12.1% 29.6%, 25.9% 27.8%)" aria-label="Tulki" aria-pressed="false"></button>
+        <button type="button" class="knowledge-nav knowledge-back" id="buildBack" style="left:2.095%;top:75.983%;width:10.473%;height:11.371%" aria-label="Oldingi sahifaga qaytish"><span class="intro-control-label">Orqaga</span></button>
+        <button type="button" class="knowledge-nav knowledge-next" id="buildContinue" style="left:87.373%;top:75.983%;width:11.071%;height:11.371%" aria-label="Keyingi bosqichga o‘tish"><span class="intro-control-label">Davom etish</span></button>
+      </div>
+      <p class="problem-feedback" id="buildFeedback" data-hint="Materialni ushlab, ish maydoniga surib olib boring. 1-qadam: g‘uddani tanlang." aria-live="polite">Materialni ushlab, ish maydoniga surib olib boring. 1-qadam: g‘uddani tanlang.</p>
+    </main>
     <!-- INTERAKTIV DARSLIK -->
     <main class="learning-screen hidden" id="learningScreen">
       <aside class="lesson-sidebar">
@@ -453,6 +484,6 @@
       </aside>
     </main>
 
-    <script src="darslar.js?v=15"></script>
+    <script src="darslar.js?v=16"></script>
   </body>
 </html>

@@ -407,6 +407,33 @@ body.lesson-problem-active .topbar { display: none; }
 }
 .ex-check::after { content: "✓"; }
 .exercise-card.is-done .ex-check { transform: translate(-50%, -50%) scale(1); }
+/* 6-BOSQICH: AMALIY ISH — KUZGI KIRPICHA */
+.build-scene { container-type: inline-size; }
+.build-scene > .build-source { z-index: 3; border-radius: 1.4cqw; touch-action: none; cursor: grab; transition: transform .16s, box-shadow .16s, background .16s; }
+.build-scene > .build-source:hover,
+.build-scene > .build-source:focus-visible { transform: scale(1.05); background: rgba(255,255,255,.2) !important; box-shadow: 0 0 0 3px #fff, 0 0 0 6px rgba(124,77,255,.5); outline: none; }
+.build-board { position: absolute; z-index: 2; border-radius: 1.6cqw; transition: box-shadow .25s; }
+.build-board.is-over { box-shadow: inset 0 0 0 .35cqw rgba(8,119,249,.55), 0 0 18px rgba(8,119,249,.45); }
+.build-board.is-won { box-shadow: inset 0 0 0 .4cqw rgba(20,168,50,.75), 0 0 26px rgba(76,217,100,.8); animation: match-pulse 1.4s ease 2; }
+.build-piece { position: absolute; z-index: 6; transform: translate(-50%, -50%); touch-action: none; cursor: grab; user-select: none; -webkit-user-select: none; filter: drop-shadow(0 .3cqw .3cqw rgba(80,40,0,.3)); transition: filter .15s; }
+.build-piece img { display: block; width: 100%; height: 100%; pointer-events: none; -webkit-user-drag: none; }
+.build-piece.is-flip img { transform: scaleX(-1); }
+.build-piece.is-dragging { cursor: grabbing; filter: drop-shadow(0 .8cqw .7cqw rgba(80,40,0,.4)); z-index: 20 !important; }
+.build-piece.is-outside { opacity: .45; }
+.build-piece[data-kind="gudda"] { z-index: 6; }
+.build-piece[data-kind="plastilin"] { z-index: 7; }
+.build-piece[data-kind="barg"], .build-piece[data-kind="meva"] { z-index: 8; }
+.build-piece[data-kind="koz"], .build-piece[data-kind="burun"] { z-index: 9; }
+.build-step { position: absolute; z-index: 2; border-radius: 1.3cqw; pointer-events: none; transition: box-shadow .25s, background .25s; }
+.build-step.is-next { box-shadow: 0 0 0 .3cqw #ffb21a, 0 0 16px rgba(255,178,26,.7); animation: build-glow 1.4s ease-in-out infinite; }
+.build-step.is-done { background: rgba(76,217,100,.14); box-shadow: 0 0 0 .3cqw rgba(20,168,50,.7); }
+@keyframes build-glow { 50% { box-shadow: 0 0 0 .3cqw #ffb21a, 0 0 26px rgba(255,178,26,.95); } }
+.build-step-tick { position: absolute; width: 3.1cqw; aspect-ratio: 1; transform: translate(-50%, -50%) scale(0); border-radius: 50%; display: grid; place-items: center; background: linear-gradient(145deg, #4cd964, #14a832); box-shadow: 0 0 0 .3cqw #fff; color: #fff; font: 1000 1.9cqw/1 Nunito, sans-serif; transition: transform .3s cubic-bezier(.2,.8,.2,1.5); }
+.build-step-tick::after { content: "✓"; }
+.build-step.is-done .build-step-tick { transform: translate(-50%, -50%) scale(1); }
+.build-scene > .build-btn { z-index: 3; border-radius: 999px; transition: transform .16s, box-shadow .16s; }
+.build-scene > .build-btn:hover,
+.build-scene > .build-btn:focus-visible { transform: scale(1.05); box-shadow: 0 0 0 4px rgba(255,255,255,.85), 0 6px 16px rgba(7,54,121,.35); outline: none; }
 @media (max-width: 600px) {
   .lesson-intro-screen { padding: 6px; }
   .lesson-intro-art { width: min(100%, calc((100vh - 12px) * 1.7779)); }
