@@ -579,6 +579,27 @@ body.lesson-problem-active .topbar { display: none; }
 .qa-options button:disabled { cursor: default; }
 .qa-next { align-self: center; padding: .7cqw 2cqw; border: .25cqw solid #fff; border-radius: 999px; background: linear-gradient(145deg, #b28cff, #7c4dff 74%); color: #fff; font: 900 1.45cqw/1 Nunito, sans-serif; cursor: pointer; box-shadow: 0 .3cqw .8cqw rgba(60,20,140,.35); }
 .qa-next.hidden { display: none; }
+/* 2-dars 4-bosqich 1/4: qog'oz tomonlari */
+.l2-scene > .paper-board { position: absolute; z-index: 2; pointer-events: none; border-radius: .3cqw; transition: box-shadow .25s; }
+.l2-scene > .paper-board.is-win { box-shadow: 0 0 0 .4cqw #4cd964, 0 0 2.4cqw rgba(76,217,100,.8); }
+.l2-scene > .paper-mark { position: absolute; z-index: 2; pointer-events: none; opacity: 0; border-radius: .4cqw; background: rgba(255,170,0,.85); box-shadow: 0 0 0 .25cqw #fff, 0 0 1.8cqw .3cqw rgba(255,140,0,.9); transition: opacity .2s, transform .2s; }
+.l2-scene > .paper-mark-tl, .l2-scene > .paper-mark-tr, .l2-scene > .paper-mark-bl, .l2-scene > .paper-mark-br { border-radius: 50%; }
+.l2-scene > .paper-mark.is-on { opacity: 1; animation: paper-pulse 1s ease-in-out infinite; }
+.l2-scene > .paper-mark.is-good { opacity: 1; background: rgba(60,200,90,.85); box-shadow: 0 0 0 .25cqw #fff, 0 0 1.8cqw .3cqw rgba(76,217,100,.9); }
+.l2-scene > .paper-mark.is-bad { opacity: 1; background: rgba(255,70,70,.85); box-shadow: 0 0 0 .25cqw #fff, 0 0 1.8cqw .3cqw rgba(255,82,82,.9); }
+@keyframes paper-pulse { 50% { filter: brightness(1.25); transform: scale(1.06); } }
+.l2-scene > .paper-zone { z-index: 4; border-radius: .5cqw; cursor: pointer; }
+.l2-scene > .paper-zone:hover, .l2-scene > .paper-zone:focus-visible { background: rgba(8,119,249,.14) !important; outline: none; }
+.l2-scene > .paper-label { z-index: 3; border-radius: 1.2cqw; transition: transform .2s cubic-bezier(.2,.8,.2,1.4), box-shadow .18s, background .18s; }
+.l2-scene > .paper-label:hover, .l2-scene > .paper-label:focus-visible { transform: scale(1.06); background: rgba(255,255,255,.18) !important; box-shadow: 0 0 0 .3cqw #fff, 0 0 0 .6cqw rgba(124,77,255,.45); outline: none; }
+.l2-scene > .paper-label.is-on { box-shadow: 0 0 0 .3cqw #ffb21a, 0 0 1.8cqw rgba(255,178,26,.8); transform: scale(1.06); }
+.l2-scene > .paper-quiz { position: absolute; z-index: 5; border: 0; border-radius: 99px; font-family: inherit; font-weight: 800; font-size: 1.35cqw; line-height: 1; color: #fff; cursor: pointer;
+  background: linear-gradient(180deg,#8d63ff,#5b2ee6); box-shadow: 0 .35cqw 0 #3d1aa8, 0 .8cqw 1.4cqw rgba(61,26,168,.35); transition: transform .15s; animation: l2-bob 1.6s ease-in-out infinite; }
+.l2-scene > .paper-quiz:hover { transform: scale(1.07); }
+.l2-scene > .paper-quiz:active { transform: translateY(.2cqw); box-shadow: 0 .15cqw 0 #3d1aa8; }
+.l2-scene > .paper-quiz.is-running { animation: none; background: linear-gradient(180deg,#ffb21a,#ff8a00); box-shadow: 0 .35cqw 0 #c25e00; font-size: 1.05cqw; line-height: 1.15; padding: 0 .6cqw; }
+.l2-scene > .paper-score { position: absolute; z-index: 5; display: grid; place-items: center; border-radius: 99px; background: #fff7d6; color: #8a5a00; font-family: inherit; font-weight: 800; font-size: 1.3cqw; line-height: 1; box-shadow: 0 0 0 .25cqw #ffcf4a; }
+.l2-scene > .paper-score.hidden { display: none; }
 @media (max-width: 600px) {
   .lesson-intro-screen { padding: 6px; }
   .lesson-intro-art { width: min(100%, calc((100vh - 12px) * 1.7779)); }

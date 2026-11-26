@@ -1746,6 +1746,81 @@ document.addEventListener("DOMContentLoaded", () => {
     $("qaOpen").addEventListener("click", startQa);
     $("qaNext").addEventListener("click", () => { if (qi < QA.length - 1) { qi++; showQ(); } else startQa(); });
   })();
+  // 2-dars 4-bosqich 1/4: qog'oz varag'ining tomonlari va burchaklari
+  (function setupPaperSides() {
+    const board = document.getElementById("paperBoard");
+    if (!board) return;
+    const scene = board.parentElement;
+    const page = scene.closest("[data-l2-page]");
+    const feedback = page.querySelector(".l2-feedback");
+    const quizBtn = document.getElementById("paperQuiz");
+    const scoreEl = document.getElementById("paperScore");
+    const labels = Array.from(scene.querySelectorAll(".paper-label"));
+    const marks = Array.from(scene.querySelectorAll(".paper-mark"));
+    const NAMES = {}; labels.forEach((l) => { NAMES[l.dataset.part] = l.dataset.name; });
+    const ALL = Object.keys(NAMES);
+    const seen = new Set();
+    let quiz = null;
+    const cap = (t) => t.charAt(0).toUpperCase() + t.slice(1);
+    function clearMarks() { marks.forEach((m) => m.classList.remove("is-on", "is-good", "is-bad")); labels.forEach((l) => l.classList.remove("is-on")); board.classList.remove("is-win"); }
+    function show(part) {
+      clearMarks();
+      scene.querySelector('.paper-mark[data-part="' + part + '"]').classList.add("is-on");
+      scene.querySelector('.paper-label[data-part="' + part + '"]').classList.add("is-on");
+      seen.add(part);
+      const corner = part.length === 2;
+      feedback.textContent = "👉 " + cap(NAMES[part]) + (corner ? " — ikki tomon uchrashgan joy." : " — qog‘ozning bir cheti.") +
+        (seen.size === ALL.length ? " 🎉 Hamma tomon va burchaklarni ko‘rdingiz! Endi «🎯 Topib ko‘r!» tugmasini bosing." : " Ko‘rildi: " + seen.size + " / " + ALL.length);
+    }
+    function ask() {
+      clearMarks();
+      const part = quiz.order[quiz.i];
+      quizBtn.textContent = "Toping: " + NAMES[part];
+      quizBtn.classList.add("is-running");
+      scoreEl.textContent = "⭐ " + quiz.score + " / " + ALL.length;
+      feedback.textContent = "🎯 " + (quiz.i + 1) + "-savol: qog‘ozdagi «" + NAMES[part] + "»ni bosing!";
+    }
+    function startQuiz() {
+      const order = ALL.slice();
+      for (let i = order.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [order[i], order[j]] = [order[j], order[i]]; }
+      quiz = { order, i: 0, score: 0, miss: false };
+      scoreEl.classList.remove("hidden");
+      ask();
+    }
+    function answer(part) {
+      const want = quiz.order[quiz.i];
+      const mark = scene.querySelector('.paper-mark[data-part="' + part + '"]');
+      clearMarks();
+      if (part === want) {
+        if (!quiz.miss) quiz.score++;
+        quiz.miss = false;
+        quiz.i++;
+        scoreEl.textContent = "⭐ " + quiz.score + " / " + ALL.length;
+        if (quiz.i >= ALL.length) {
+          board.classList.add("is-win");
+          feedback.textContent = "🏆 Barakalla! Hammasini topdingiz. Birinchi urinishda: " + quiz.score + " / " + ALL.length + ". Yana o‘ynash uchun tugmani bosing.";
+          quizBtn.textContent = "↻ Yana o‘ynash";
+          quizBtn.classList.remove("is-running");
+          quiz = null;
+          return;
+        }
+        ask();
+        mark.classList.add("is-good");
+        feedback.textContent = "✅ To‘g‘ri! Bu — " + NAMES[part] + ". Endi qog‘ozdagi «" + NAMES[quiz.order[quiz.i]] + "»ni bosing!";
+      } else {
+        quiz.miss = true;
+        mark.classList.add("is-bad");
+        feedback.textContent = "🤔 Bu — " + NAMES[part] + ". Bizga «" + NAMES[want] + "» kerak. Yana urinib ko‘ring!";
+      }
+    }
+    scene.querySelectorAll(".paper-zone, .paper-label").forEach((el) => {
+      el.addEventListener("click", () => (quiz ? answer(el.dataset.part) : show(el.dataset.part)));
+    });
+    quizBtn.addEventListener("click", () => {
+      if (quiz) { feedback.textContent = "🎯 Qog‘ozdagi «" + NAMES[quiz.order[quiz.i]] + "»ni bosing! Qaytadan boshlash uchun yana bir marta bosing."; quiz.restart = (quiz.restart || 0) + 1; if (quiz.restart > 1) startQuiz(); return; }
+      startQuiz();
+    });
+  })();
   $("backToQuarters").addEventListener("click",()=>{$("quarterMapScreen").classList.add("hidden");$("quarterScreen").classList.remove("hidden");renderQuarterHub();window.scrollTo(0,0)});
   $("previousQuarter").addEventListener("click",()=>{if(activeQuarter>0)openQuarter(activeMapCourse.quarters[activeQuarter-1].id)});$("nextQuarter").addEventListener("click",()=>{if(activeQuarter<3)openQuarter(activeMapCourse.quarters[activeQuarter+1].id)});
   $("returnToMap").addEventListener("click",()=>{document.body.classList.remove("lesson-intro-active","lesson-problem-active");$("problemSituationScreen").classList.add("hidden");hideKnowledgeScreen();hideSafetyScreen();hideExerciseScreen();$("lessonIntroScreen").classList.add("hidden");$("learningScreen").classList.add("hidden");$("quarterMapScreen").classList.remove("hidden");renderQuarterMap();window.scrollTo(0,0)});
