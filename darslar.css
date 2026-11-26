@@ -302,6 +302,9 @@ body.lesson-problem-active .topbar { display: none; }
 .safety-rule.is-checked .safety-badge { background: linear-gradient(145deg, #4cd964, #14a832); box-shadow: 0 0 0 3px #fff, 0 3px 8px rgba(10,80,30,.35); transform: translate(-35%, -35%) scale(1.1); }
 .safety-rule.is-checked .safety-badge::after { content: "✓"; }
 .safety-rule:has(.safety-badge) { border-radius: 28px; }
+.safety-badge-mini { width: 2.1cqw; font-size: 1.4cqw; transform: translate(-50%, -50%); background: transparent; box-shadow: none; }
+.safety-rule.is-checked .safety-badge-mini { transform: translate(-50%, -50%) scale(1.1); }
+.safety-rule:has(.safety-badge-mini) { border-radius: 14px; }
 .safety-object { border-radius: 20px; transition: background .18s, box-shadow .18s, transform .18s; }
 .safety-object:hover,
 .safety-object:focus-visible { background: rgba(255,255,255,.18) !important; box-shadow: 0 0 0 3px rgba(255,178,26,.8); transform: scale(1.04); outline: none; }
