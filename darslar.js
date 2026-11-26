@@ -1952,6 +1952,124 @@ document.addEventListener("DOMContentLoaded", () => {
     });
     quizBtn.addEventListener("click", startQuiz);
   })();
+  // 2-dars 4-bosqich 4/4: qaychi bilan shakl o'zgartirish va albomga surib yopishtirish
+  (function setupAlbum() {
+    const panel = document.getElementById("albumPanel");
+    if (!panel) return;
+    const scene = panel.parentElement;
+    const page = scene.closest("[data-l2-page]");
+    const feedback = page.querySelector(".l2-feedback");
+    const cap = (t) => t.charAt(0).toUpperCase() + t.slice(1);
+    const made = new Set();
+    scene.querySelectorAll(".tf-src").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const row = btn.dataset.row;
+        scene.querySelectorAll(".tf-src").forEach((b) => b.classList.toggle("is-on", b.dataset.row === row && !b.classList.contains("tf-txt")));
+        scene.querySelectorAll('.tf-cut[data-row="' + row + '"], .tf-merge[data-row="' + row + '"]').forEach((c) => { c.classList.remove("is-run"); void c.offsetWidth; c.classList.add("is-run"); });
+        feedback.textContent = "✂️ " + btn.dataset.say;
+        setTimeout(() => {
+          scene.querySelector('.tf-name[data-row="' + row + '"]').classList.add("is-on");
+          made.add(row);
+          feedback.textContent = "🎉 " + cap(btn.dataset.name) + " hosil bo‘ldi! " + btn.dataset.say +
+            (made.size === 3 ? " Endi albomni ochib, shakllarni yopishtiring!" : " Yangi shakllar: " + made.size + " / 3.");
+        }, 850);
+      });
+    });
+    const tray = document.getElementById("albumTray");
+    const scoreEl = document.getElementById("albumScore");
+    const SHAPES = [["circle", "Doira", "#9b7bf0"], ["half", "Yarimdoira", "#ff8fb1"], ["square", "Kvadrat", "#4fb3ff"], ["tri", "Uchburchak", "#ffb21a"], ["rect", "To‘g‘ri to‘rtburchak", "#4cd964"], ["oval", "Oval", "#ff7a59"]];
+    let score = 0, picked = null;
+    function fill() {
+      tray.innerHTML = "";
+      score = 0; picked = null;
+      scoreEl.textContent = "⭐ 0 / 6";
+      panel.querySelectorAll(".alb-slot").forEach((slot) => { slot.classList.remove("is-filled", "is-hover"); slot.querySelectorAll(".shp.is-glued").forEach((s) => s.remove()); slot.querySelector(".shp").style.display = ""; });
+      const list = SHAPES.slice().sort(() => Math.random() - 0.5);
+      list.forEach(([key, name, color]) => {
+        const p = document.createElement("div");
+        p.className = "alb-piece";
+        p.dataset.shape = key;
+        p.dataset.name = name;
+        p.setAttribute("role", "button");
+        p.setAttribute("tabindex", "0");
+        p.setAttribute("aria-label", name + " — albomdagi joyiga suring");
+        p.innerHTML = '<i class="shp shp-' + key + '" style="--c:' + color + '"></i>';
+        bindPiece(p);
+        tray.appendChild(p);
+      });
+    }
+    function place(piece, slot) {
+      if (!slot || slot.classList.contains("is-filled")) { piece.style.transform = ""; return; }
+      if (slot.dataset.shape === piece.dataset.shape) {
+        const shp = piece.querySelector(".shp");
+        shp.classList.add("is-glued");
+        slot.querySelector(".shp").style.display = "none";
+        slot.insertBefore(shp, slot.firstChild);
+        slot.classList.add("is-filled");
+        piece.remove();
+        picked = null;
+        score++;
+        scoreEl.textContent = "⭐ " + score + " / 6";
+        feedback.textContent = score === 6
+          ? "🏆 Barakalla! Hamma shakllar albomga tartib bilan yopishtirildi! Albomni yopish uchun ✕ ni bosing."
+          : "✅ To‘g‘ri! «" + piece.dataset.name + "» albomga yopishtirildi. Yopishtirildi: " + score + " / 6.";
+      } else {
+        piece.style.transform = "";
+        slot.classList.remove("is-wrong"); void slot.offsetWidth; slot.classList.add("is-wrong");
+        setTimeout(() => slot.classList.remove("is-wrong"), 500);
+        feedback.textContent = "🤔 Bu joyga «" + slot.querySelector("small").textContent + "» kerak. «" + piece.dataset.name + "»ning joyini toping!";
+      }
+    }
+    function slotAt(x, y) { return document.elementsFromPoint(x, y).map((el) => el.closest && el.closest(".alb-slot")).find(Boolean) || null; }
+    function bindPiece(p) {
+      let sx = 0, sy = 0, moved = false, id = null;
+      p.addEventListener("pointerdown", (e) => {
+        id = e.pointerId; sx = e.clientX; sy = e.clientY; moved = false;
+        p.setPointerCapture(id);
+        e.preventDefault();
+      });
+      p.addEventListener("pointermove", (e) => {
+        if (e.pointerId !== id) return;
+        const dx = e.clientX - sx, dy = e.clientY - sy;
+        if (!moved && Math.hypot(dx, dy) < 6) return;
+        moved = true;
+        p.classList.add("is-drag");
+        p.style.pointerEvents = "none";
+        p.style.transform = "translate(" + dx + "px," + dy + "px) scale(1.08)";
+        panel.querySelectorAll(".alb-slot").forEach((s) => s.classList.remove("is-hover"));
+        const s = slotAt(e.clientX, e.clientY);
+        if (s && !s.classList.contains("is-filled")) s.classList.add("is-hover");
+      });
+      const end = (e) => {
+        if (e.pointerId !== id) return;
+        id = null;
+        p.classList.remove("is-drag");
+        p.style.pointerEvents = "";
+        panel.querySelectorAll(".alb-slot").forEach((s) => s.classList.remove("is-hover"));
+        if (moved) { place(p, e.type === "pointerup" ? slotAt(e.clientX, e.clientY) : null); return; }
+        tray.querySelectorAll(".alb-piece").forEach((x) => x.classList.toggle("is-picked", x === p));
+        picked = p;
+        feedback.textContent = "👉 «" + p.dataset.name + "» tanlandi. Endi albomdagi joyini bosing yoki surib olib boring.";
+      };
+      p.addEventListener("pointerup", end);
+      p.addEventListener("pointercancel", end);
+    }
+    panel.querySelectorAll(".alb-slot").forEach((slot) => {
+      slot.addEventListener("click", () => {
+        if (picked) place(picked, slot);
+        else if (!slot.classList.contains("is-filled")) feedback.textContent = "Bu joyga «" + slot.querySelector("small").textContent + "» yopishtiriladi. O‘ngdagi shakllardan birini surib olib keling!";
+      });
+    });
+    document.getElementById("albumOpen").addEventListener("click", () => {
+      panel.classList.remove("hidden");
+      if (score === 6 || !tray.children.length) fill();
+      feedback.textContent = "📒 O‘ngdagi shakllarni barmoq yoki sichqoncha bilan albomdagi mos joyga surib olib boring!";
+    });
+    document.getElementById("albumClose").addEventListener("click", () => {
+      panel.classList.add("hidden");
+      feedback.textContent = score === 6 ? "🏆 Albom tayyor! → tugmasi bilan keyingi bosqichga o‘ting." : "Albomni yana ochib, o‘yinni davom ettirishingiz mumkin.";
+    });
+  })();
   $("backToQuarters").addEventListener("click",()=>{$("quarterMapScreen").classList.add("hidden");$("quarterScreen").classList.remove("hidden");renderQuarterHub();window.scrollTo(0,0)});
   $("previousQuarter").addEventListener("click",()=>{if(activeQuarter>0)openQuarter(activeMapCourse.quarters[activeQuarter-1].id)});$("nextQuarter").addEventListener("click",()=>{if(activeQuarter<3)openQuarter(activeMapCourse.quarters[activeQuarter+1].id)});
   $("returnToMap").addEventListener("click",()=>{document.body.classList.remove("lesson-intro-active","lesson-problem-active");$("problemSituationScreen").classList.add("hidden");hideKnowledgeScreen();hideSafetyScreen();hideExerciseScreen();$("lessonIntroScreen").classList.add("hidden");$("learningScreen").classList.add("hidden");$("quarterMapScreen").classList.remove("hidden");renderQuarterMap();window.scrollTo(0,0)});
