@@ -1598,7 +1598,8 @@ document.addEventListener("DOMContentLoaded", () => {
     });
     page.querySelector(".l2-back").addEventListener("click", () => (k === 0 || page.querySelector(".l2-back").dataset.home ? lesson2ToMap() : openLesson2Page(k - 1)));
     page.querySelector(".l2-next").addEventListener("click", () => {
-      if (k < lesson2Pages().length - 1) openLesson2Page(k + 1);
+      if (page.querySelector(".l2-next").dataset.home) lesson2ToMap();
+      else if (k < lesson2Pages().length - 1) openLesson2Page(k + 1);
       else feedback.textContent = "Keyingi bosqich tez orada qo‘shiladi! Hozircha ← tugmasi bilan orqaga qaytishingiz mumkin.";
     });
   });
@@ -2407,6 +2408,84 @@ document.addEventListener("DOMContentLoaded", () => {
     }
     document.getElementById("tugAgain").addEventListener("click", () => { reset(); feedback.textContent = "↻ Yangi bellashuv boshlandi! Omad, jamoalar!"; });
     reset();
+  })();
+  // 2-dars 8-bosqich: darsni yakunlash — yulduzcha bilan baholash, medallar, uyga vazifa, konfetti
+  (function setupLesson2Final() {
+    const stars = Array.from(document.querySelectorAll(".rate-star"));
+    if (!stars.length) return;
+    const scene = stars[0].parentElement;
+    const page = scene.closest("[data-l2-page]");
+    const feedback = page.querySelector(".l2-feedback");
+    const box = document.getElementById("l2FinalConfetti");
+    const ROWS = ["Faollik", "Topshiriqlarni aniq bajarish", "Jamoada hamkorlik"];
+    const PRAISE = ["Harakat qiling, keyingi safar albatta zo‘r bo‘ladi!", "Yaxshi! Yana ozgina harakat qilsak bo‘ladi.", "A’lo! Siz bugun zo‘r ishladingiz!"];
+    const rating = [0, 0, 0];
+    function confetti(count = 22) {
+      const bits = ["⭐", "🎉", "✨", "🌟", "🟦", "🔺", "🟣"];
+      for (let i = 0; i < count; i++) {
+        const s = document.createElement("span");
+        s.textContent = bits[i % bits.length];
+        s.style.left = Math.random() * 96 + "%";
+        s.style.animationDuration = 1.8 + Math.random() * 1.6 + "s";
+        s.style.animationDelay = Math.random() * 0.5 + "s";
+        box.appendChild(s);
+        setTimeout(() => s.remove(), 4200);
+      }
+    }
+    function paint(r) {
+      stars.filter((s) => Number(s.dataset.row) === r).forEach((s) => {
+        const on = Number(s.dataset.star) <= rating[r];
+        s.classList.toggle("is-on", on);
+        s.setAttribute("aria-pressed", String(on));
+      });
+    }
+    stars.forEach((star) => {
+      star.addEventListener("click", () => {
+        const r = Number(star.dataset.row), n = Number(star.dataset.star);
+        rating[r] = rating[r] === n ? n - 1 : n;
+        paint(r);
+        star.classList.remove("is-pop"); void star.offsetWidth; star.classList.add("is-pop");
+        const done = rating.filter(Boolean).length;
+        if (done === 3) {
+          const total = rating.reduce((a, b) => a + b, 0);
+          feedback.textContent = "🌟 Baholash tugadi: " + total + " / 9 yulduzcha! " + (total >= 8 ? "Ajoyib natija! Endi medalingizni tanlang." : "Barakalla! Endi medal tanlang.");
+          if (total >= 8) confetti(16);
+        } else {
+          feedback.textContent = "⭐ " + ROWS[r] + ": " + rating[r] + " yulduzcha. " + (rating[r] ? PRAISE[rating[r] - 1] : "") + " Baholangan: " + done + " / 3";
+        }
+      });
+    });
+    const medals = Array.from(scene.querySelectorAll(".l2-medal"));
+    medals.forEach((medal) => {
+      medal.addEventListener("click", () => {
+        medals.forEach((other) => {
+          const on = other === medal;
+          other.classList.toggle("is-selected", on);
+          other.classList.toggle("is-dim", !on);
+          other.setAttribute("aria-pressed", String(on));
+        });
+        feedback.textContent = medal.dataset.say;
+        confetti(medal.dataset.medal === "oltin" ? 24 : 10);
+      });
+    });
+    scene.querySelector(".l2-ribbon").addEventListener("click", () => {
+      feedback.textContent = "🎗 Faol o‘quvchilar rag‘batlantirildi! Bugun hammangiz zo‘r ishladingiz!";
+      confetti(14);
+    });
+    scene.querySelectorAll(".hw-shape").forEach((shape) => {
+      shape.addEventListener("click", () => {
+        shape.classList.remove("is-pop"); void shape.offsetWidth; shape.classList.add("is-pop");
+        feedback.textContent = "✏️ Bu — " + shape.dataset.name + ". Uni daftaringizga chizib, nomini yozing!";
+      });
+    });
+    const sign = scene.querySelector(".l2-sign");
+    sign.addEventListener("click", () => {
+      sign.classList.remove("is-wave"); void sign.offsetWidth; sign.classList.add("is-wave");
+      confetti(30);
+      feedback.textContent = "👋 Darsimiz yakunlandi! Faol ishtirokingiz uchun rahmat! Uycha tugmasini bosib, Kuzgi sayohat xaritasiga qayting.";
+    });
+    // sahifa ochilganda kichik bayram
+    new MutationObserver(() => { if (!page.classList.contains("hidden")) setTimeout(() => confetti(14), 300); }).observe(page, { attributes: true, attributeFilter: ["class"] });
   })();
   $("backToQuarters").addEventListener("click",()=>{$("quarterMapScreen").classList.add("hidden");$("quarterScreen").classList.remove("hidden");renderQuarterHub();window.scrollTo(0,0)});
   $("previousQuarter").addEventListener("click",()=>{if(activeQuarter>0)openQuarter(activeMapCourse.quarters[activeQuarter-1].id)});$("nextQuarter").addEventListener("click",()=>{if(activeQuarter<3)openQuarter(activeMapCourse.quarters[activeQuarter+1].id)});
