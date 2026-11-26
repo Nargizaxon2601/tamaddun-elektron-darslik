@@ -734,6 +734,16 @@ document.addEventListener("DOMContentLoaded", () => {
       });
       rule.addEventListener("animationend", () => rule.classList.remove("is-flash"));
     });
+    screen.querySelectorAll("[data-mood]").forEach((face) => {
+      face.addEventListener("click", () => {
+        screen.querySelectorAll("[data-mood]").forEach((other) => {
+          const selected = other === face;
+          other.classList.toggle("is-selected", selected);
+          other.setAttribute("aria-pressed", String(selected));
+        });
+        updateSafetyState(k, face.dataset.say);
+      });
+    });
     screen.querySelectorAll("[data-object-rule]").forEach((object) => {
       object.addEventListener("click", () => {
         const rule = screen.querySelector('[data-rule="' + object.dataset.objectRule + '"]');

@@ -305,6 +305,10 @@ body.lesson-problem-active .topbar { display: none; }
 .safety-badge-mini { width: 2.1cqw; font-size: 1.4cqw; transform: translate(-50%, -50%); background: transparent; box-shadow: none; }
 .safety-rule.is-checked .safety-badge-mini { transform: translate(-50%, -50%) scale(1.1); }
 .safety-rule:has(.safety-badge-mini) { border-radius: 14px; }
+.mood-face { border-radius: 50% / 45%; transition: transform .18s, background .18s, box-shadow .18s; }
+.mood-face:hover,
+.mood-face:focus-visible { transform: scale(1.1); background: rgba(255,214,64,.18) !important; outline: none; }
+.mood-face.is-selected { transform: scale(1.12); background: rgba(255,214,64,.32) !important; box-shadow: 0 0 0 3px #ffb21a, 0 0 14px rgba(255,178,26,.7); }
 .safety-object { border-radius: 20px; transition: background .18s, box-shadow .18s, transform .18s; }
 .safety-object:hover,
 .safety-object:focus-visible { background: rgba(255,255,255,.18) !important; box-shadow: 0 0 0 3px rgba(255,178,26,.8); transform: scale(1.04); outline: none; }
