@@ -8,6 +8,8 @@ document.addEventListener("DOMContentLoaded", () => {
   let lessonIndex = 0;
   let stageIndex = 0;
   let situationChoice = "";
+  const knownTools = new Set();
+  const knowledgeTools = [["Qaychi", "Qaychi qog‘oz va kartonni qirqish uchun kerak. U bilan ehtiyot bo‘lib ishlaymiz!"], ["Yelim", "Yelim qog‘oz va karton bo‘laklarini bir-biriga yopishtiradi."], ["Qalam", "Qalam bilan chizamiz, belgi qo‘yamiz va shakllarni chizib olamiz."], ["Bo‘yoq", "Bo‘yoq bilan rasm va buyumlarimizni rang-barang qilamiz."], ["Mo‘yqalam", "Mo‘yqalam bo‘yoqni qog‘ozga surtish uchun ishlatiladi."], ["Plastilin", "Plastilindan turli shakl va hayvonchalar yasaymiz."], ["Qog‘oz", "Rangli qog‘ozdan applikatsiya va o‘yinchoqlar yasaymiz."], ["Karton", "Karton qalin va mustahkam, undan qutichalar yasash mumkin."]];
   let score = 0;
   let completed = new Set();
   let exerciseDone = new Set();
@@ -498,7 +500,7 @@ document.addEventListener("DOMContentLoaded", () => {
   function startLesson(id) {
     if (!activeMapCourse.lessons.some((lesson) => lesson.id === id && lesson.openable)) return;
     document.body.classList.remove("lesson-problem-active");
-    $("problemSituationScreen").classList.add("hidden");
+    $("problemSituationScreen").classList.add("hidden");$("knowledgeScreen").classList.add("hidden");
     lessonIndex = 0;
     resetLesson();
     $("quarterScreen").classList.add("hidden");
@@ -516,6 +518,7 @@ document.addEventListener("DOMContentLoaded", () => {
     document.body.classList.add("lesson-problem-active");
     $("lessonIntroScreen").classList.add("hidden");
     $("learningScreen").classList.add("hidden");
+    $("knowledgeScreen").classList.add("hidden");
     $("problemSituationScreen").classList.remove("hidden");
     document.querySelectorAll("[data-problem-choice]").forEach((button) => {
       const selected = button.dataset.problemChoice === situationChoice;
@@ -532,7 +535,7 @@ document.addEventListener("DOMContentLoaded", () => {
   function openLessonContent() {
     document.body.classList.remove("lesson-intro-active", "lesson-problem-active");
     $("lessonIntroScreen").classList.add("hidden");
-    $("problemSituationScreen").classList.add("hidden");
+    $("problemSituationScreen").classList.add("hidden");$("knowledgeScreen").classList.add("hidden");
     $("quarterScreen").classList.add("hidden");
     $("quarterMapScreen").classList.add("hidden");
     $("learningScreen").classList.remove("hidden");
@@ -546,7 +549,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   $("introBackToMap").addEventListener("click", () => {
     document.body.classList.remove("lesson-intro-active", "lesson-problem-active");
-    $("problemSituationScreen").classList.add("hidden");
+    $("problemSituationScreen").classList.add("hidden");$("knowledgeScreen").classList.add("hidden");
     $("lessonIntroScreen").classList.add("hidden");
     $("quarterMapScreen").classList.remove("hidden");
     renderQuarterMap();
@@ -556,7 +559,7 @@ document.addEventListener("DOMContentLoaded", () => {
   $("problemBackToIntro").addEventListener("click", () => {
     document.body.classList.remove("lesson-problem-active");
     document.body.classList.add("lesson-intro-active");
-    $("problemSituationScreen").classList.add("hidden");
+    $("problemSituationScreen").classList.add("hidden");$("knowledgeScreen").classList.add("hidden");
     $("lessonIntroScreen").classList.remove("hidden");
     window.scrollTo(0, 0);
   });
@@ -585,13 +588,89 @@ document.addEventListener("DOMContentLoaded", () => {
   $("problemContinue").addEventListener("click", () => {
     if (situationChoice !== "safe") return;
     if (!completed.has(1)) completeStage(1);
-    stageIndex = 2;
-    openLessonContent();
+    openKnowledgeCheck();
   });
+
+  // Kundalik bilimlarni aniqlash sahifasi (muammoli vaziyatdan keyin)
+  function updateKnowledgeState(message) {
+    document.querySelectorAll("[data-check]").forEach((button) => {
+      const checked = knownTools.has(Number(button.dataset.check));
+      button.classList.toggle("is-checked", checked);
+      button.setAttribute("aria-pressed", String(checked));
+    });
+    $("knowledgeContinue").disabled = knownTools.size === 0;
+    document.querySelectorAll("[data-dot]").forEach((dot) => {
+      const i = Number(dot.dataset.dot);
+      dot.classList.toggle("is-done", i < 2);
+      dot.classList.toggle("is-current", i === 2);
+      dot.disabled = !(i < 2 || (i === 3 && knownTools.size > 0) || (i > 3 && completed.has(i - 2)));
+      if (i === 2) dot.setAttribute("aria-current", "step"); else dot.removeAttribute("aria-current");
+    });
+    $("knowledgeFeedback").textContent = message || (knownTools.size === 0
+      ? "Buyum kartochkasini bosing yoki pastda o‘zingiz tanigan buyumlarni belgilang."
+      : knownTools.size === knowledgeTools.length
+        ? "Barakalla! Siz barcha 8 ta buyumni taniysiz. Davom etish tugmasini bosing."
+        : "Belgilandi: " + knownTools.size + " / " + knowledgeTools.length + ". Davom etish uchun o‘ngdagi tugmani bosing.");
+  }
+
+  function openKnowledgeCheck() {
+    stageIndex = 1;
+    document.body.classList.remove("lesson-intro-active");
+    document.body.classList.add("lesson-problem-active");
+    ["lessonIntroScreen", "problemSituationScreen", "learningScreen", "quarterScreen", "quarterMapScreen"].forEach((id) => $(id).classList.add("hidden"));
+    $("knowledgeScreen").classList.remove("hidden");
+    document.querySelectorAll(".knowledge-card").forEach((card) => card.classList.remove("is-active"));
+    document.querySelectorAll(".knowledge-hero").forEach((hero) => { hero.classList.remove("is-selected"); hero.setAttribute("aria-pressed", "false"); });
+    updateKnowledgeState();
+    window.scrollTo(0, 0);
+  }
+
+  function leaveKnowledgeCheck(toStage) {
+    if (knownTools.size === 0) return;
+    stageIndex = toStage;
+    openLessonContent();
+  }
+
+  document.querySelectorAll(".knowledge-card").forEach((card) => {
+    card.addEventListener("click", () => {
+      const i = Number(card.dataset.tool);
+      document.querySelectorAll(".knowledge-card").forEach((other) => other.classList.toggle("is-active", other === card));
+      const cell = document.querySelector('[data-check="' + i + '"]');
+      cell.classList.remove("is-flash");
+      void cell.offsetWidth;
+      cell.classList.add("is-flash");
+      updateKnowledgeState(knowledgeTools[i][1] + " Agar uni taniysiz, pastda belgilang.");
+    });
+  });
+  document.querySelectorAll("[data-check]").forEach((button) => {
+    button.addEventListener("click", () => {
+      const i = Number(button.dataset.check);
+      if (knownTools.has(i)) knownTools.delete(i); else knownTools.add(i);
+      updateKnowledgeState();
+    });
+    button.addEventListener("animationend", () => button.classList.remove("is-flash"));
+  });
+  document.querySelectorAll(".knowledge-hero").forEach((hero) => {
+    hero.addEventListener("click", () => {
+      const selected = !hero.classList.contains("is-selected");
+      hero.classList.toggle("is-selected", selected);
+      hero.setAttribute("aria-pressed", String(selected));
+    });
+  });
+  document.querySelectorAll("[data-dot]").forEach((dot) => {
+    dot.addEventListener("click", () => {
+      const i = Number(dot.dataset.dot);
+      if (i === 0) $("problemBackToIntro").click();
+      else if (i === 1) openProblemSituation();
+      else if (i >= 3) leaveKnowledgeCheck(i - 1);
+    });
+  });
+  $("knowledgeBack").addEventListener("click", openProblemSituation);
+  $("knowledgeContinue").addEventListener("click", () => leaveKnowledgeCheck(2));
 
   $("backToQuarters").addEventListener("click",()=>{$("quarterMapScreen").classList.add("hidden");$("quarterScreen").classList.remove("hidden");renderQuarterHub();window.scrollTo(0,0)});
   $("previousQuarter").addEventListener("click",()=>{if(activeQuarter>0)openQuarter(activeMapCourse.quarters[activeQuarter-1].id)});$("nextQuarter").addEventListener("click",()=>{if(activeQuarter<3)openQuarter(activeMapCourse.quarters[activeQuarter+1].id)});
-  $("returnToMap").addEventListener("click",()=>{document.body.classList.remove("lesson-intro-active","lesson-problem-active");$("problemSituationScreen").classList.add("hidden");$("lessonIntroScreen").classList.add("hidden");$("learningScreen").classList.add("hidden");$("quarterMapScreen").classList.remove("hidden");renderQuarterMap();window.scrollTo(0,0)});
+  $("returnToMap").addEventListener("click",()=>{document.body.classList.remove("lesson-intro-active","lesson-problem-active");$("problemSituationScreen").classList.add("hidden");$("knowledgeScreen").classList.add("hidden");$("lessonIntroScreen").classList.add("hidden");$("learningScreen").classList.add("hidden");$("quarterMapScreen").classList.remove("hidden");renderQuarterMap();window.scrollTo(0,0)});
   function chooseGrade(value, openWhenReady = false) {
     grade = Number(value);
     document
@@ -625,6 +704,7 @@ document.addEventListener("DOMContentLoaded", () => {
   function resetLesson() {
     stageIndex = 0;
     situationChoice = "";
+    knownTools.clear();
     score = 0;
     completed = new Set();
     exerciseDone = new Set();
@@ -940,6 +1020,10 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   $("previousStage").addEventListener("click", () => {
+    if (stageIndex === 2) {
+      openKnowledgeCheck();
+      return;
+    }
     if (stageIndex > 0) {
       stageIndex--;
       renderStage();
