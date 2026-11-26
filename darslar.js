@@ -12,12 +12,13 @@ document.addEventListener("DOMContentLoaded", () => {
   const safetyDone = [];
   let safetyResume = 0;
   const hasKnowledgeScreen = () => Boolean(document.getElementById("knowledgeScreen"));
+  const lesson2Pages = () => Array.from(document.querySelectorAll("[data-l2-page]"));
   const safetyScreens = () => Array.from(document.querySelectorAll("[data-safety-page]"));
   const hasSafetyScreen = () => safetyScreens().length > 0;
   const hideSafetyScreen = () => safetyScreens().forEach((screen) => screen.classList.add("hidden"));
   const hasExerciseScreen = () => Boolean(document.getElementById("exerciseScreen"));
   const hasBuildScreen = () => Boolean(document.getElementById("buildScreen"));
-  const hideExerciseScreen = () => ["exerciseScreen", "buildScreen", "drumScreen", "finalScreen"].forEach((id) => { const el = document.getElementById(id); if (el) el.classList.add("hidden"); });
+  const hideExerciseScreen = () => { ["exerciseScreen", "buildScreen", "drumScreen", "finalScreen"].forEach((id) => { const el = document.getElementById(id); if (el) el.classList.add("hidden"); }); document.querySelectorAll("[data-l2-page]").forEach((el) => el.classList.add("hidden")); };
   const hideKnowledgeScreen = () => { if (hasKnowledgeScreen()) $("knowledgeScreen").classList.add("hidden"); };
   const knowledgeTools = [["Qaychi", "Qaychi qog‘oz va kartonni qirqish uchun kerak. U bilan ehtiyot bo‘lib ishlaymiz!"], ["Yelim", "Yelim qog‘oz va karton bo‘laklarini bir-biriga yopishtiradi."], ["Qalam", "Qalam bilan chizamiz, belgi qo‘yamiz va shakllarni chizib olamiz."], ["Bo‘yoq", "Bo‘yoq bilan rasm va buyumlarimizni rang-barang qilamiz."], ["Mo‘yqalam", "Mo‘yqalam bo‘yoqni qog‘ozga surtish uchun ishlatiladi."], ["Plastilin", "Plastilindan turli shakl va hayvonchalar yasaymiz."], ["Qog‘oz", "Rangli qog‘ozdan applikatsiya va o‘yinchoqlar yasaymiz."], ["Karton", "Karton qalin va mustahkam, undan qutichalar yasash mumkin."]];
   let score = 0;
@@ -439,15 +440,16 @@ document.addEventListener("DOMContentLoaded", () => {
       const firstLesson = lessons.find((lesson) => lesson.openable);
       const stations = Array.from({ length: 11 }, (_, index) => {
         const number = index + 1;
-        const isAvailable = number === 1 && firstLesson;
-        const isDone = Boolean(isAvailable && finishedLessons.has(firstLesson.id));
+        const isLesson2 = number === 2 && lesson2Pages().length > 0;
+        const isAvailable = (number === 1 && firstLesson) || isLesson2;
+        const isDone = Boolean(number === 1 && firstLesson && finishedLessons.has(firstLesson.id));
         const state = isAvailable ? (isDone ? " Bajarilgan" : " Mavjud dars") : " Kontent tayyorlanmoqda";
         const label = number === 11 ? "11-manzil" : number + "-dars";
         return '<button type="button" class="q1-map-station station-' + number +
           (isDone ? ' is-done' : '') + '" data-station-id="texnologiya-1-q1-station-' + number + '"' +
-          (isAvailable ? ' data-lesson-id="' + firstLesson.id + '"' : '') +
+          (isLesson2 ? ' data-lesson2="1"' : (isAvailable ? ' data-lesson-id="' + firstLesson.id + '"' : '')) +
           ' aria-label="' + label + '.' + state + '"><span class="sr-only">' + label +
-          (isAvailable ? ' — ' + firstLesson.title + ', darsni ochish' : ' — kontent tayyorlanmoqda') +
+          (isLesson2 ? ' — Qog‘oz varag‘i bilan ishlash, darsni ochish' : (isAvailable ? ' — ' + firstLesson.title + ', darsni ochish' : ' — kontent tayyorlanmoqda')) +
           '</span></button>';
       }).join("");
 
@@ -463,6 +465,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
       document.querySelectorAll("[data-station-id]").forEach((button) => {
         button.addEventListener("click", () => {
+          if (button.dataset.lesson2) {
+            openLesson2Page(0);
+            return;
+          }
           if (button.dataset.lessonId) {
             startLesson(button.dataset.lessonId);
             return;
@@ -1519,6 +1525,66 @@ document.addEventListener("DOMContentLoaded", () => {
     // Uycha: 1-chorak "Kuzgi sayohat" xaritasiga qaytish
     $("finalHome").addEventListener("click", () => $("returnToMap").click());
   }
+  // ===== 2-DARS: "Qog‘oz varag‘i bilan ishlash" — rasmli interaktiv sahifalar =====
+  let lesson2Index = 0;
+  function hideLesson2() { lesson2Pages().forEach((page) => page.classList.add("hidden")); }
+  function updateLesson2Dots(k) {
+    const page = lesson2Pages()[k];
+    const total = lesson2Pages().length;
+    page.querySelectorAll("[data-l2-dot]").forEach((dot) => {
+      const i = Number(dot.dataset.l2Dot);
+      dot.classList.toggle("is-done", i < k);
+      dot.classList.toggle("is-current", i === k);
+      dot.disabled = i >= total;
+      if (i === k) dot.setAttribute("aria-current", "step"); else dot.removeAttribute("aria-current");
+    });
+  }
+  function openLesson2Page(k) {
+    const pages = lesson2Pages();
+    if (!pages.length) return;
+    k = Math.max(0, Math.min(k, pages.length - 1));
+    lesson2Index = k;
+    document.body.classList.remove("lesson-intro-active");
+    document.body.classList.add("lesson-problem-active");
+    ["lessonIntroScreen", "problemSituationScreen", "learningScreen", "quarterScreen", "quarterMapScreen"].forEach((id) => $(id).classList.add("hidden"));
+    hideKnowledgeScreen();
+    hideSafetyScreen();
+    hideExerciseScreen();
+    pages.forEach((page, i) => page.classList.toggle("hidden", i !== k));
+    const page = pages[k];
+    page.querySelectorAll(".knowledge-hero").forEach((hero) => { hero.classList.remove("is-selected"); hero.setAttribute("aria-pressed", "false"); });
+    updateLesson2Dots(k);
+    window.scrollTo(0, 0);
+  }
+  function lesson2ToMap() {
+    hideLesson2();
+    document.body.classList.remove("lesson-intro-active", "lesson-problem-active");
+    $("quarterMapScreen").classList.remove("hidden");
+    renderQuarterMap();
+    window.scrollTo(0, 0);
+  }
+  lesson2Pages().forEach((page, k) => {
+    const feedback = page.querySelector(".l2-feedback");
+    const seen = new Set();
+    const items = page.querySelectorAll(".l2-item");
+    items.forEach((item, i) => {
+      item.addEventListener("click", () => {
+        items.forEach((other) => { other.classList.toggle("is-active", other === item); });
+        seen.add(i);
+        item.classList.add("is-seen");
+        item.setAttribute("aria-pressed", "true");
+        feedback.textContent = item.dataset.say + (seen.size === items.length ? " 🎉 Barchasi bilan tanishdingiz!" : "");
+      });
+    });
+    page.querySelectorAll("[data-l2-dot]").forEach((dot) => {
+      dot.addEventListener("click", () => openLesson2Page(Number(dot.dataset.l2Dot)));
+    });
+    page.querySelector(".l2-back").addEventListener("click", () => (k === 0 ? lesson2ToMap() : openLesson2Page(k - 1)));
+    page.querySelector(".l2-next").addEventListener("click", () => {
+      if (k < lesson2Pages().length - 1) openLesson2Page(k + 1);
+      else feedback.textContent = "Keyingi bosqich tez orada qo‘shiladi! Hozircha ← tugmasi bilan orqaga qaytishingiz mumkin.";
+    });
+  });
   $("backToQuarters").addEventListener("click",()=>{$("quarterMapScreen").classList.add("hidden");$("quarterScreen").classList.remove("hidden");renderQuarterHub();window.scrollTo(0,0)});
   $("previousQuarter").addEventListener("click",()=>{if(activeQuarter>0)openQuarter(activeMapCourse.quarters[activeQuarter-1].id)});$("nextQuarter").addEventListener("click",()=>{if(activeQuarter<3)openQuarter(activeMapCourse.quarters[activeQuarter+1].id)});
   $("returnToMap").addEventListener("click",()=>{document.body.classList.remove("lesson-intro-active","lesson-problem-active");$("problemSituationScreen").classList.add("hidden");hideKnowledgeScreen();hideSafetyScreen();hideExerciseScreen();$("lessonIntroScreen").classList.add("hidden");$("learningScreen").classList.add("hidden");$("quarterMapScreen").classList.remove("hidden");renderQuarterMap();window.scrollTo(0,0)});
