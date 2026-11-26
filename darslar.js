@@ -599,12 +599,11 @@ document.addEventListener("DOMContentLoaded", () => {
       button.classList.toggle("is-checked", checked);
       button.setAttribute("aria-pressed", String(checked));
     });
-    $("knowledgeContinue").disabled = knownTools.size === 0;
     document.querySelectorAll("[data-dot]").forEach((dot) => {
       const i = Number(dot.dataset.dot);
       dot.classList.toggle("is-done", i < 2);
       dot.classList.toggle("is-current", i === 2);
-      dot.disabled = !(i < 2 || (i === 3 && knownTools.size > 0) || (i > 3 && completed.has(i - 2)));
+      dot.disabled = !(i <= 3 || completed.has(i - 2));
       if (i === 2) dot.setAttribute("aria-current", "step"); else dot.removeAttribute("aria-current");
     });
     $("knowledgeFeedback").textContent = message || (knownTools.size === 0
@@ -627,7 +626,6 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function leaveKnowledgeCheck(toStage) {
-    if (knownTools.size === 0) return;
     stageIndex = toStage;
     openLessonContent();
   }
