@@ -692,7 +692,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const i = Number(dot.dataset.safetyDot);
       dot.classList.toggle("is-done", i < 3);
       dot.classList.toggle("is-current", i === 3);
-      dot.disabled = !(i <= 4 || completed.has(i - 1));
+      dot.disabled = i > 7 || !(i <= 4 || completed.has(i - 1));
       if (i === 3) dot.setAttribute("aria-current", "step"); else dot.removeAttribute("aria-current");
     });
     const feedback = screen.querySelector(".safety-feedback");
@@ -772,6 +772,171 @@ document.addEventListener("DOMContentLoaded", () => {
       else leaveSafetyPage(4);
     });
   });
+  // 7/7 Sinov o'yini: ish qurolini mos vazifaga surib ulash (sichqoncha yoki barmoq)
+  (function setupMatchGame() {
+    const game = document.getElementById("matchGame");
+    if (!game) return;
+    const screen = game.closest("[data-safety-page]");
+    const feedback = screen.querySelector(".safety-feedback");
+    const svg = game.querySelector(".match-lines");
+    const tasks = game.dataset.tasks.split("|");
+    const W = 1672, H = 941, TILE_X = 886, TILE_W = 418, TILE_H = 102;
+    const tileTops = [285, 389, 492, 595, 699];
+    const rowY = [335, 438, 542, 646, 750];
+    const LEFT_X = 735, RIGHT_X = 868;
+    const NS = "http://www.w3.org/2000/svg";
+    let order = [0, 1, 2, 3, 4]; // order[slot] = qaysi vazifa shu qatorda turibdi
+    let matched = new Map(); // tool -> slot
+    let tries = 0;
+    let drag = null;
+
+    const leftItems = Array.from(game.querySelectorAll(".match-left"));
+    const rightItems = Array.from(game.querySelectorAll(".match-right"));
+
+    function shuffle() {
+      do {
+        for (let i = order.length - 1; i > 0; i--) {
+          const r = Math.floor(Math.random() * (i + 1));
+          [order[i], order[r]] = [order[r], order[i]];
+        }
+      } while (order.some((task, slot) => task === slot));
+    }
+    function drawTiles() {
+      game.querySelectorAll(".match-tile").forEach((tile) => {
+        const task = order[Number(tile.dataset.slot)];
+        tile.style.backgroundPosition = (TILE_X / (W - TILE_W) * 100) + "% " + (tileTops[task] / (H - TILE_H) * 100) + "%";
+      });
+      rightItems.forEach((item) => item.setAttribute("aria-label", tasks[order[Number(item.dataset.slot)]]));
+    }
+    function line(x1, y1, x2, y2, cls) {
+      const l = document.createElementNS(NS, "line");
+      l.setAttribute("x1", x1); l.setAttribute("y1", y1); l.setAttribute("x2", x2); l.setAttribute("y2", y2);
+      l.setAttribute("class", cls);
+      svg.appendChild(l);
+      return l;
+    }
+    function toSvg(event) {
+      const r = game.getBoundingClientRect();
+      return { x: (event.clientX - r.left) / r.width * W, y: (event.clientY - r.top) / r.height * H };
+    }
+    function say(text) { feedback.textContent = text; }
+    function render() {
+      svg.innerHTML = "";
+      matched.forEach((slot, tool) => line(LEFT_X, rowY[tool], RIGHT_X, rowY[slot], "is-ok"));
+      leftItems.forEach((item) => item.classList.toggle("is-matched", matched.has(Number(item.dataset.index))));
+      const usedSlots = new Set(matched.values());
+      rightItems.forEach((item) => item.classList.toggle("is-matched", usedSlots.has(Number(item.dataset.slot))));
+      game.classList.toggle("is-won", matched.size === 5);
+    }
+    function reset() {
+      matched = new Map();
+      tries = 0;
+      shuffle();
+      drawTiles();
+      render();
+      say(feedback.dataset.hint);
+    }
+    function itemAt(x, y, side) {
+      const el = document.elementsFromPoint(x, y).find((node) => node.classList && node.classList.contains("match-item"));
+      return el && el.dataset.side === side ? el : null;
+    }
+    function tryMatch(tool, slot) {
+      const toolItem = leftItems[tool];
+      const slotItem = rightItems[slot];
+      tries++;
+      if (order[slot] === tool) {
+        matched.set(tool, slot);
+        render();
+        if (matched.size === 5) {
+          const mistakes = tries - 5;
+          say("🎉 Barakalla! Hammasini to‘g‘ri topdingiz: 5 / 5" + (mistakes === 0 ? ", birorta ham xatosiz!" : ". Xatolar soni: " + mistakes + "."));
+        } else {
+          say("✅ To‘g‘ri! " + toolItem.getAttribute("aria-label") + " — " + tasks[tool].toLowerCase() + ". To‘g‘ri: " + matched.size + " / 5");
+        }
+      } else {
+        [toolItem, slotItem].forEach((el) => {
+          el.classList.remove("is-wrong");
+          void el.offsetWidth;
+          el.classList.add("is-wrong");
+        });
+        const bad = line(LEFT_X, rowY[tool], RIGHT_X, rowY[slot], "is-bad");
+        setTimeout(() => bad.remove(), 600);
+        say("🤔 Yo‘q, " + toolItem.getAttribute("aria-label") + " bu ish uchun emas. Yana urinib ko‘ring! To‘g‘ri: " + matched.size + " / 5");
+      }
+    }
+    function isDone(item) {
+      return item.dataset.side === "left" ? matched.has(Number(item.dataset.index)) : new Set(matched.values()).has(Number(item.dataset.slot));
+    }
+    function anchor(item) {
+      return item.dataset.side === "left"
+        ? { x: LEFT_X, y: rowY[Number(item.dataset.index)] }
+        : { x: RIGHT_X, y: rowY[Number(item.dataset.slot)] };
+    }
+    function clearTargets() { game.querySelectorAll(".is-target, .is-picked").forEach((el) => el.classList.remove("is-target", "is-picked")); }
+
+    [...leftItems, ...rightItems].forEach((item) => {
+      item.addEventListener("animationend", () => item.classList.remove("is-wrong"));
+      item.addEventListener("pointerdown", (event) => {
+        if (isDone(item) || (event.button !== undefined && event.button > 0)) return;
+        event.preventDefault();
+        const a = anchor(item);
+        const p = toSvg(event);
+        drag = { item, id: event.pointerId, line: line(a.x, a.y, p.x, p.y, "is-drag"), moved: false };
+        item.classList.add("is-picked");
+        try { item.setPointerCapture(event.pointerId); } catch (e) {}
+      });
+      item.addEventListener("pointermove", (event) => {
+        if (!drag || drag.id !== event.pointerId) return;
+        const p = toSvg(event);
+        drag.line.setAttribute("x2", p.x);
+        drag.line.setAttribute("y2", p.y);
+        drag.moved = true;
+        game.querySelectorAll(".is-target").forEach((el) => el.classList.remove("is-target"));
+        const other = itemAt(event.clientX, event.clientY, item.dataset.side === "left" ? "right" : "left");
+        if (other && !isDone(other)) other.classList.add("is-target");
+      });
+      const finish = (event) => {
+        if (!drag || drag.id !== event.pointerId) return;
+        const from = drag.item;
+        drag.line.remove();
+        const wasMoved = drag.moved;
+        drag = null;
+        clearTargets();
+        const other = itemAt(event.clientX, event.clientY, from.dataset.side === "left" ? "right" : "left");
+        if (other && !isDone(other)) {
+          const tool = Number((from.dataset.side === "left" ? from : other).dataset.index);
+          const slot = Number((from.dataset.side === "left" ? other : from).dataset.slot);
+          tryMatch(tool, slot);
+          picked = null;
+        } else if (!wasMoved) {
+          // bosib tanlash usuli: avval bir tomondan, keyin ikkinchi tomondan bosing
+          if (picked && picked.dataset.side !== from.dataset.side) {
+            const tool = Number((from.dataset.side === "left" ? from : picked).dataset.index);
+            const slot = Number((from.dataset.side === "left" ? picked : from).dataset.slot);
+            picked = null;
+            tryMatch(tool, slot);
+          } else {
+            picked = from;
+            from.classList.add("is-picked");
+            say("Endi " + (from.dataset.side === "left" ? "mos vazifani" : "mos ish qurolini") + " bosing yoki chiziqni surib olib boring.");
+          }
+        } else {
+          picked = null;
+          say("Chiziqni boshqa tomondagi qatorga olib borib qo‘ying. To‘g‘ri: " + matched.size + " / 5");
+        }
+      };
+      item.addEventListener("pointerup", finish);
+      item.addEventListener("pointercancel", (event) => {
+        if (!drag || drag.id !== event.pointerId) return;
+        drag.line.remove();
+        drag = null;
+        clearTargets();
+      });
+    });
+    let picked = null;
+    game.querySelector(".match-reset").addEventListener("click", () => { picked = null; reset(); });
+    reset();
+  })();
   $("backToQuarters").addEventListener("click",()=>{$("quarterMapScreen").classList.add("hidden");$("quarterScreen").classList.remove("hidden");renderQuarterHub();window.scrollTo(0,0)});
   $("previousQuarter").addEventListener("click",()=>{if(activeQuarter>0)openQuarter(activeMapCourse.quarters[activeQuarter-1].id)});$("nextQuarter").addEventListener("click",()=>{if(activeQuarter<3)openQuarter(activeMapCourse.quarters[activeQuarter+1].id)});
   $("returnToMap").addEventListener("click",()=>{document.body.classList.remove("lesson-intro-active","lesson-problem-active");$("problemSituationScreen").classList.add("hidden");hideKnowledgeScreen();hideSafetyScreen();$("lessonIntroScreen").classList.add("hidden");$("learningScreen").classList.add("hidden");$("quarterMapScreen").classList.remove("hidden");renderQuarterMap();window.scrollTo(0,0)});
