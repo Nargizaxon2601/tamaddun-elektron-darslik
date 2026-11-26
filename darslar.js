@@ -1576,6 +1576,18 @@ document.addEventListener("DOMContentLoaded", () => {
         feedback.textContent = item.dataset.say + (seen.size === items.length ? " 🎉 Barchasi bilan tanishdingiz!" : "");
       });
     });
+    const checks = page.querySelectorAll(".l2-check");
+    checks.forEach((check) => {
+      check.addEventListener("click", () => {
+        const on = !check.classList.contains("is-checked");
+        check.classList.toggle("is-checked", on);
+        check.setAttribute("aria-pressed", String(on));
+        const n = page.querySelectorAll(".l2-check.is-checked").length;
+        feedback.textContent = n === checks.length
+          ? "🎉 Barakalla! Hamma savollar ustida o‘ylab ko‘rdingiz."
+          : (on ? "🤔 " + check.getAttribute("aria-label") + " O‘ylab ko‘ring va javobingizni ayting!" : "Belgi olib tashlandi.") + " Belgilandi: " + n + " / " + checks.length;
+      });
+    });
     page.querySelectorAll("[data-l2-dot]").forEach((dot) => {
       dot.addEventListener("click", () => openLesson2Page(Number(dot.dataset.l2Dot)));
     });

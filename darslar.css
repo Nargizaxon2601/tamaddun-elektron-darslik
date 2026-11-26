@@ -523,6 +523,10 @@ body.lesson-problem-active .topbar { display: none; }
 .l2-scene > .l2-item:hover,
 .l2-scene > .l2-item:focus-visible { transform: translateY(-4px) scale(1.05); background: rgba(255,255,255,.16) !important; box-shadow: 0 0 0 .3cqw #fff, 0 0 0 .6cqw rgba(124,77,255,.45); outline: none; }
 .l2-scene > .l2-item.is-active { transform: translateY(-6px) scale(1.07); box-shadow: 0 0 0 .3cqw #ffb21a, 0 0 1.8cqw rgba(255,178,26,.75); animation: l2-bob 1.2s ease-in-out infinite; }
+.l2-scene > .l2-check { z-index: 3; border-radius: 1cqw; transition: background .18s, box-shadow .18s; }
+.l2-scene > .l2-check:hover,
+.l2-scene > .l2-check:focus-visible { background: rgba(8,119,249,.08) !important; box-shadow: inset 0 0 0 2px rgba(8,119,249,.4); outline: none; }
+.l2-scene > .l2-check.is-checked { background: rgba(76,217,100,.13) !important; }
 @keyframes l2-bob { 50% { transform: translateY(-10px) scale(1.07); } }
 @media (max-width: 600px) {
   .lesson-intro-screen { padding: 6px; }
