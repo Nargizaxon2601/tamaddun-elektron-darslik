@@ -360,6 +360,53 @@ body.lesson-problem-active .topbar { display: none; }
 .match-game .match-reset:focus-visible { transform: scale(1.06); outline: none; }
 .match-game.is-won .match-reset { animation: match-pulse 1.2s ease infinite; }
 @keyframes match-pulse { 50% { transform: scale(1.08); box-shadow: 0 0 0 6px rgba(255,255,255,.6); } }
+/* 5-BOSQICH: QUVNOQ JISMONIY MASHQLAR */
+.exercise-scene { container-type: inline-size; }
+.exercise-card { border-radius: 1.8cqw; transition: transform .2s, box-shadow .2s, background .2s; }
+.exercise-card:hover,
+.exercise-card:focus-visible { transform: translateY(-4px) scale(1.02); box-shadow: 0 0 0 3px #fff, 0 0 0 6px rgba(8,119,249,.5), 0 10px 22px rgba(12,44,88,.25); outline: none; }
+.exercise-card.is-running { background: rgba(255,214,64,.16) !important; box-shadow: 0 0 0 4px #ffb21a, 0 0 22px rgba(255,178,26,.7); animation: ex-bounce .6s ease-in-out infinite; }
+.exercise-card.is-done { background: rgba(76,217,100,.12) !important; box-shadow: 0 0 0 4px rgba(20,168,50,.75); }
+@keyframes ex-bounce { 50% { transform: translateY(-8px) scale(1.02); } }
+.ex-counter {
+  position: absolute;
+  left: 50%;
+  top: 46%;
+  width: 7cqw;
+  aspect-ratio: 1;
+  transform: translate(-50%, -50%) scale(0);
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: linear-gradient(145deg, #ffe95c, #ff8d13 78%);
+  border: .35cqw solid #fff;
+  color: #fff;
+  font: 1000 3.6cqw/1 Nunito, sans-serif;
+  text-shadow: 0 2px 3px rgba(150,60,0,.5);
+  box-shadow: 0 6px 16px rgba(120,60,0,.35);
+  transition: transform .25s cubic-bezier(.2,.8,.2,1.4);
+  pointer-events: none;
+}
+.exercise-card.is-running .ex-counter { transform: translate(-50%, -50%) scale(1); }
+.ex-counter.is-tick { animation: ex-tick .35s ease; }
+@keyframes ex-tick { 40% { transform: translate(-50%, -50%) scale(1.25); } }
+.ex-check {
+  position: absolute;
+  width: 3.4cqw;
+  aspect-ratio: 1;
+  transform: translate(-50%, -50%) scale(0);
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: linear-gradient(145deg, #4cd964, #14a832);
+  box-shadow: 0 0 0 .3cqw #fff, 0 3px 8px rgba(10,80,30,.35);
+  color: #fff;
+  font: 1000 2.1cqw/1 Nunito, sans-serif;
+  transition: transform .3s cubic-bezier(.2,.8,.2,1.5);
+  pointer-events: none;
+}
+.ex-check::after { content: "✓"; }
+.exercise-card.is-done .ex-check { transform: translate(-50%, -50%) scale(1); }
 @media (max-width: 600px) {
   .lesson-intro-screen { padding: 6px; }
   .lesson-intro-art { width: min(100%, calc((100vh - 12px) * 1.7779)); }

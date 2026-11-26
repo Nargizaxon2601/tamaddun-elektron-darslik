@@ -15,6 +15,8 @@ document.addEventListener("DOMContentLoaded", () => {
   const safetyScreens = () => Array.from(document.querySelectorAll("[data-safety-page]"));
   const hasSafetyScreen = () => safetyScreens().length > 0;
   const hideSafetyScreen = () => safetyScreens().forEach((screen) => screen.classList.add("hidden"));
+  const hasExerciseScreen = () => Boolean(document.getElementById("exerciseScreen"));
+  const hideExerciseScreen = () => { if (hasExerciseScreen()) $("exerciseScreen").classList.add("hidden"); };
   const hideKnowledgeScreen = () => { if (hasKnowledgeScreen()) $("knowledgeScreen").classList.add("hidden"); };
   const knowledgeTools = [["Qaychi", "Qaychi qog‘oz va kartonni qirqish uchun kerak. U bilan ehtiyot bo‘lib ishlaymiz!"], ["Yelim", "Yelim qog‘oz va karton bo‘laklarini bir-biriga yopishtiradi."], ["Qalam", "Qalam bilan chizamiz, belgi qo‘yamiz va shakllarni chizib olamiz."], ["Bo‘yoq", "Bo‘yoq bilan rasm va buyumlarimizni rang-barang qilamiz."], ["Mo‘yqalam", "Mo‘yqalam bo‘yoqni qog‘ozga surtish uchun ishlatiladi."], ["Plastilin", "Plastilindan turli shakl va hayvonchalar yasaymiz."], ["Qog‘oz", "Rangli qog‘ozdan applikatsiya va o‘yinchoqlar yasaymiz."], ["Karton", "Karton qalin va mustahkam, undan qutichalar yasash mumkin."]];
   let score = 0;
@@ -504,7 +506,7 @@ document.addEventListener("DOMContentLoaded", () => {
   function startLesson(id) {
     if (!activeMapCourse.lessons.some((lesson) => lesson.id === id && lesson.openable)) return;
     document.body.classList.remove("lesson-problem-active");
-    $("problemSituationScreen").classList.add("hidden");hideKnowledgeScreen();hideSafetyScreen();
+    $("problemSituationScreen").classList.add("hidden");hideKnowledgeScreen();hideSafetyScreen();hideExerciseScreen();
     lessonIndex = 0;
     resetLesson();
     $("quarterScreen").classList.add("hidden");
@@ -522,7 +524,7 @@ document.addEventListener("DOMContentLoaded", () => {
     document.body.classList.add("lesson-problem-active");
     $("lessonIntroScreen").classList.add("hidden");
     $("learningScreen").classList.add("hidden");
-    hideKnowledgeScreen();hideSafetyScreen();
+    hideKnowledgeScreen();hideSafetyScreen();hideExerciseScreen();
     $("problemSituationScreen").classList.remove("hidden");
     document.querySelectorAll("[data-problem-choice]").forEach((button) => {
       const selected = button.dataset.problemChoice === situationChoice;
@@ -539,7 +541,7 @@ document.addEventListener("DOMContentLoaded", () => {
   function openLessonContent() {
     document.body.classList.remove("lesson-intro-active", "lesson-problem-active");
     $("lessonIntroScreen").classList.add("hidden");
-    $("problemSituationScreen").classList.add("hidden");hideKnowledgeScreen();hideSafetyScreen();
+    $("problemSituationScreen").classList.add("hidden");hideKnowledgeScreen();hideSafetyScreen();hideExerciseScreen();
     $("quarterScreen").classList.add("hidden");
     $("quarterMapScreen").classList.add("hidden");
     $("learningScreen").classList.remove("hidden");
@@ -553,7 +555,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   $("introBackToMap").addEventListener("click", () => {
     document.body.classList.remove("lesson-intro-active", "lesson-problem-active");
-    $("problemSituationScreen").classList.add("hidden");hideKnowledgeScreen();hideSafetyScreen();
+    $("problemSituationScreen").classList.add("hidden");hideKnowledgeScreen();hideSafetyScreen();hideExerciseScreen();
     $("lessonIntroScreen").classList.add("hidden");
     $("quarterMapScreen").classList.remove("hidden");
     renderQuarterMap();
@@ -563,7 +565,7 @@ document.addEventListener("DOMContentLoaded", () => {
   $("problemBackToIntro").addEventListener("click", () => {
     document.body.classList.remove("lesson-problem-active");
     document.body.classList.add("lesson-intro-active");
-    $("problemSituationScreen").classList.add("hidden");hideKnowledgeScreen();hideSafetyScreen();
+    $("problemSituationScreen").classList.add("hidden");hideKnowledgeScreen();hideSafetyScreen();hideExerciseScreen();
     $("lessonIntroScreen").classList.remove("hidden");
     window.scrollTo(0, 0);
   });
@@ -621,6 +623,7 @@ document.addEventListener("DOMContentLoaded", () => {
     document.body.classList.add("lesson-problem-active");
     ["lessonIntroScreen", "problemSituationScreen", "learningScreen", "quarterScreen", "quarterMapScreen"].forEach((id) => $(id).classList.add("hidden"));
     hideSafetyScreen();
+    hideExerciseScreen();
     $("knowledgeScreen").classList.remove("hidden");
     document.querySelectorAll(".knowledge-card").forEach((card) => card.classList.remove("is-active"));
     document.querySelectorAll(".knowledge-hero").forEach((hero) => { hero.classList.remove("is-selected"); hero.setAttribute("aria-pressed", "false"); });
@@ -711,6 +714,7 @@ document.addEventListener("DOMContentLoaded", () => {
     document.body.classList.add("lesson-problem-active");
     ["lessonIntroScreen", "problemSituationScreen", "learningScreen", "quarterScreen", "quarterMapScreen"].forEach((id) => $(id).classList.add("hidden"));
     hideKnowledgeScreen();
+    hideExerciseScreen();
     screens.forEach((screen, i) => screen.classList.toggle("hidden", i !== k));
     screens[k].querySelectorAll(".knowledge-hero").forEach((hero) => { hero.classList.remove("is-selected"); hero.setAttribute("aria-pressed", "false"); });
     updateSafetyState(k);
@@ -937,9 +941,112 @@ document.addEventListener("DOMContentLoaded", () => {
     game.querySelector(".match-reset").addEventListener("click", () => { picked = null; reset(); });
     reset();
   })();
+  // 5-bosqich: Quvnoq jismoniy mashqlar (rasmli sahifa)
+  const exerciseDoneSet = new Set();
+  let exerciseTimer = null;
+  function stopExercise() {
+    if (exerciseTimer) clearInterval(exerciseTimer);
+    exerciseTimer = null;
+    document.querySelectorAll(".exercise-card.is-running").forEach((card) => card.classList.remove("is-running"));
+  }
+  function updateExerciseState() {
+    document.querySelectorAll("[data-exercise]").forEach((card) => {
+      const done = exerciseDoneSet.has(Number(card.dataset.exercise));
+      card.classList.toggle("is-done", done);
+      card.setAttribute("aria-pressed", String(done));
+    });
+    document.querySelectorAll("[data-ex-dot]").forEach((dot) => {
+      const i = Number(dot.dataset.exDot);
+      dot.classList.toggle("is-done", i < 4);
+      dot.classList.toggle("is-current", i === 4);
+      dot.disabled = !(i <= 5 || completed.has(i - 1));
+      if (i === 4) dot.setAttribute("aria-current", "step"); else dot.removeAttribute("aria-current");
+    });
+  }
+  function openExercisePage() {
+    stageIndex = 4;
+    document.body.classList.remove("lesson-intro-active");
+    document.body.classList.add("lesson-problem-active");
+    ["lessonIntroScreen", "problemSituationScreen", "learningScreen", "quarterScreen", "quarterMapScreen"].forEach((id) => $(id).classList.add("hidden"));
+    hideKnowledgeScreen();
+    hideSafetyScreen();
+    $("exerciseScreen").classList.remove("hidden");
+    $("exerciseScreen").querySelectorAll(".knowledge-hero").forEach((hero) => { hero.classList.remove("is-selected"); hero.setAttribute("aria-pressed", "false"); });
+    updateExerciseState();
+    $("exerciseFeedback").textContent = exerciseDoneSet.size === 5
+      ? "Barakalla! Hamma mashqlarni bajardingiz. Davom etish tugmasini bosing."
+      : $("exerciseFeedback").dataset.hint;
+    window.scrollTo(0, 0);
+  }
+  function leaveExercisePage(toStage) {
+    stopExercise();
+    if (!completed.has(4)) completeStage(4);
+    stageIndex = toStage;
+    openLessonContent();
+  }
+  if (hasExerciseScreen()) {
+    document.querySelectorAll("[data-exercise]").forEach((card) => {
+      card.addEventListener("click", () => {
+        const wasRunning = card.classList.contains("is-running");
+        stopExercise();
+        if (wasRunning) {
+          $("exerciseFeedback").textContent = "Mashq to‘xtatildi. Qayta boshlash uchun kartochkani bosing.";
+          return;
+        }
+        const i = Number(card.dataset.exercise);
+        const total = Number(card.dataset.count);
+        const isSeconds = card.dataset.mode === "sec";
+        const counter = card.querySelector(".ex-counter");
+        const name = card.getAttribute("aria-label").replace(" mashqini boshlash", "");
+        let n = isSeconds ? total : 1;
+        const show = () => {
+          counter.textContent = n;
+          counter.classList.remove("is-tick");
+          void counter.offsetWidth;
+          counter.classList.add("is-tick");
+          $("exerciseFeedback").textContent = isSeconds
+            ? "«" + name + "»: oyoq uchida turing… " + n + " soniya qoldi"
+            : "«" + name + "»: " + n + " / " + total + " marta";
+        };
+        card.classList.add("is-running");
+        show();
+        exerciseTimer = setInterval(() => {
+          const finished = isSeconds ? n <= 1 : n >= total;
+          if (finished) {
+            stopExercise();
+            exerciseDoneSet.add(i);
+            updateExerciseState();
+            $("exerciseFeedback").textContent = exerciseDoneSet.size === 5
+              ? "🎉 Barakalla! Hamma 5 ta mashqni bajardingiz. Tanamiz chiniqdi, endi davom etamiz!"
+              : "✅ Zo‘r! «" + name + "» bajarildi. Bajarildi: " + exerciseDoneSet.size + " / 5";
+            return;
+          }
+          n += isSeconds ? -1 : 1;
+          show();
+        }, isSeconds ? 1000 : 1300);
+      });
+    });
+    document.querySelectorAll("[data-ex-dot]").forEach((dot) => {
+      dot.addEventListener("click", () => {
+        const i = Number(dot.dataset.exDot);
+        stopExercise();
+        if (i === 0) $("problemBackToIntro").click();
+        else if (i === 1) openProblemSituation();
+        else if (i === 2) openKnowledgeCheck();
+        else if (i === 3) openSafetyPage(safetyScreens().length - 1);
+        else if (i >= 5) leaveExercisePage(i);
+      });
+    });
+    $("exerciseBack").addEventListener("click", () => {
+      stopExercise();
+      if (hasSafetyScreen()) openSafetyPage(safetyScreens().length - 1);
+      else { stageIndex = 3; openLessonContent(); }
+    });
+    $("exerciseContinue").addEventListener("click", () => leaveExercisePage(5));
+  }
   $("backToQuarters").addEventListener("click",()=>{$("quarterMapScreen").classList.add("hidden");$("quarterScreen").classList.remove("hidden");renderQuarterHub();window.scrollTo(0,0)});
   $("previousQuarter").addEventListener("click",()=>{if(activeQuarter>0)openQuarter(activeMapCourse.quarters[activeQuarter-1].id)});$("nextQuarter").addEventListener("click",()=>{if(activeQuarter<3)openQuarter(activeMapCourse.quarters[activeQuarter+1].id)});
-  $("returnToMap").addEventListener("click",()=>{document.body.classList.remove("lesson-intro-active","lesson-problem-active");$("problemSituationScreen").classList.add("hidden");hideKnowledgeScreen();hideSafetyScreen();$("lessonIntroScreen").classList.add("hidden");$("learningScreen").classList.add("hidden");$("quarterMapScreen").classList.remove("hidden");renderQuarterMap();window.scrollTo(0,0)});
+  $("returnToMap").addEventListener("click",()=>{document.body.classList.remove("lesson-intro-active","lesson-problem-active");$("problemSituationScreen").classList.add("hidden");hideKnowledgeScreen();hideSafetyScreen();hideExerciseScreen();$("lessonIntroScreen").classList.add("hidden");$("learningScreen").classList.add("hidden");$("quarterMapScreen").classList.remove("hidden");renderQuarterMap();window.scrollTo(0,0)});
   function chooseGrade(value, openWhenReady = false) {
     grade = Number(value);
     document
@@ -976,6 +1083,7 @@ document.addEventListener("DOMContentLoaded", () => {
     knownTools.clear();
     safetyDone.forEach((done) => done.clear());
     safetyResume = 0;
+    exerciseDoneSet.clear();
     score = 0;
     completed = new Set();
     exerciseDone = new Set();
@@ -1026,6 +1134,10 @@ document.addEventListener("DOMContentLoaded", () => {
     }
     if (stageIndex === 3 && hasSafetyScreen()) {
       openSafetyPage(safetyResume);
+      return;
+    }
+    if (stageIndex === 4 && hasExerciseScreen()) {
+      openExercisePage();
       return;
     }
     if (stageIndex === 1) {
