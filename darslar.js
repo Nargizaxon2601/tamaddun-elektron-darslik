@@ -2070,6 +2070,98 @@ document.addEventListener("DOMContentLoaded", () => {
       feedback.textContent = score === 6 ? "🏆 Albom tayyor! → tugmasi bilan keyingi bosqichga o‘ting." : "Albomni yana ochib, o‘yinni davom ettirishingiz mumkin.";
     });
   })();
+  // 2-dars 5-bosqich: jismoniy daqiqa — har mashq uchun sanoq, «Hammasini boshlash»
+  (function setupExercises() {
+    const cards = Array.from(document.querySelectorAll(".ex-card"));
+    if (!cards.length) return;
+    const scene = cards[0].parentElement;
+    const page = scene.closest("[data-l2-page]");
+    const feedback = page.querySelector(".l2-feedback");
+    const allBtn = document.getElementById("exAll");
+    const q = (cls, i) => scene.querySelector("." + cls + '[data-ex="' + i + '"]');
+    const done = new Set();
+    let run = null;
+    function stop(msg) {
+      if (!run) return;
+      clearTimeout(run.timer);
+      if (run.i === -1) {
+        run = null;
+        allBtn.classList.remove("is-running");
+        allBtn.querySelector("span").textContent = "▶ Hammasini boshlash";
+        if (msg) feedback.textContent = msg;
+        return;
+      }
+      cards[run.i].classList.remove("is-running");
+      const c = q("ex-count", run.i);
+      c.classList.remove("is-running");
+      c.textContent = done.has(run.i) ? "✓ Bajarildi" : "▶ Boshlash";
+      q("ex-big", run.i).classList.remove("is-pop");
+      run = null;
+      allBtn.classList.remove("is-running");
+      allBtn.querySelector("span").textContent = "▶ Hammasini boshlash";
+      if (msg) feedback.textContent = msg;
+    }
+    function beat() {
+      if (!run) return;
+      if (page.classList.contains("hidden")) { stop(); return; }
+      const card = cards[run.i];
+      const reps = Number(card.dataset.reps);
+      const cues = card.dataset.cue.split("|");
+      run.rep++;
+      if (run.rep > reps) { finish(); return; }
+      const big = q("ex-big", run.i);
+      big.textContent = run.rep;
+      big.classList.remove("is-pop"); void big.offsetWidth; big.classList.add("is-pop");
+      card.classList.remove("is-beat"); void card.offsetWidth; card.classList.add("is-beat");
+      q("ex-count", run.i).textContent = run.rep + " / " + reps;
+      feedback.textContent = "🏃 " + (run.i + 1) + "-mashq: " + card.dataset.say + ". " + cues[(run.rep - 1) % cues.length] + " (" + run.rep + " / " + reps + ")";
+      run.timer = setTimeout(beat, Number(card.dataset.ms));
+    }
+    function finish() {
+      const i = run.i, auto = run.auto;
+      done.add(i);
+      cards[i].classList.add("is-done");
+      q("ex-done", i).classList.add("is-on");
+      q("ex-count", i).classList.add("is-done");
+      stop();
+      const nextI = cards.findIndex((_, j) => j > i);
+      if (auto && nextI >= 0) {
+        feedback.textContent = "✅ Barakalla! Endi " + (nextI + 1) + "-mashq…";
+        run = { i: -1, auto: true, timer: setTimeout(() => { run = null; start(nextI, true); }, 1300) };
+        allBtn.classList.add("is-running");
+        allBtn.querySelector("span").textContent = "⏸ To‘xtatish";
+        return;
+      }
+      feedback.textContent = done.size === cards.length
+        ? "🏆 Barakalla! 5 ta mashqning hammasini bajardingiz. Endi kuch va diqqat bilan darsni davom ettiramiz!"
+        : "✅ " + (i + 1) + "-mashq bajarildi! Bajarilgan mashqlar: " + done.size + " / " + cards.length + ".";
+    }
+    function start(i, auto) {
+      stop();
+      run = { i, rep: 0, auto, timer: 0 };
+      cards[i].classList.add("is-running");
+      q("ex-count", i).classList.add("is-running");
+      q("ex-count", i).classList.remove("is-done");
+      q("ex-count", i).textContent = "Tayyorlaning…";
+      if (auto) { allBtn.classList.add("is-running"); allBtn.querySelector("span").textContent = "⏸ To‘xtatish"; }
+      feedback.textContent = "🙋 " + (i + 1) + "-mashq: " + cards[i].dataset.say + " (" + cards[i].dataset.reps + " marta). Tayyorlaning!";
+      run.timer = setTimeout(beat, 1000);
+    }
+    cards.forEach((card, i) => {
+      card.addEventListener("click", () => {
+        if (run && run.i === i) { stop("⏸ Mashq to‘xtatildi. Qaytadan boshlash uchun kartochkani yana bosing."); return; }
+        start(i, false);
+      });
+    });
+    allBtn.addEventListener("click", () => {
+      if (run) {
+        if (run.i === -1 || run.auto) { stop("⏸ Mashqlar to‘xtatildi. Qaytadan boshlash uchun yana bosing."); return; }
+      }
+      start(0, true);
+    });
+    page.querySelector(".l2-back").addEventListener("click", () => stop());
+    page.querySelector(".l2-next").addEventListener("click", () => stop());
+  })();
   $("backToQuarters").addEventListener("click",()=>{$("quarterMapScreen").classList.add("hidden");$("quarterScreen").classList.remove("hidden");renderQuarterHub();window.scrollTo(0,0)});
   $("previousQuarter").addEventListener("click",()=>{if(activeQuarter>0)openQuarter(activeMapCourse.quarters[activeQuarter-1].id)});$("nextQuarter").addEventListener("click",()=>{if(activeQuarter<3)openQuarter(activeMapCourse.quarters[activeQuarter+1].id)});
   $("returnToMap").addEventListener("click",()=>{document.body.classList.remove("lesson-intro-active","lesson-problem-active");$("problemSituationScreen").classList.add("hidden");hideKnowledgeScreen();hideSafetyScreen();hideExerciseScreen();$("lessonIntroScreen").classList.add("hidden");$("learningScreen").classList.add("hidden");$("quarterMapScreen").classList.remove("hidden");renderQuarterMap();window.scrollTo(0,0)});

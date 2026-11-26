@@ -670,6 +670,25 @@ body.lesson-problem-active .topbar { display: none; }
 .shp-rect { width: 6.4cqw; height: 3cqw; border-radius: .3cqw; }
 .shp-oval { width: 6.4cqw; height: 3.6cqw; border-radius: 50%; }
 .shp-square { border-radius: .3cqw; }
+/* 2-dars 5-bosqich: jismoniy daqiqa (sanoq) */
+.l2-scene > .ex-card { z-index: 3; border-radius: 1.8cqw; transition: transform .2s cubic-bezier(.2,.8,.2,1.4), box-shadow .18s, background .18s; }
+.l2-scene > .ex-card:hover, .l2-scene > .ex-card:focus-visible { transform: translateY(-4px); background: rgba(255,255,255,.12) !important; box-shadow: 0 0 0 .3cqw #fff, 0 0 0 .6cqw rgba(124,77,255,.45); outline: none; }
+.l2-scene > .ex-card.is-running { box-shadow: 0 0 0 .4cqw #ffb21a, 0 0 2.4cqw rgba(255,178,26,.9); }
+.l2-scene > .ex-card.is-beat { animation: ex-beat .45s ease-out; }
+@keyframes ex-beat { 40% { transform: scale(1.035); } }
+.l2-scene > .ex-card.is-done:not(.is-running) { box-shadow: 0 0 0 .3cqw #4cd964, 0 0 1.4cqw rgba(76,217,100,.6); }
+.l2-scene > .ex-count { position: absolute; z-index: 4; pointer-events: none; line-height: 1.25; transform: translate(-50%, -50%); white-space: nowrap; padding: .4cqw 1.1cqw; border-radius: 99px;
+  background: linear-gradient(180deg,#8d63ff,#5b2ee6); color: #fff; font-family: inherit; font-weight: 900; font-size: 1.45cqw; box-shadow: 0 0 0 .2cqw #fff, 0 .3cqw .7cqw rgba(0,0,0,.25); }
+.l2-scene > .ex-count.is-running { background: linear-gradient(180deg,#ffd54a,#ff9f1a); color: #5a3a00; font-size: 1.6cqw; }
+.l2-scene > .ex-count.is-done { background: linear-gradient(180deg,#5fe07a,#26b14a); }
+.l2-scene > .ex-big { position: absolute; z-index: 4; pointer-events: none; transform: translate(-50%, -50%) scale(0); width: 5.4cqw; height: 5.4cqw; display: grid; place-items: center; border-radius: 50%;
+  background: #fff; color: #ff7a00; font-family: inherit; font-weight: 900; font-size: 3cqw; box-shadow: 0 0 0 .3cqw #ffb21a, 0 .4cqw 1cqw rgba(0,0,0,.25); }
+.l2-scene > .ex-big.is-pop { animation: ex-pop .6s cubic-bezier(.2,.8,.2,1.4) forwards; }
+@keyframes ex-pop { 0% { transform: translate(-50%, -50%) scale(.3); } 100% { transform: translate(-50%, -50%) scale(1); } }
+.l2-scene > .ex-all { z-index: 3; display: flex; align-items: flex-end; justify-content: center; border-radius: 3cqw; transition: transform .2s cubic-bezier(.2,.8,.2,1.4); }
+.l2-scene > .ex-all span { line-height: 1.25; transform: translateY(60%); padding: .55cqw 1.6cqw; border-radius: 99px; background: linear-gradient(180deg,#ff8fb1,#e64b85); color: #fff; font-family: inherit; font-weight: 900; font-size: 1.6cqw; box-shadow: 0 .3cqw 0 #a8285a; animation: l2-bob 1.6s ease-in-out infinite; }
+.l2-scene > .ex-all:hover, .l2-scene > .ex-all:focus-visible { transform: scale(1.04); outline: none; }
+.l2-scene > .ex-all.is-running span { background: linear-gradient(180deg,#ffd54a,#ff9f1a); color: #5a3a00; box-shadow: 0 .3cqw 0 #c27400; animation: none; }
 @media (max-width: 600px) {
   .lesson-intro-screen { padding: 6px; }
   .lesson-intro-art { width: min(100%, calc((100vh - 12px) * 1.7779)); }
