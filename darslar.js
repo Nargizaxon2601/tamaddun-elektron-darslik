@@ -2162,6 +2162,153 @@ document.addEventListener("DOMContentLoaded", () => {
     page.querySelector(".l2-back").addEventListener("click", () => stop());
     page.querySelector(".l2-next").addEventListener("click", () => stop());
   })();
+  // 2-dars 6-bosqich: ish maydonida geometrik shakllardan kompozitsiya (surib joylash)
+  (function setupComposition() {
+    const board = document.getElementById("cmpBoard");
+    if (!board) return;
+    const scene = board.parentElement;
+    const page = scene.closest("[data-l2-page]");
+    const feedback = page.querySelector(".l2-feedback");
+    const W = 1671, H = 941;
+    const BOARD = { x1: 385, y1: 296, x2: 1155, y2: 796 };
+    const SIZE = { sq: [80, 80], circle: [80, 80], half: [100, 50], tri: [70, 65], trir: [70, 65], rect: [270, 60], oval: [125, 65] };
+    const NAMES = { sq: "kvadrat", circle: "doira", half: "yarimdoira", tri: "uchburchak", trir: "uchburchak", rect: "to‘g‘ri to‘rtburchak", oval: "oval" };
+    const LAYOUT = [["sq", 0, 352], ["sq", 95, 352], ["circle", 190, 352], ["half", 0, 458], ["tri", 115, 450], ["trir", 200, 450], ["rect", 0, 530], ["oval", 0, 606], ["oval", 145, 606]];
+    const COLORS = { l: "#8e4fd6", r: "#2fa8f0" };
+    const slots = [];
+    [["l", 442], ["r", 827]].forEach(([side, hx]) => {
+      LAYOUT.forEach(([shape, dx, y]) => {
+        const [w, h] = SIZE[shape];
+        const g = document.createElement("span");
+        g.className = "cmp-ghost shape-" + shape + " " + shape + " side-" + side;
+        g.style.cssText = "left:" + ((hx + dx) / W * 100) + "%;top:" + (y / H * 100) + "%;width:" + (w / W * 100) + "%;height:" + (h / H * 100) + "%";
+        scene.insertBefore(g, board.nextSibling);
+        slots.push({ side, shape, cx: hx + dx + w / 2, cy: y + h / 2, piece: null, ghost: g });
+      });
+    });
+    let color = COLORS.l;
+    const progress = document.getElementById("cmpProgress");
+    const filled = () => slots.filter((s) => s.piece).length;
+    function update(msg) {
+      const n = filled();
+      progress.textContent = "⭐ " + n + " / " + slots.length;
+      board.classList.toggle("is-win", n === slots.length);
+      if (n === slots.length) feedback.textContent = "🏆 Barakalla! Kitobdagi namunaga o‘xshash chiroyli kompozitsiya tayyor! Siz haqiqiy usta ekansiz!";
+      else if (msg) feedback.textContent = msg;
+    }
+    function toScene(e) {
+      const r = scene.getBoundingClientRect();
+      return { x: (e.clientX - r.left) / r.width * W, y: (e.clientY - r.top) / r.height * H };
+    }
+    function setPos(p, x, y) { p.dataset.x = x; p.dataset.y = y; p.style.left = (x / W * 100) + "%"; p.style.top = (y / H * 100) + "%"; }
+    function makePiece(shape, c) {
+      const [w, h] = SIZE[shape];
+      const p = document.createElement("div");
+      p.className = "cmp-piece shape-" + shape;
+      p.dataset.shape = shape;
+      p.style.setProperty("--c", c);
+      p.dataset.color = c;
+      p.style.width = (w / W * 100) + "%";
+      p.style.height = (h / H * 100) + "%";
+      p.setAttribute("role", "img");
+      p.setAttribute("aria-label", NAMES[shape]);
+      scene.appendChild(p);
+      p.addEventListener("pointerdown", (e) => { e.preventDefault(); startDrag(p, e, false); });
+      return p;
+    }
+    function release(p) { slots.forEach((s) => { if (s.piece === p) s.piece = null; }); }
+    function snap(p, slot) {
+      release(p);
+      slot.piece = p;
+      setPos(p, slot.cx, slot.cy);
+      p.classList.remove("is-snap"); void p.offsetWidth; p.classList.add("is-snap");
+    }
+    function drop(p, x, y, fresh) {
+      const inside = x > BOARD.x1 && x < BOARD.x2 && y > BOARD.y1 && y < BOARD.y2 - 50;
+      if (!inside) {
+        release(p);
+        p.remove();
+        update(fresh ? "Shaklni ish maydoniga (oq varaqqa) olib boring!" : "🗑 Shakl ish maydonidan olib tashlandi.");
+        return;
+      }
+      const side = p.dataset.color === COLORS.l ? "l" : "r";
+      const near = slots.filter((s) => s.shape === p.dataset.shape && (!s.piece || s.piece === p) && Math.hypot(s.cx - x, s.cy - y) < 75)
+        .sort((a, b) => Math.hypot(a.cx - x, a.cy - y) - Math.hypot(b.cx - x, b.cy - y));
+      const good = near.find((s) => s.side === side);
+      if (good) {
+        snap(p, good);
+        update("✅ " + NAMES[p.dataset.shape][0].toUpperCase() + NAMES[p.dataset.shape].slice(1) + " o‘z joyiga yopishtirildi!");
+      } else {
+        release(p);
+        setPos(p, x, y);
+        update(near.length
+          ? "🤔 Bu tomonga " + (side === "l" ? "ko‘k" : "binafsha") + " shakl kerak! " + (side === "l" ? "Binafsha" : "Ko‘k") + " shakllar " + (side === "l" ? "chap" : "o‘ng") + " tomonga joylanadi."
+          : "🎨 Shakl ish maydoniga qo‘yildi. Namunadagi chiziqli joyga olib borsangiz, yopishib qoladi!");
+      }
+    }
+    function startDrag(p, e, fresh, onTap) {
+      const id = e.pointerId;
+      let moved = false;
+      const s0 = toScene(e);
+      const ox = fresh ? 0 : Number(p.dataset.x) - s0.x, oy = fresh ? 0 : Number(p.dataset.y) - s0.y;
+      p.classList.add("is-drag");
+      const move = (ev) => {
+        if (ev.pointerId !== id) return;
+        const s = toScene(ev);
+        if (!moved && Math.hypot(s.x - s0.x, s.y - s0.y) < 4) return;
+        moved = true;
+        p.style.visibility = "";
+        setPos(p, s.x + ox, s.y + oy);
+      };
+      const up = (ev) => {
+        if (ev.pointerId !== id) return;
+        window.removeEventListener("pointermove", move);
+        window.removeEventListener("pointerup", up);
+        window.removeEventListener("pointercancel", up);
+        p.classList.remove("is-drag");
+        if (!moved) { if (onTap && ev.type === "pointerup") onTap(); else if (fresh) p.remove(); return; }
+        if (ev.type === "pointercancel") { drop(p, -1, -1, fresh); return; }
+        drop(p, Number(p.dataset.x), Number(p.dataset.y), fresh);
+      };
+      window.addEventListener("pointermove", move);
+      window.addEventListener("pointerup", up);
+      window.addEventListener("pointercancel", up);
+    }
+    function tapPlace(p, shape) {
+      // bosish: rangiga mos tomondagi birinchi bo'sh joyga qo'yamiz
+      const side = color === COLORS.l ? "l" : "r";
+      const slot = slots.find((sl) => sl.side === side && sl.shape === shape && !sl.piece);
+      p.style.visibility = "";
+      if (slot) { snap(p, slot); update("✅ " + NAMES[shape][0].toUpperCase() + NAMES[shape].slice(1) + " ish maydoniga yopishtirildi! Uni surib boshqa joyga ham qo‘yishingiz mumkin."); }
+      else { p.remove(); update("Bu tomonda bunday shakl uchun bo‘sh joy qolmadi. Boshqa rangni tanlang yoki shaklni surib, xohlagan joyingizga qo‘ying!"); }
+    }
+    scene.querySelectorAll(".cmp-src").forEach((src) => {
+      src.addEventListener("pointerdown", (e) => {
+        e.preventDefault();
+        const s0 = toScene(e);
+        const p = makePiece(src.dataset.shape, color);
+        setPos(p, s0.x, s0.y);
+        p.style.visibility = "hidden";
+        startDrag(p, e, true, () => tapPlace(p, src.dataset.shape));
+      });
+    });
+    scene.querySelectorAll(".cmp-color").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        color = btn.dataset.color;
+        scene.querySelectorAll(".cmp-color").forEach((b) => b.classList.toggle("is-on", b === btn));
+        feedback.textContent = color === COLORS.l ? "🟪 Binafsha rang tanlandi — shakllar chap tomonga." : "🟦 Ko‘k rang tanlandi — shakllar o‘ng tomonga.";
+      });
+    });
+    document.getElementById("cmpGhost").addEventListener("click", () => {
+      const off = scene.classList.toggle("cmp-noghost");
+      feedback.textContent = off ? "👁 Namuna chiziqlari yashirildi. Endi o‘zingiz joylashtirib ko‘ring!" : "👁 Namuna chiziqlari ko‘rsatildi.";
+    });
+    document.getElementById("cmpClear").addEventListener("click", () => {
+      scene.querySelectorAll(".cmp-piece").forEach((p) => p.remove());
+      slots.forEach((s) => { s.piece = null; });
+      update("🗑 Ish maydoni tozalandi. Qaytadan boshlang!");
+    });
+  })();
   $("backToQuarters").addEventListener("click",()=>{$("quarterMapScreen").classList.add("hidden");$("quarterScreen").classList.remove("hidden");renderQuarterHub();window.scrollTo(0,0)});
   $("previousQuarter").addEventListener("click",()=>{if(activeQuarter>0)openQuarter(activeMapCourse.quarters[activeQuarter-1].id)});$("nextQuarter").addEventListener("click",()=>{if(activeQuarter<3)openQuarter(activeMapCourse.quarters[activeQuarter+1].id)});
   $("returnToMap").addEventListener("click",()=>{document.body.classList.remove("lesson-intro-active","lesson-problem-active");$("problemSituationScreen").classList.add("hidden");hideKnowledgeScreen();hideSafetyScreen();hideExerciseScreen();$("lessonIntroScreen").classList.add("hidden");$("learningScreen").classList.add("hidden");$("quarterMapScreen").classList.remove("hidden");renderQuarterMap();window.scrollTo(0,0)});
