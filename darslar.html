@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>TAMADDUN — Interaktiv dars</title>
-    <link rel="stylesheet" href="darslar.css?v=5" />
+    <link rel="stylesheet" href="darslar.css?v=6" />
   </head>
   <body>
     <header class="topbar">
@@ -130,6 +130,31 @@
       </div>
       <p class="problem-feedback" id="knowledgeFeedback" aria-live="polite">Buyum kartochkasini bosing yoki pastda o‘zingiz tanigan buyumlarni belgilang.</p>
     </main>
+    <main class="lesson-intro-screen lesson-problem-screen safety-screen hidden" id="safetyScreen" aria-label="4-bosqich: Texnologiya darslarida xavfsizlik texnikasi, 1/7">
+      <div class="problem-scene knowledge-scene safety-scene">
+        <img src="images/1_tex_1s_1dars_4bosqich_1.webp" alt="Texnologiya darslarida xavfsizlik texnikasi: ish o‘rningizni tayyorlab oling" />
+        <button type="button" class="safety-rule" data-rule="0" style="left:42.71%;top:51.91%;width:34.65%;height:8.40%" aria-pressed="false" aria-label="Partani iflos qilmaslik uchun uning ustiga qog‘oz yoki kleyonka to‘shang"><span class="safety-tick" style="left:3.79%;top:43.04%" aria-hidden="true"></span></button>
+        <button type="button" class="safety-rule" data-rule="1" style="left:42.71%;top:62.02%;width:36.02%;height:5.74%" aria-pressed="false" aria-label="Materiallaringizni tartib bilan joylashtiring"><span class="safety-tick" style="left:3.65%;top:50.00%" aria-hidden="true"></span></button>
+        <button type="button" class="safety-rule" data-rule="2" style="left:42.71%;top:69.15%;width:34.65%;height:8.72%" aria-pressed="false" aria-label="Ortiqcha narsalarni portfelingizga solib qo‘ying"><span class="safety-tick" style="left:4.31%;top:48.78%" aria-hidden="true"></span></button>
+        <button type="button" class="safety-object" data-object-rule="0" style="left:21.80%;top:52.34%;width:19.41%;height:10.43%" aria-label="Kleyonka to‘shalgan parta"></button>
+        <button type="button" class="safety-object" data-object-rule="2" style="left:24.19%;top:67.23%;width:8.66%;height:15.53%" aria-label="Portfel"></button>
+        <button type="button" class="safety-object" data-object-rule="1" style="left:32.26%;top:61.49%;width:6.27%;height:11.91%" aria-label="Qalamdon"></button>
+        <button type="button" class="safety-object" data-object-rule="0" style="left:33.15%;top:73.40%;width:8.66%;height:9.79%" aria-label="Kleyonka rulon"></button>
+        <button type="button" class="knowledge-dot safety-dot" data-safety-dot="0" style="left:36.68%;top:91.81%" aria-label="1-bosqich"></button>
+        <button type="button" class="knowledge-dot safety-dot" data-safety-dot="1" style="left:40.32%;top:91.81%" aria-label="2-bosqich"></button>
+        <button type="button" class="knowledge-dot safety-dot" data-safety-dot="2" style="left:43.91%;top:91.81%" aria-label="3-bosqich"></button>
+        <button type="button" class="knowledge-dot safety-dot" data-safety-dot="3" style="left:47.43%;top:91.81%" aria-label="4-bosqich"></button>
+        <button type="button" class="knowledge-dot safety-dot" data-safety-dot="4" style="left:50.84%;top:91.81%" aria-label="5-bosqich"></button>
+        <button type="button" class="knowledge-dot safety-dot" data-safety-dot="5" style="left:54.12%;top:91.81%" aria-label="6-bosqich"></button>
+        <button type="button" class="knowledge-dot safety-dot" data-safety-dot="6" style="left:57.53%;top:91.81%" aria-label="7-bosqich"></button>
+        <button type="button" class="knowledge-dot safety-dot" data-safety-dot="7" style="left:60.93%;top:91.81%" aria-label="8-bosqich"></button>
+        <button type="button" class="knowledge-hero" data-hero="robot" style="left:2.09%;top:36.17%;width:18.04%;height:50.53%;clip-path:polygon(28.1% 0.0%, 38.1% 1.1%, 38.1% 12.6%, 64.6% 13.7%, 81.1% 21.1%, 87.7% 26.3%, 94.4% 26.9%, 100.0% 35.8%, 98.3% 43.2%, 85.1% 48.8%, 73.8% 54.7%, 71.9% 71.6%, 78.5% 84.2%, 88.4% 94.7%, 86.8% 100.0%, 44.7% 100.0%, 38.1% 92.6%, 24.8% 88.4%, 14.9% 75.8%, 8.3% 63.2%, 14.9% 52.6%, 8.3% 46.3%, 0.0% 33.7%, 3.3% 23.2%, 18.2% 14.7%, 27.5% 12.2%)" aria-label="Robotcha" aria-pressed="false"></button>
+        <button type="button" class="knowledge-hero" data-hero="tulki" style="left:79.63%;top:37.45%;width:16.97%;height:49.47%;clip-path:polygon(30.6% 4.9%, 48.2% 0.0%, 69.4% 0.0%, 80.6% 6.0%, 93.0% 14.6%, 100.0% 21.5%, 94.7% 36.1%, 98.2% 49.0%, 96.5% 61.9%, 85.9% 68.8%, 80.6% 79.6%, 56.0% 86.0%, 41.9% 96.3%, 38.4% 100.0%, 12.3% 100.0%, 17.6% 89.9%, 22.9% 79.1%, 17.6% 64.1%, 15.8% 45.2%, 0.0% 36.6%, 1.8% 22.8%, 15.8% 20.6%, 22.9% 14.2%)" aria-label="Tulki" aria-pressed="false"></button>
+        <button type="button" class="knowledge-nav knowledge-back" id="safetyBack" style="left:1.79%;top:87.77%;width:7.89%;height:10.32%" aria-label="Oldingi sahifaga qaytish"><span class="intro-control-label">Orqaga</span></button>
+        <button type="button" class="knowledge-nav knowledge-next" id="safetyContinue" style="left:89.78%;top:87.77%;width:8.30%;height:10.32%" aria-label="Keyingi sahifaga o‘tish"><span class="intro-control-label">Davom etish</span></button>
+      </div>
+      <p class="problem-feedback" id="safetyFeedback" aria-live="polite">Ish o‘rnini tayyorlash qoidalarini bosib, bajarganlaringizni belgilang.</p>
+    </main>
     <!-- INTERAKTIV DARSLIK -->
     <main class="learning-screen hidden" id="learningScreen">
       <aside class="lesson-sidebar">
@@ -248,6 +273,6 @@
       </aside>
     </main>
 
-    <script src="darslar.js?v=5"></script>
+    <script src="darslar.js?v=6"></script>
   </body>
 </html>
