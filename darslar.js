@@ -527,7 +527,7 @@ document.addEventListener("DOMContentLoaded", () => {
       button.classList.toggle("is-selected", selected);
       button.setAttribute("aria-pressed", String(selected));
     });
-    $("problemContinue").disabled = situationChoice !== "safe";
+    $("problemContinue").disabled = false;
     $("problemFeedback").textContent = situationChoice === "safe"
       ? "To‘g‘ri! Qaychini ehtiyotkor ishlatamiz va ish joyini tartibli saqlaymiz."
       : "Ikki holatni solishtiring. Qaysi biri xavfsiz?";
@@ -574,7 +574,6 @@ document.addEventListener("DOMContentLoaded", () => {
         choice.setAttribute("aria-pressed", String(selected));
       });
       const isSafe = situationChoice === "safe";
-      $("problemContinue").disabled = !isSafe;
       $("problemFeedback").textContent = isSafe
         ? "To‘g‘ri! Qaychini ehtiyotkor ishlatamiz va ish joyini tartibli saqlaymiz."
         : "Ehtiyotsiz qaychi jarohat yetkazishi mumkin. Xavfsiz holatni tanlang.";
@@ -588,7 +587,6 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
   $("problemContinue").addEventListener("click", () => {
-    if (situationChoice !== "safe") return;
     if (!completed.has(1)) completeStage(1);
     if (!hasKnowledgeScreen()) { stageIndex = 2; openLessonContent(); return; }
     openKnowledgeCheck();
