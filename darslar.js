@@ -17,7 +17,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const hideSafetyScreen = () => safetyScreens().forEach((screen) => screen.classList.add("hidden"));
   const hasExerciseScreen = () => Boolean(document.getElementById("exerciseScreen"));
   const hasBuildScreen = () => Boolean(document.getElementById("buildScreen"));
-  const hideExerciseScreen = () => ["exerciseScreen", "buildScreen", "drumScreen"].forEach((id) => { const el = document.getElementById(id); if (el) el.classList.add("hidden"); });
+  const hideExerciseScreen = () => ["exerciseScreen", "buildScreen", "drumScreen", "finalScreen"].forEach((id) => { const el = document.getElementById(id); if (el) el.classList.add("hidden"); });
   const hideKnowledgeScreen = () => { if (hasKnowledgeScreen()) $("knowledgeScreen").classList.add("hidden"); };
   const knowledgeTools = [["Qaychi", "Qaychi qog‘oz va kartonni qirqish uchun kerak. U bilan ehtiyot bo‘lib ishlaymiz!"], ["Yelim", "Yelim qog‘oz va karton bo‘laklarini bir-biriga yopishtiradi."], ["Qalam", "Qalam bilan chizamiz, belgi qo‘yamiz va shakllarni chizib olamiz."], ["Bo‘yoq", "Bo‘yoq bilan rasm va buyumlarimizni rang-barang qilamiz."], ["Mo‘yqalam", "Mo‘yqalam bo‘yoqni qog‘ozga surtish uchun ishlatiladi."], ["Plastilin", "Plastilindan turli shakl va hayvonchalar yasaymiz."], ["Qog‘oz", "Rangli qog‘ozdan applikatsiya va o‘yinchoqlar yasaymiz."], ["Karton", "Karton qalin va mustahkam, undan qutichalar yasash mumkin."]];
   let score = 0;
@@ -971,7 +971,7 @@ document.addEventListener("DOMContentLoaded", () => {
     ["lessonIntroScreen", "problemSituationScreen", "learningScreen", "quarterScreen", "quarterMapScreen"].forEach((id) => $(id).classList.add("hidden"));
     hideKnowledgeScreen();
     hideSafetyScreen();
-    ["buildScreen", "drumScreen"].forEach((id) => { const el = document.getElementById(id); if (el) el.classList.add("hidden"); });
+    ["buildScreen", "drumScreen", "finalScreen"].forEach((id) => { const el = document.getElementById(id); if (el) el.classList.add("hidden"); });
     $("exerciseScreen").classList.remove("hidden");
     $("exerciseScreen").querySelectorAll(".knowledge-hero").forEach((hero) => { hero.classList.remove("is-selected"); hero.setAttribute("aria-pressed", "false"); });
     updateExerciseState();
@@ -1412,6 +1412,113 @@ document.addEventListener("DOMContentLoaded", () => {
     $("drumBack").addEventListener("click", () => (hasBuildScreen() ? openBuildPage() : (stageIndex = 5, openLessonContent())));
     $("drumContinue").addEventListener("click", () => leaveDrumPage(7));
   }
+  // 8-bosqich: Dars yakuni — baholash, bugungi darsda, uyga vazifa, uycha -> 1-chorak xaritasi
+  const finalApi = (function setupFinal() {
+    const scene = document.getElementById("finalScene");
+    if (!scene) return { reset() {} };
+    const feedback = $("finalFeedback");
+    const say = (text) => { feedback.textContent = text; };
+    const itemsDone = new Set();
+    function confetti(count = 26) {
+      const box = $("finalConfetti");
+      const bits = ["⭐", "🍂", "🍁", "🎉", "✨", "🌟"];
+      for (let i = 0; i < count; i++) {
+        const s = document.createElement("span");
+        s.textContent = bits[i % bits.length];
+        s.style.left = Math.random() * 96 + "%";
+        s.style.animationDuration = 1.8 + Math.random() * 1.6 + "s";
+        s.style.animationDelay = Math.random() * 0.5 + "s";
+        box.appendChild(s);
+        setTimeout(() => s.remove(), 4200);
+      }
+    }
+    scene.querySelectorAll("[data-medal]").forEach((medal) => {
+      medal.addEventListener("click", () => {
+        scene.querySelectorAll("[data-medal]").forEach((other) => {
+          const on = other === medal;
+          other.classList.toggle("is-selected", on);
+          other.classList.toggle("is-dim", !on);
+          other.setAttribute("aria-pressed", String(on));
+        });
+        say(medal.dataset.say);
+        if (medal.dataset.medal === "alo") confetti(18);
+      });
+    });
+    scene.querySelectorAll("[data-final-item]").forEach((item) => {
+      item.addEventListener("click", () => {
+        const i = Number(item.dataset.finalItem);
+        if (itemsDone.has(i)) itemsDone.delete(i); else itemsDone.add(i);
+        item.classList.toggle("is-checked", itemsDone.has(i));
+        item.setAttribute("aria-pressed", String(itemsDone.has(i)));
+        say(itemsDone.size === 4
+          ? "🎉 Ajoyib! Bugungi darsning hammasini esladingiz!"
+          : "✅ " + item.getAttribute("aria-label") + ". Esladingiz: " + itemsDone.size + " / 4");
+        if (itemsDone.size === 4) confetti(14);
+      });
+    });
+    const cardText = {
+      home: "🏠 Uyga vazifa: ota-onangiz bilan birga tabiiy materiallardan yana bir ijodiy buyum yasang va sinfda taqdim eting.",
+      next: "📅 Keyingi darsda rangli qog‘oz va kartondan qiziqarli buyumlar yasashni o‘rganamiz!"
+    };
+    scene.querySelectorAll("[data-final-card]").forEach((card) => {
+      card.addEventListener("click", () => {
+        scene.querySelectorAll("[data-final-card]").forEach((other) => other.classList.toggle("is-active", other === card));
+        say(cardText[card.dataset.finalCard]);
+      });
+    });
+    const sign = scene.querySelector(".final-sign");
+    sign.addEventListener("click", () => {
+      sign.classList.remove("is-wave");
+      void sign.offsetWidth;
+      sign.classList.add("is-wave");
+      confetti();
+      say("👋 Keyingi sayohatda ko‘rishguncha! Uycha tugmasini bosib, Kuzgi sayohat xaritasiga qayting.");
+    });
+    function reset() {
+      itemsDone.clear();
+      scene.querySelectorAll(".is-selected, .is-dim, .is-checked, .is-active").forEach((el) => el.classList.remove("is-selected", "is-dim", "is-checked", "is-active"));
+      scene.querySelectorAll("[aria-pressed]").forEach((el) => el.setAttribute("aria-pressed", "false"));
+      say(feedback.dataset.hint);
+    }
+    return { reset, confetti };
+  })();
+  function openFinalPage() {
+    stageIndex = 7;
+    if (!completed.has(7)) completeStage(7);
+    document.body.classList.remove("lesson-intro-active");
+    document.body.classList.add("lesson-problem-active");
+    ["lessonIntroScreen", "problemSituationScreen", "learningScreen", "quarterScreen", "quarterMapScreen"].forEach((id) => $(id).classList.add("hidden"));
+    hideKnowledgeScreen();
+    hideSafetyScreen();
+    hideExerciseScreen();
+    $("finalScreen").classList.remove("hidden");
+    $("finalScreen").querySelectorAll(".knowledge-hero").forEach((hero) => { hero.classList.remove("is-selected"); hero.setAttribute("aria-pressed", "false"); });
+    document.querySelectorAll("[data-final-dot]").forEach((dot) => {
+      const i = Number(dot.dataset.finalDot);
+      dot.classList.toggle("is-done", i < 7);
+      dot.classList.toggle("is-current", i === 7);
+      if (i === 7) dot.setAttribute("aria-current", "step"); else dot.removeAttribute("aria-current");
+    });
+    setTimeout(() => finalApi.confetti(16), 300);
+    window.scrollTo(0, 0);
+  }
+  if (document.getElementById("finalScreen")) {
+    document.querySelectorAll("[data-final-dot]").forEach((dot) => {
+      dot.addEventListener("click", () => {
+        const i = Number(dot.dataset.finalDot);
+        if (i === 0) $("problemBackToIntro").click();
+        else if (i === 1) openProblemSituation();
+        else if (i === 2) openKnowledgeCheck();
+        else if (i === 3) openSafetyPage(safetyScreens().length - 1);
+        else if (i === 4) openExercisePage();
+        else if (i === 5) openBuildPage();
+        else if (i === 6) openDrumPage();
+      });
+    });
+    $("finalBack").addEventListener("click", () => openDrumPage());
+    // Uycha: 1-chorak "Kuzgi sayohat" xaritasiga qaytish
+    $("finalHome").addEventListener("click", () => $("returnToMap").click());
+  }
   $("backToQuarters").addEventListener("click",()=>{$("quarterMapScreen").classList.add("hidden");$("quarterScreen").classList.remove("hidden");renderQuarterHub();window.scrollTo(0,0)});
   $("previousQuarter").addEventListener("click",()=>{if(activeQuarter>0)openQuarter(activeMapCourse.quarters[activeQuarter-1].id)});$("nextQuarter").addEventListener("click",()=>{if(activeQuarter<3)openQuarter(activeMapCourse.quarters[activeQuarter+1].id)});
   $("returnToMap").addEventListener("click",()=>{document.body.classList.remove("lesson-intro-active","lesson-problem-active");$("problemSituationScreen").classList.add("hidden");hideKnowledgeScreen();hideSafetyScreen();hideExerciseScreen();$("lessonIntroScreen").classList.add("hidden");$("learningScreen").classList.add("hidden");$("quarterMapScreen").classList.remove("hidden");renderQuarterMap();window.scrollTo(0,0)});
@@ -1454,6 +1561,7 @@ document.addEventListener("DOMContentLoaded", () => {
     exerciseDoneSet.clear();
     if (typeof buildApi !== "undefined") buildApi.reset();
     if (typeof drumApi !== "undefined") drumApi.reset();
+    if (typeof finalApi !== "undefined") finalApi.reset();
     score = 0;
     completed = new Set();
     exerciseDone = new Set();
@@ -1516,6 +1624,10 @@ document.addEventListener("DOMContentLoaded", () => {
     }
     if (stageIndex === 6 && document.getElementById("drumScreen")) {
       openDrumPage();
+      return;
+    }
+    if (stageIndex === 7 && document.getElementById("finalScreen")) {
+      openFinalPage();
       return;
     }
     if (stageIndex === 1) {

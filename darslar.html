@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>TAMADDUN — Interaktiv dars</title>
-    <link rel="stylesheet" href="darslar.css?v=19" />
+    <link rel="stylesheet" href="darslar.css?v=20" />
   </head>
   <body>
     <header class="topbar">
@@ -396,6 +396,35 @@
       </div>
       <p class="problem-feedback" id="drumFeedback" data-hint="«Aylantirish» tugmasini bosing yoki barabanning o‘zini bosing!" aria-live="polite">«Aylantirish» tugmasini bosing yoki barabanning o‘zini bosing!</p>
     </main>
+    <main class="lesson-intro-screen lesson-problem-screen final-screen hidden" id="finalScreen" aria-label="8-bosqich: Dars yakuni">
+      <div class="problem-scene knowledge-scene final-scene" id="finalScene" style="aspect-ratio:1670 / 942">
+        <img src="images/1_tex_1s_1dars_8bosqich.webp" alt="Dars yakuni: baholash va rag‘bat, bugungi darsda, uyga vazifa, keyingi dars" />
+        <button type="button" class="final-medal" data-medal="alo" data-say="🥇 A‘lo! Siz bugun juda zo‘r ishladingiz!" style="left:19.042%;top:19.108%;width:8.383%;height:16.773%" aria-pressed="false" aria-label="Baho: A‘lo!"></button>
+        <button type="button" class="final-medal" data-medal="faol" data-say="🥈 Faol! Darsda faol qatnashdingiz, barakalla!" style="left:28.623%;top:19.108%;width:8.204%;height:16.773%" aria-pressed="false" aria-label="Baho: Faol!"></button>
+        <button type="button" class="final-medal" data-medal="yaxshi" data-say="🥉 Yaxshi! Keyingi darsda yanada zo‘r bo‘ladi!" style="left:38.204%;top:19.108%;width:8.802%;height:16.773%" aria-pressed="false" aria-label="Baho: Yaxshi!"></button>
+        <button type="button" class="final-item" data-final-item="0" style="left:52.814%;top:18.684%;width:29.820%;height:3.822%" aria-pressed="false" aria-label="Texnologiya va amaliy ish haqida bildik"><span class="safety-tick" style="left:4.82%;top:50%;width:2.1cqw" aria-hidden="true"></span></button>
+        <button type="button" class="final-item" data-final-item="1" style="left:52.814%;top:22.718%;width:29.820%;height:3.822%" aria-pressed="false" aria-label="Tabiiy materiallar bilan tanishdik"><span class="safety-tick" style="left:4.82%;top:50%;width:2.1cqw" aria-hidden="true"></span></button>
+        <button type="button" class="final-item" data-final-item="2" style="left:52.814%;top:26.645%;width:29.820%;height:3.822%" aria-pressed="false" aria-label="Xavfsizlik qoidalarini esladik"><span class="safety-tick" style="left:4.82%;top:50%;width:2.1cqw" aria-hidden="true"></span></button>
+        <button type="button" class="final-item" data-final-item="3" style="left:52.814%;top:30.679%;width:29.820%;height:3.822%" aria-pressed="false" aria-label="“Kuzgi kirpicha”ni yasadik"><span class="safety-tick" style="left:4.82%;top:50%;width:2.1cqw" aria-hidden="true"></span></button>
+        <button type="button" class="final-card" data-final-card="home" style="left:16.647%;top:40.127%;width:31.976%;height:25.053%" aria-label="Uyga vazifa"></button>
+        <button type="button" class="final-card" data-final-card="next" style="left:50.060%;top:40.127%;width:33.892%;height:25.053%" aria-label="Keyingi dars"></button>
+        <button type="button" class="final-sign" style="left:32.635%;top:67.941%;width:33.533%;height:15.924%" aria-label="Keyingi sayohatda ko‘rishguncha!"></button>
+        <button type="button" class="knowledge-dot" data-final-dot="0" style="left:34.731%;top:87.473%" aria-label="1-bosqich"></button>
+        <button type="button" class="knowledge-dot" data-final-dot="1" style="left:38.743%;top:87.473%" aria-label="2-bosqich"></button>
+        <button type="button" class="knowledge-dot" data-final-dot="2" style="left:42.754%;top:87.473%" aria-label="3-bosqich"></button>
+        <button type="button" class="knowledge-dot" data-final-dot="3" style="left:46.647%;top:87.473%" aria-label="4-bosqich"></button>
+        <button type="button" class="knowledge-dot" data-final-dot="4" style="left:50.539%;top:87.473%" aria-label="5-bosqich"></button>
+        <button type="button" class="knowledge-dot" data-final-dot="5" style="left:54.491%;top:87.473%" aria-label="6-bosqich"></button>
+        <button type="button" class="knowledge-dot" data-final-dot="6" style="left:58.383%;top:87.473%" aria-label="7-bosqich"></button>
+        <button type="button" class="knowledge-dot" data-final-dot="7" style="left:62.395%;top:87.473%" aria-label="8-bosqich"></button>
+        <button type="button" class="knowledge-hero" data-hero="robot" style="left:1.497%;top:40.127%;width:15.749%;height:37.898%;clip-path:polygon(13.3% 0.0%, 20.9% 2.0%, 22.8% 9.0%, 51.3% 11.8%, 68.4% 18.8%, 76.0% 28.6%, 87.5% 23.0%, 98.9% 28.6%, 100.0% 37.0%, 91.3% 45.4%, 81.7% 52.4%, 79.8% 67.8%, 87.5% 81.8%, 91.3% 98.6%, 55.1% 100.0%, 32.3% 97.2%, 20.9% 87.4%, 19.0% 73.4%, 11.4% 62.2%, 1.9% 51.0%, 0.0% 34.2%, 5.7% 20.2%)" aria-label="Robotcha" aria-pressed="false"></button>
+        <button type="button" class="knowledge-hero" data-hero="tulki" style="left:83.234%;top:40.870%;width:15.569%;height:39.809%;clip-path:polygon(34.6% 2.7%, 57.7% 0.0%, 80.8% 6.7%, 96.2% 17.3%, 100.0% 30.7%, 96.2% 46.7%, 92.3% 62.7%, 100.0% 78.7%, 96.2% 94.7%, 76.9% 100.0%, 42.3% 100.0%, 15.4% 96.0%, 19.2% 84.0%, 25.0% 68.0%, 19.2% 52.0%, 11.5% 41.3%, 0.0% 28.0%, 1.9% 20.0%, 15.4% 17.3%, 26.9% 12.0%)" aria-label="Tulki" aria-pressed="false"></button>
+        <button type="button" class="knowledge-nav knowledge-back" id="finalBack" style="left:1.497%;top:83.333%;width:10.778%;height:11.677%" aria-label="Oldingi sahifaga qaytish"><span class="intro-control-label">Orqaga</span></button>
+        <button type="button" class="knowledge-nav knowledge-next" id="finalHome" style="left:87.725%;top:83.333%;width:10.778%;height:11.677%" aria-label="1-chorak xaritasiga qaytish"><span class="intro-control-label">Kuzgi sayohat xaritasi</span></button>
+        <div class="final-confetti" id="finalConfetti" aria-hidden="true"></div>
+      </div>
+      <p class="problem-feedback" id="finalFeedback" data-hint="O‘zingizni baholang: medallardan birini tanlang. So‘ng bugun o‘rganganlaringizni belgilang." aria-live="polite">O‘zingizni baholang: medallardan birini tanlang. So‘ng bugun o‘rganganlaringizni belgilang.</p>
+    </main>
     <!-- INTERAKTIV DARSLIK -->
     <main class="learning-screen hidden" id="learningScreen">
       <aside class="lesson-sidebar">
@@ -514,6 +543,6 @@
       </aside>
     </main>
 
-    <script src="darslar.js?v=19"></script>
+    <script src="darslar.js?v=20"></script>
   </body>
 </html>
