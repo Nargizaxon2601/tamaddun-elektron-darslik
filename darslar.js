@@ -17,7 +17,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const hideSafetyScreen = () => safetyScreens().forEach((screen) => screen.classList.add("hidden"));
   const hasExerciseScreen = () => Boolean(document.getElementById("exerciseScreen"));
   const hasBuildScreen = () => Boolean(document.getElementById("buildScreen"));
-  const hideExerciseScreen = () => ["exerciseScreen", "buildScreen"].forEach((id) => { const el = document.getElementById(id); if (el) el.classList.add("hidden"); });
+  const hideExerciseScreen = () => ["exerciseScreen", "buildScreen", "drumScreen"].forEach((id) => { const el = document.getElementById(id); if (el) el.classList.add("hidden"); });
   const hideKnowledgeScreen = () => { if (hasKnowledgeScreen()) $("knowledgeScreen").classList.add("hidden"); };
   const knowledgeTools = [["Qaychi", "Qaychi qog‘oz va kartonni qirqish uchun kerak. U bilan ehtiyot bo‘lib ishlaymiz!"], ["Yelim", "Yelim qog‘oz va karton bo‘laklarini bir-biriga yopishtiradi."], ["Qalam", "Qalam bilan chizamiz, belgi qo‘yamiz va shakllarni chizib olamiz."], ["Bo‘yoq", "Bo‘yoq bilan rasm va buyumlarimizni rang-barang qilamiz."], ["Mo‘yqalam", "Mo‘yqalam bo‘yoqni qog‘ozga surtish uchun ishlatiladi."], ["Plastilin", "Plastilindan turli shakl va hayvonchalar yasaymiz."], ["Qog‘oz", "Rangli qog‘ozdan applikatsiya va o‘yinchoqlar yasaymiz."], ["Karton", "Karton qalin va mustahkam, undan qutichalar yasash mumkin."]];
   let score = 0;
@@ -971,7 +971,7 @@ document.addEventListener("DOMContentLoaded", () => {
     ["lessonIntroScreen", "problemSituationScreen", "learningScreen", "quarterScreen", "quarterMapScreen"].forEach((id) => $(id).classList.add("hidden"));
     hideKnowledgeScreen();
     hideSafetyScreen();
-    if (hasBuildScreen()) $("buildScreen").classList.add("hidden");
+    ["buildScreen", "drumScreen"].forEach((id) => { const el = document.getElementById(id); if (el) el.classList.add("hidden"); });
     $("exerciseScreen").classList.remove("hidden");
     $("exerciseScreen").querySelectorAll(".knowledge-hero").forEach((hero) => { hero.classList.remove("is-selected"); hero.setAttribute("aria-pressed", "false"); });
     updateExerciseState();
@@ -1247,6 +1247,171 @@ document.addEventListener("DOMContentLoaded", () => {
     $("buildBack").addEventListener("click", () => (hasExerciseScreen() ? openExercisePage() : (stageIndex = 4, openLessonContent())));
     $("buildContinue").addEventListener("click", () => leaveBuildPage(6));
   }
+  // 7-bosqich: Baraban metodi — baraban haqiqatan aylanadi, chiqqan savolga javob beriladi
+  const drumApi = (function setupDrum() {
+    const wheel = document.getElementById("drumWheel");
+    if (!wheel) return { reset() {} };
+    const disk = wheel.querySelector("img");
+    const pin = document.querySelector("#drumScene .drum-pin");
+    const spinBtn = $("drumSpin");
+    const panel = $("drumQuestion");
+    const feedback = $("drumFeedback");
+    // sektorlar soat strelkasi bo'yicha, tepadan boshlab (har biri 45°)
+    const sectors = [
+      { icon: "🧴", q: "Yelim nima uchun kerak?", a: ["Yopishtirish uchun", "Kesish uchun", "Chizish uchun"] },
+      { icon: "📄", q: "Rangli qog‘ozdan nima yasash mumkin?", a: ["Applikatsiya", "Choy", "Non"] },
+      { icon: "🍂", q: "Daraxt barglari qanday material?", a: ["Tabiiy material", "Temir", "Shisha"] },
+      { icon: "🌰", q: "Tabiiy materiallarga nimalar kiradi?", a: ["G‘udda va barglar", "Qaychi va yelim", "Telefon va kitob"] },
+      { icon: "🧱", q: "Plastilindan nima qilamiz?", a: ["Turli shakllar yasaymiz", "Qog‘oz qirqamiz", "Rasm yuvamiz"] },
+      { icon: "🙌", q: "Ish paytida qaysi qoida to‘g‘ri?", a: ["Qaychini ehtiyot bo‘lib ishlataman", "Yelimni tatib ko‘raman", "Ish joyini sochib tashlayman"] },
+      { icon: "⚙️", q: "Ish qurollari nima uchun kerak?", a: ["Narsalar yasash uchun", "Sindirib o‘ynash uchun", "Yashirib qo‘yish uchun"] },
+      { icon: "✂️", q: "Qaysi asbob qog‘ozni kesish uchun kerak?", a: ["Qaychi", "Yelim", "Qalam"] }
+    ];
+    let angle = 0;
+    let spinning = false;
+    let stars = 0;
+    let answered = new Set();
+    let current = -1;
+
+    function setStars() {
+      document.querySelectorAll("#drumScene .drum-star").forEach((star, i) => star.classList.toggle("is-on", i < stars));
+    }
+    function shuffle(list) {
+      const a = list.slice();
+      for (let i = a.length - 1; i > 0; i--) { const r = Math.floor(Math.random() * (i + 1)); [a[i], a[r]] = [a[r], a[i]]; }
+      return a;
+    }
+    function ask(k) {
+      current = k;
+      const s = sectors[k];
+      $("drumQuestionIcon").textContent = s.icon;
+      $("drumQuestionText").textContent = s.q;
+      $("drumAgain").classList.add("hidden");
+      const box = $("drumOptions");
+      box.innerHTML = "";
+      shuffle(s.a.map((text, i) => ({ text, right: i === 0 }))).forEach((opt) => {
+        const b = document.createElement("button");
+        b.type = "button";
+        b.textContent = opt.text;
+        b.addEventListener("click", () => {
+          if (opt.right) {
+            box.querySelectorAll("button").forEach((x) => { x.disabled = true; });
+            b.classList.add("is-right");
+            answered.add(k);
+            if (stars < 3) stars++;
+            setStars();
+            if (stars >= 3) {
+              if (!completed.has(6)) completeStage(6);
+              feedback.textContent = "🎉 Barakalla! 3 ta yulduzcha yig‘dingiz! Siz haqiqiy bilimdonsiz.";
+            } else {
+              feedback.textContent = "✅ To‘g‘ri! Yulduzcha oldingiz: " + stars + " / 3. Yana aylantiring!";
+            }
+            $("drumAgain").classList.remove("hidden");
+            $("drumAgain").focus();
+          } else {
+            b.classList.add("is-wrong");
+            b.disabled = true;
+            feedback.textContent = "🤔 Bu javob to‘g‘ri emas. Yana bir bor o‘ylab ko‘ring!";
+          }
+        });
+        box.appendChild(b);
+      });
+      panel.classList.remove("hidden");
+      feedback.textContent = "Savolni o‘qing va to‘g‘ri javobni tanlang.";
+      const first = box.querySelector("button");
+      if (first) first.focus({ preventScroll: true });
+    }
+    function spin() {
+      if (spinning) return;
+      panel.classList.add("hidden");
+      const pool = sectors.map((_, i) => i).filter((i) => !answered.has(i));
+      const target = (pool.length ? pool : sectors.map((_, i) => i))[Math.floor(Math.random() * (pool.length || sectors.length))];
+      const center = target * 45 + 22.5;
+      const jitter = (Math.random() - 0.5) * 30;
+      const base = angle - (angle % 360);
+      const finalAngle = base + 360 * (5 + Math.floor(Math.random() * 2)) + ((360 - center + jitter) % 360 + 360) % 360;
+      const start = angle;
+      const duration = 4200 + Math.random() * 800;
+      const t0 = performance.now();
+      let lastSector = Math.floor(((start % 360) + 360) % 360 / 45);
+      spinning = true;
+      spinBtn.disabled = true;
+      wheel.classList.add("is-spinning");
+      feedback.textContent = "Baraban aylanmoqda…";
+      const ease = (t) => 1 - Math.pow(1 - t, 4);
+      function frame(now) {
+        const t = Math.min(1, (now - t0) / duration);
+        angle = start + (finalAngle - start) * ease(t);
+        disk.style.transform = "rotate(" + angle + "deg)";
+        const sec = Math.floor(((angle % 360) + 360) % 360 / 45);
+        if (sec !== lastSector) {
+          lastSector = sec;
+          pin.classList.remove("is-tick");
+          void pin.getBoundingClientRect();
+          pin.classList.add("is-tick");
+        }
+        if (t < 1) { requestAnimationFrame(frame); return; }
+        spinning = false;
+        spinBtn.disabled = false;
+        wheel.classList.remove("is-spinning");
+        const landed = Math.floor((((360 - (angle % 360)) % 360) + 360) % 360 / 45) % 8;
+        ask(landed);
+      }
+      requestAnimationFrame(frame);
+    }
+    wheel.addEventListener("click", spin);
+    spinBtn.addEventListener("click", spin);
+    $("drumAgain").addEventListener("click", spin);
+    function reset() {
+      stars = 0;
+      answered = new Set();
+      panel.classList.add("hidden");
+      setStars();
+      feedback.textContent = feedback.dataset.hint;
+    }
+    reset();
+    return { reset, sectors, landedFor: () => current };
+  })();
+  function openDrumPage() {
+    stageIndex = 6;
+    document.body.classList.remove("lesson-intro-active");
+    document.body.classList.add("lesson-problem-active");
+    ["lessonIntroScreen", "problemSituationScreen", "learningScreen", "quarterScreen", "quarterMapScreen"].forEach((id) => $(id).classList.add("hidden"));
+    hideKnowledgeScreen();
+    hideSafetyScreen();
+    hideExerciseScreen();
+    $("drumScreen").classList.remove("hidden");
+    $("drumScreen").querySelectorAll(".knowledge-hero").forEach((hero) => { hero.classList.remove("is-selected"); hero.setAttribute("aria-pressed", "false"); });
+    document.querySelectorAll("[data-drum-dot]").forEach((dot) => {
+      const i = Number(dot.dataset.drumDot);
+      dot.classList.toggle("is-done", i < 6);
+      dot.classList.toggle("is-current", i === 6);
+      dot.disabled = false;
+      if (i === 6) dot.setAttribute("aria-current", "step"); else dot.removeAttribute("aria-current");
+    });
+    window.scrollTo(0, 0);
+  }
+  function leaveDrumPage(toStage) {
+    if (!completed.has(6)) completeStage(6);
+    stageIndex = toStage;
+    openLessonContent();
+  }
+  if (document.getElementById("drumScreen")) {
+    document.querySelectorAll("[data-drum-dot]").forEach((dot) => {
+      dot.addEventListener("click", () => {
+        const i = Number(dot.dataset.drumDot);
+        if (i === 0) $("problemBackToIntro").click();
+        else if (i === 1) openProblemSituation();
+        else if (i === 2) openKnowledgeCheck();
+        else if (i === 3) openSafetyPage(safetyScreens().length - 1);
+        else if (i === 4) openExercisePage();
+        else if (i === 5) openBuildPage();
+        else if (i === 7) leaveDrumPage(7);
+      });
+    });
+    $("drumBack").addEventListener("click", () => (hasBuildScreen() ? openBuildPage() : (stageIndex = 5, openLessonContent())));
+    $("drumContinue").addEventListener("click", () => leaveDrumPage(7));
+  }
   $("backToQuarters").addEventListener("click",()=>{$("quarterMapScreen").classList.add("hidden");$("quarterScreen").classList.remove("hidden");renderQuarterHub();window.scrollTo(0,0)});
   $("previousQuarter").addEventListener("click",()=>{if(activeQuarter>0)openQuarter(activeMapCourse.quarters[activeQuarter-1].id)});$("nextQuarter").addEventListener("click",()=>{if(activeQuarter<3)openQuarter(activeMapCourse.quarters[activeQuarter+1].id)});
   $("returnToMap").addEventListener("click",()=>{document.body.classList.remove("lesson-intro-active","lesson-problem-active");$("problemSituationScreen").classList.add("hidden");hideKnowledgeScreen();hideSafetyScreen();hideExerciseScreen();$("lessonIntroScreen").classList.add("hidden");$("learningScreen").classList.add("hidden");$("quarterMapScreen").classList.remove("hidden");renderQuarterMap();window.scrollTo(0,0)});
@@ -1288,6 +1453,7 @@ document.addEventListener("DOMContentLoaded", () => {
     safetyResume = 0;
     exerciseDoneSet.clear();
     if (typeof buildApi !== "undefined") buildApi.reset();
+    if (typeof drumApi !== "undefined") drumApi.reset();
     score = 0;
     completed = new Set();
     exerciseDone = new Set();
@@ -1346,6 +1512,10 @@ document.addEventListener("DOMContentLoaded", () => {
     }
     if (stageIndex === 5 && hasBuildScreen()) {
       openBuildPage();
+      return;
+    }
+    if (stageIndex === 6 && document.getElementById("drumScreen")) {
+      openDrumPage();
       return;
     }
     if (stageIndex === 1) {

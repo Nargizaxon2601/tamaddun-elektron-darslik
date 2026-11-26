@@ -434,6 +434,62 @@ body.lesson-problem-active .topbar { display: none; }
 .build-scene > .build-btn { z-index: 3; border-radius: 999px; transition: transform .16s, box-shadow .16s; }
 .build-scene > .build-btn:hover,
 .build-scene > .build-btn:focus-visible { transform: scale(1.05); box-shadow: 0 0 0 4px rgba(255,255,255,.85), 0 6px 16px rgba(7,54,121,.35); outline: none; }
+/* 7-BOSQICH: BARABAN METODI */
+.drum-scene { container-type: inline-size; }
+.drum-scene > .drum-wheel { z-index: 3; border-radius: 50%; overflow: hidden; }
+.drum-wheel img { display: block; width: 100%; height: 100%; transform: rotate(0deg); will-change: transform; pointer-events: none; }
+.drum-wheel.is-spinning { cursor: progress; }
+.drum-scene > .drum-wheel:focus-visible { box-shadow: 0 0 0 .4cqw #fff, 0 0 0 .8cqw rgba(8,119,249,.6); outline: none; }
+.drum-pin { position: absolute; z-index: 4; pointer-events: none; filter: drop-shadow(0 .25cqw .3cqw rgba(90,0,0,.45)); transform-origin: 50% 30%; }
+.drum-pin.is-tick { animation: drum-tick .12s ease; }
+@keyframes drum-tick { 50% { transform: rotate(-12deg); } }
+.drum-scene > .drum-spin { z-index: 3; border-radius: 999px; transition: transform .16s, box-shadow .16s, filter .16s; }
+.drum-scene > .drum-spin:hover,
+.drum-scene > .drum-spin:focus-visible { transform: scale(1.05); box-shadow: 0 0 0 4px rgba(255,255,255,.85), 0 6px 16px rgba(7,54,121,.35); outline: none; }
+.drum-scene > .drum-spin:disabled { background: rgba(80,90,110,.4) !important; cursor: progress; }
+.drum-star { position: absolute; z-index: 3; display: grid; place-items: center; color: #ffc61a; font-size: 5.2cqw; line-height: 1; text-shadow: 0 0 .2cqw #fff, 0 .25cqw .5cqw rgba(160,90,0,.5); transform: scale(0); transition: transform .45s cubic-bezier(.2,.8,.2,1.6); pointer-events: none; }
+.drum-star.is-on { transform: scale(1); }
+.drum-question {
+  position: absolute;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: .6cqw;
+  justify-content: center;
+  padding: .9cqw 1.1cqw;
+  border: .3cqw solid #fff;
+  border-radius: 2.2cqw;
+  background: linear-gradient(180deg, #fffdf2, #fff3d6);
+  box-shadow: 0 0 0 .35cqw #ffb21a, 0 1.2cqw 3cqw rgba(30,40,90,.4);
+  color: #123b7b;
+  text-align: center;
+  line-height: 1.2;
+  animation: drum-pop .35s cubic-bezier(.2,.8,.2,1.3);
+}
+.drum-scene > .drum-question { height: auto !important; min-height: 30%; max-height: 57%; }
+.drum-question.hidden { display: none; }
+@keyframes drum-pop { from { transform: scale(.6); opacity: 0; } }
+.drum-q-icon { width: 3.8cqw; aspect-ratio: 1; border-radius: 50%; display: grid; place-items: center; font-size: 2.2cqw; line-height: 1; background: #fff; box-shadow: 0 0 0 .3cqw #ffb21a, 0 .3cqw .8cqw rgba(0,0,0,.2); }
+.drum-q-text { margin: 0; font: 900 1.65cqw/1.25 Nunito, sans-serif; }
+.drum-options { display: grid; gap: .5cqw; width: 100%; }
+.drum-options button {
+  padding: .6cqw 1cqw;
+  border: .25cqw solid #8fb4ef;
+  border-radius: 1.4cqw;
+  background: #fff;
+  color: #123b7b;
+  font: 800 1.3cqw/1.2 Nunito, sans-serif;
+  cursor: pointer;
+  transition: transform .14s, background .14s, border-color .14s;
+}
+.drum-options button:hover:not(:disabled),
+.drum-options button:focus-visible { transform: scale(1.03); border-color: #0877f9; background: #eef5ff; outline: none; }
+.drum-options button.is-right { background: #dcf8e1; border-color: #14a832; color: #0d6b23; }
+.drum-options button.is-wrong { background: #ffe1e1; border-color: #ff4d4d; color: #a51d1d; animation: match-shake .4s ease; }
+.drum-options button:disabled { cursor: default; }
+.drum-again { padding: .6cqw 1.6cqw; border: .25cqw solid #fff; border-radius: 999px; background: linear-gradient(145deg, #36e0ff, #0877f9 74%); color: #fff; font: 900 1.35cqw/1 Nunito, sans-serif; cursor: pointer; box-shadow: 0 .3cqw .8cqw rgba(7,54,121,.35); }
+.drum-again.hidden { display: none; }
 @media (max-width: 600px) {
   .lesson-intro-screen { padding: 6px; }
   .lesson-intro-art { width: min(100%, calc((100vh - 12px) * 1.7779)); }

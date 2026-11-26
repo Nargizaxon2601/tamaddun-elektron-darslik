@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>TAMADDUN — Interaktiv dars</title>
-    <link rel="stylesheet" href="darslar.css?v=16" />
+    <link rel="stylesheet" href="darslar.css?v=19" />
   </head>
   <body>
     <header class="topbar">
@@ -366,6 +366,36 @@
       </div>
       <p class="problem-feedback" id="buildFeedback" data-hint="Materialni ushlab, ish maydoniga surib olib boring. 1-qadam: g‘uddani tanlang." aria-live="polite">Materialni ushlab, ish maydoniga surib olib boring. 1-qadam: g‘uddani tanlang.</p>
     </main>
+    <main class="lesson-intro-screen lesson-problem-screen drum-screen hidden" id="drumScreen" aria-label="7-bosqich: Baraban metodi">
+      <div class="problem-scene knowledge-scene drum-scene" id="drumScene" style="aspect-ratio:1671 / 941">
+        <img src="images/1_tex_1s_1dars_7bosqich.webp" alt="Baraban metodi: barabanni aylantiring va chiqqan savolga javob bering" />
+        <button type="button" class="drum-wheel" id="drumWheel" style="left:37.672%;top:21.998%;width:24.656%;height:43.783%" aria-label="Barabanni aylantirish"><img src="images/baraban-disk.webp" alt="" draggable="false"></button>
+        <svg class="drum-pin" style="left:48.235%;top:17.003%;width:3.591%;height:9.777%" viewBox="0 0 60 92" aria-hidden="true"><path d="M30 90 C 22 70 4 52 4 30 A 26 26 0 1 1 56 30 C 56 52 38 70 30 90 Z" fill="#ef1b1b" stroke="#fff" stroke-width="4"/><circle cx="30" cy="30" r="10" fill="#fff"/></svg>
+        <button type="button" class="drum-spin" id="drumSpin" style="left:40.694%;top:68.013%;width:18.851%;height:8.502%" aria-label="Aylantirish"></button>
+        <span class="drum-star" data-star="0" style="left:53.501%;top:78.215%;width:4.309%;height:7.439%" aria-hidden="true">★</span>
+        <span class="drum-star" data-star="1" style="left:58.229%;top:78.215%;width:4.309%;height:7.439%" aria-hidden="true">★</span>
+        <span class="drum-star" data-star="2" style="left:63.076%;top:78.215%;width:4.309%;height:7.439%" aria-hidden="true">★</span>
+        <div class="drum-question hidden" id="drumQuestion" role="dialog" aria-modal="false" aria-labelledby="drumQuestionText" style="left:63.196%;top:20.404%;width:23.459%;height:52.922%">
+          <div class="drum-q-icon" id="drumQuestionIcon"></div>
+          <p class="drum-q-text" id="drumQuestionText"></p>
+          <div class="drum-options" id="drumOptions"></div>
+          <button type="button" class="drum-again hidden" id="drumAgain">↻ Yana aylantirish</button>
+        </div>
+        <button type="button" class="knowledge-dot" data-drum-dot="0" style="left:34.650%;top:90.436%" aria-label="1-bosqich"></button>
+        <button type="button" class="knowledge-dot" data-drum-dot="1" style="left:38.600%;top:90.436%" aria-label="2-bosqich"></button>
+        <button type="button" class="knowledge-dot" data-drum-dot="2" style="left:42.549%;top:90.436%" aria-label="3-bosqich"></button>
+        <button type="button" class="knowledge-dot" data-drum-dot="3" style="left:46.499%;top:90.436%" aria-label="4-bosqich"></button>
+        <button type="button" class="knowledge-dot" data-drum-dot="4" style="left:50.389%;top:90.436%" aria-label="5-bosqich"></button>
+        <button type="button" class="knowledge-dot" data-drum-dot="5" style="left:54.399%;top:90.436%" aria-label="6-bosqich"></button>
+        <button type="button" class="knowledge-dot" data-drum-dot="6" style="left:58.408%;top:90.436%" aria-label="7-bosqich"></button>
+        <button type="button" class="knowledge-dot" data-drum-dot="7" style="left:62.358%;top:90.436%" aria-label="8-bosqich"></button>
+        <button type="button" class="knowledge-hero" data-hero="robot" style="left:2.095%;top:44.102%;width:14.782%;height:46.227%;clip-path:polygon(18.2% 0.0%, 24.3% 1.1%, 26.3% 8.0%, 54.7% 9.2%, 72.9% 14.9%, 79.8% 24.1%, 87.0% 19.5%, 97.2% 23.0%, 100.0% 29.9%, 91.1% 36.8%, 83.0% 44.8%, 85.0% 60.9%, 91.1% 74.7%, 89.1% 88.5%, 78.9% 100.0%, 42.5% 100.0%, 30.4% 88.5%, 18.2% 74.7%, 14.2% 63.2%, 8.1% 51.7%, 0.0% 37.9%, 0.0% 24.1%, 8.1% 12.6%)" aria-label="Robotcha" aria-pressed="false"></button>
+        <button type="button" class="knowledge-hero" data-hero="tulki" style="left:83.303%;top:44.633%;width:15.739%;height:41.658%;clip-path:polygon(33.5% 2.6%, 52.5% 0.0%, 75.3% 5.1%, 90.5% 15.3%, 98.1% 25.5%, 94.3% 38.3%, 94.3% 51.0%, 100.0% 66.3%, 94.3% 81.6%, 79.1% 86.7%, 77.2% 99.0%, 37.3% 100.0%, 14.4% 96.9%, 18.3% 84.2%, 22.1% 68.9%, 18.3% 51.0%, 12.5% 39.5%, 1.1% 35.7%, 0.0% 25.5%, 10.6% 20.4%, 24.0% 15.3%)" aria-label="Tulki" aria-pressed="false"></button>
+        <button type="button" class="knowledge-nav knowledge-back" id="drumBack" style="left:2.394%;top:86.610%;width:9.575%;height:11.158%" aria-label="Oldingi sahifaga qaytish"><span class="intro-control-label">Orqaga</span></button>
+        <button type="button" class="knowledge-nav knowledge-next" id="drumContinue" style="left:87.672%;top:86.610%;width:9.575%;height:11.158%" aria-label="Keyingi bosqichga o‘tish"><span class="intro-control-label">Davom etish</span></button>
+      </div>
+      <p class="problem-feedback" id="drumFeedback" data-hint="«Aylantirish» tugmasini bosing yoki barabanning o‘zini bosing!" aria-live="polite">«Aylantirish» tugmasini bosing yoki barabanning o‘zini bosing!</p>
+    </main>
     <!-- INTERAKTIV DARSLIK -->
     <main class="learning-screen hidden" id="learningScreen">
       <aside class="lesson-sidebar">
@@ -484,6 +514,6 @@
       </aside>
     </main>
 
-    <script src="darslar.js?v=16"></script>
+    <script src="darslar.js?v=19"></script>
   </body>
 </html>
