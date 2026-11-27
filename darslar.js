@@ -15,7 +15,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const lesson2Pages = () => Array.from(document.querySelectorAll("[data-l2-page]"));
   const lessonOf = (page) => Number(page.dataset.lesson || 2);
   const lessonPages = (L) => lesson2Pages().filter((page) => lessonOf(page) === L);
-  const LESSON_TITLES = { 2: "Qog‘oz varag‘i bilan ishlash", 3: "Manzara yaratamiz: Uycha va daraxtlar" };
+  const LESSON_TITLES = { 2: "Qog‘oz varag‘i bilan ishlash", 3: "Manzara yaratamiz: Uycha va daraxtlar", 4: "Manzara yaratamiz: To‘lqinlar uzra suzayotgan kemacha" };
   const safetyScreens = () => Array.from(document.querySelectorAll("[data-safety-page]"));
   const hasSafetyScreen = () => safetyScreens().length > 0;
   const hideSafetyScreen = () => safetyScreens().forEach((screen) => screen.classList.add("hidden"));
@@ -2508,14 +2508,15 @@ document.addEventListener("DOMContentLoaded", () => {
   })();
   // 3-dars 1-bosqich: manzaradagi shakllarni nomlash va «Shakllarni izla» o'yini
   (function setupSceneHunt() {
-    const hunt = document.getElementById("sceneHunt");
-    if (!hunt) return;
+    document.querySelectorAll(".scene-hunt").forEach((hunt) => {
     const scene = hunt.parentElement;
     const page = scene.closest("[data-l2-page]");
     const feedback = page.querySelector(".l2-feedback");
-    const scoreEl = document.getElementById("sceneHuntScore");
+    const scoreEl = scene.querySelector(".scene-hunt-score") || document.getElementById("sceneHuntScore");
     const shapes = Array.from(scene.querySelectorAll(".scene-shape"));
-    const TYPES = { circle: "doira", tri: "uchburchak", kvadrat: "kvadrat", rect: "to‘g‘ri to‘rtburchak" };
+    const ALL_TYPES = { circle: "doira", tri: "uchburchak", kvadrat: "kvadrat", rect: "to‘g‘ri to‘rtburchak", trap: "trapetsiya" };
+    const TYPES = {};
+    Object.keys(ALL_TYPES).forEach((t) => { if (shapes.some((s) => s.dataset.type === t)) TYPES[t] = ALL_TYPES[t]; });
     const seen = new Set();
     let game = null;
     const tick = (key, on) => scene.querySelector('.scene-tick[data-key="' + key + '"]').classList.toggle("is-on", on);
@@ -2574,6 +2575,7 @@ document.addEventListener("DOMContentLoaded", () => {
       });
     });
     hunt.addEventListener("click", startGame);
+    });
   })();
   // 3-dars 2-bosqich: stoldagi shakllarni doskadagi chiziqli joylarga surib, kuz manzarasini yaratish
   (function setupProblemScene() {
