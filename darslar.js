@@ -3093,6 +3093,48 @@ document.addEventListener("DOMContentLoaded", () => {
     page.querySelectorAll(".l2-back, .l2-next, .knowledge-dot").forEach((b) => b.addEventListener("click", () => { if (state === "showing") reset(); }));
     setState("idle");
   })();
+  // 3-dars 8-bosqich: dars yakuni — o'zini baholash va bayram konfettisi
+  (function setupLesson3Final() {
+    const rates = Array.from(document.querySelectorAll(".self-rate"));
+    if (!rates.length) return;
+    const scene = rates[0].parentElement;
+    const page = scene.closest("[data-l2-page]");
+    const feedback = page.querySelector(".l2-feedback");
+    const box = scene.querySelector(".l3-confetti");
+    function confetti(count, bits) {
+      for (let i = 0; i < count; i++) {
+        const s = document.createElement("span");
+        s.textContent = bits[i % bits.length];
+        s.style.left = Math.random() * 96 + "%";
+        s.style.animationDuration = 1.8 + Math.random() * 1.6 + "s";
+        s.style.animationDelay = Math.random() * 0.5 + "s";
+        box.appendChild(s);
+        setTimeout(() => s.remove(), 4200);
+      }
+    }
+    rates.forEach((r) => {
+      r.addEventListener("click", () => {
+        const on = r.getAttribute("aria-pressed") !== "true";
+        rates.forEach((o) => {
+          const me = o === r && on;
+          o.setAttribute("aria-pressed", String(me));
+          o.classList.toggle("is-selected", me);
+          scene.querySelector('.self-mark[data-rate="' + o.dataset.rate + '"]').classList.toggle("is-on", me);
+        });
+        if (!on) { feedback.textContent = "O‘zingizga mos javobni tanlang."; return; }
+        r.classList.remove("is-pop"); void r.offsetWidth; r.classList.add("is-pop");
+        feedback.textContent = r.dataset.say;
+        const n = Number(r.dataset.rate);
+        confetti(n === 3 ? 24 : n === 2 ? 12 : 6, n === 3 ? ["⭐", "🌟", "🎉", "🏠", "🌳", "☀️"] : ["⭐", "👍", "✨"]);
+      });
+    });
+    let wasHidden = page.classList.contains("hidden");
+    new MutationObserver(() => {
+      const hidden = page.classList.contains("hidden");
+      if (wasHidden && !hidden) setTimeout(() => confetti(18, ["🎉", "⭐", "🍂", "🏠", "🌳", "☀️"]), 250);
+      wasHidden = hidden;
+    }).observe(page, { attributes: true, attributeFilter: ["class"] });
+  })();
   $("backToQuarters").addEventListener("click",()=>{$("quarterMapScreen").classList.add("hidden");$("quarterScreen").classList.remove("hidden");renderQuarterHub();window.scrollTo(0,0)});
   $("previousQuarter").addEventListener("click",()=>{if(activeQuarter>0)openQuarter(activeMapCourse.quarters[activeQuarter-1].id)});$("nextQuarter").addEventListener("click",()=>{if(activeQuarter<3)openQuarter(activeMapCourse.quarters[activeQuarter+1].id)});
   $("returnToMap").addEventListener("click",()=>{document.body.classList.remove("lesson-intro-active","lesson-problem-active");$("problemSituationScreen").classList.add("hidden");hideKnowledgeScreen();hideSafetyScreen();hideExerciseScreen();$("lessonIntroScreen").classList.add("hidden");$("learningScreen").classList.add("hidden");$("quarterMapScreen").classList.remove("hidden");renderQuarterMap();window.scrollTo(0,0)});
