@@ -921,6 +921,10 @@ body.lesson-problem-active .topbar { display: none; }
 .l2-scene > .pic-card.pic-word { z-index: 4; border-radius: .6cqw; }
 .l2-scene > .pic-card.pic-word.is-active { transform: translateY(-2px) scale(1.06); background: rgba(255,214,64,.25) !important; }
 .l2-scene > .pic-mark[data-part="circle"], .l2-scene > .pic-part[data-part="circle"] { border-radius: 50%; }
+/* 4-dars 5-bosqich: musiqa tugmasi */
+.l2-scene > .ex-music { z-index: 5; border: .25cqw solid #fff; border-radius: 99px; background: linear-gradient(180deg,#8f6bff,#6a3fd0) !important; color: #fff; font-family: inherit; font-weight: 900; font-size: 1.2cqw; line-height: 1.2; box-shadow: 0 .3cqw 0 #42228f; transition: transform .2s; }
+.l2-scene > .ex-music:hover, .l2-scene > .ex-music:focus-visible { transform: scale(1.06); outline: none; }
+.l2-scene > .ex-music.is-on { background: linear-gradient(180deg,#5fe07a,#26b14a) !important; box-shadow: 0 .3cqw 0 #13762e; animation: l2-bob 1.2s ease-in-out infinite; }
 @media (max-width: 600px) {
   .lesson-intro-screen { padding: 6px; }
   .lesson-intro-art { width: min(100%, calc((100vh - 12px) * 1.7779)); }

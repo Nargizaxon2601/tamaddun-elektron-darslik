@@ -2085,6 +2085,34 @@ document.addEventListener("DOMContentLoaded", () => {
     const feedback = page.querySelector(".l2-feedback");
     const allBtn = scene.querySelector(".ex-all");
     const finishBtn = scene.querySelector(".ex-finish");
+    const musicBtn = scene.querySelector(".ex-music");
+    let music = false, actx = null;
+    const MELODY = [523, 659, 784, 659, 587, 698, 880, 698];
+    function playNote(n) {
+      if (!music) return;
+      try {
+        actx = actx || new (window.AudioContext || window.webkitAudioContext)();
+        const t = actx.currentTime;
+        [0, 0.18].forEach((d, k) => {
+          const o = actx.createOscillator(), g = actx.createGain();
+          o.type = "triangle";
+          o.frequency.value = MELODY[(n * 2 + k) % MELODY.length];
+          g.gain.setValueAtTime(0.0001, t + d);
+          g.gain.exponentialRampToValueAtTime(0.18, t + d + 0.02);
+          g.gain.exponentialRampToValueAtTime(0.0001, t + d + 0.3);
+          o.connect(g).connect(actx.destination);
+          o.start(t + d); o.stop(t + d + 0.32);
+        });
+      } catch (e) { /* ovoz yo'q */ }
+    }
+    if (musicBtn) musicBtn.addEventListener("click", () => {
+      music = !music;
+      musicBtn.classList.toggle("is-on", music);
+      musicBtn.setAttribute("aria-pressed", String(music));
+      musicBtn.textContent = music ? "🎵 Musiqa: yoniq" : "🎵 Musiqa: o‘chiq";
+      if (music) playNote(0);
+      feedback.textContent = music ? "🎵 Musiqa yoqildi! Endi har bir sanoqda kuy chalinadi — mashq kartochkasini bosing." : "🔇 Musiqa o‘chirildi.";
+    });
     const q = (cls, i) => scene.querySelector("." + cls + '[data-ex="' + i + '"]');
     const done = new Set();
     let run = null;
@@ -2121,6 +2149,7 @@ document.addEventListener("DOMContentLoaded", () => {
       big.classList.remove("is-pop"); void big.offsetWidth; big.classList.add("is-pop");
       card.classList.remove("is-beat"); void card.offsetWidth; card.classList.add("is-beat");
       q("ex-count", run.i).textContent = run.rep + " / " + reps;
+      playNote(run.rep);
       feedback.textContent = "🏃 " + (run.i + 1) + "-mashq: " + card.dataset.say + ". " + cues[(run.rep - 1) % cues.length] + " (" + run.rep + " / " + reps + ")";
       run.timer = setTimeout(beat, Number(card.dataset.ms));
     }
