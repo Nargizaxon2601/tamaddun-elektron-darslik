@@ -2079,12 +2079,12 @@ document.addEventListener("DOMContentLoaded", () => {
   })();
   // 2-dars 5-bosqich: jismoniy daqiqa — har mashq uchun sanoq, «Hammasini boshlash»
   (function setupExercises() {
-    const cards = Array.from(document.querySelectorAll(".ex-card"));
-    if (!cards.length) return;
-    const scene = cards[0].parentElement;
+    new Set(Array.from(document.querySelectorAll(".ex-card"), (c) => c.parentElement)).forEach((scene) => {
+    const cards = Array.from(scene.querySelectorAll(".ex-card"));
     const page = scene.closest("[data-l2-page]");
     const feedback = page.querySelector(".l2-feedback");
-    const allBtn = document.getElementById("exAll");
+    const allBtn = scene.querySelector(".ex-all");
+    const finishBtn = scene.querySelector(".ex-finish");
     const q = (cls, i) => scene.querySelector("." + cls + '[data-ex="' + i + '"]');
     const done = new Set();
     let run = null;
@@ -2139,8 +2139,9 @@ document.addEventListener("DOMContentLoaded", () => {
         allBtn.querySelector("span").textContent = "⏸ To‘xtatish";
         return;
       }
+      if (finishBtn) finishBtn.classList.toggle("is-ready", done.size === cards.length);
       feedback.textContent = done.size === cards.length
-        ? "🏆 Barakalla! 5 ta mashqning hammasini bajardingiz. Endi kuch va diqqat bilan darsni davom ettiramiz!"
+        ? (scene.dataset.exDone || "🏆 Barakalla! 5 ta mashqning hammasini bajardingiz. Endi kuch va diqqat bilan darsni davom ettiramiz!")
         : "✅ " + (i + 1) + "-mashq bajarildi! Bajarilgan mashqlar: " + done.size + " / " + cards.length + ".";
     }
     function start(i, auto) {
@@ -2166,8 +2167,20 @@ document.addEventListener("DOMContentLoaded", () => {
       }
       start(0, true);
     });
+    if (finishBtn) finishBtn.addEventListener("click", () => {
+      if (done.size === cards.length) {
+        feedback.textContent = scene.dataset.exDone || "🏆 Barakalla!";
+        finishBtn.classList.remove("is-cheer"); void finishBtn.offsetWidth; finishBtn.classList.add("is-cheer");
+        return;
+      }
+      const left = cards.map((_, j) => j).filter((j) => !done.has(j)).map((j) => j + 1);
+      feedback.textContent = "💪 Hali " + left.join(", ") + "-mashq" + " qoldi (" + done.size + " / " + cards.length + "). Kartochkani bosing yoki «Hammasini boshlash»ni tanlang!";
+      left.forEach((n) => { const c = cards[n - 1]; c.classList.remove("is-beat"); void c.offsetWidth; c.classList.add("is-beat"); });
+    });
     page.querySelector(".l2-back").addEventListener("click", () => stop());
     page.querySelector(".l2-next").addEventListener("click", () => stop());
+    page.querySelectorAll(".knowledge-dot").forEach((d) => d.addEventListener("click", () => stop()));
+    });
   })();
   // 2-dars 6-bosqich: ish maydonida geometrik shakllardan kompozitsiya (surib joylash)
   (function setupComposition() {

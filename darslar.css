@@ -824,6 +824,11 @@ body.lesson-problem-active .topbar { display: none; }
 .l2-scene > .pic-card.is-seen:not(.is-active) { box-shadow: 0 0 0 .25cqw #4cd964; }
 .l2-scene > .pic-mark { position: absolute; z-index: 2; pointer-events: none; border-radius: 1.4cqw; opacity: 0; box-shadow: 0 0 0 .35cqw #ffb21a, 0 0 2.2cqw .4cqw rgba(255,190,40,.9); background: rgba(255,240,170,.18); transition: opacity .25s; }
 .l2-scene > .pic-mark.is-on { opacity: 1; animation: mv-shine 1.2s ease-in-out infinite; }
+/* 3-dars 5-bosqich: jismoniy daqiqa — yakuniy «A'lo!» tasmasi */
+.l2-scene > .ex-finish { z-index: 3; border-radius: 4cqw; transition: transform .2s cubic-bezier(.2,.8,.2,1.4), box-shadow .2s, background .2s; }
+.l2-scene > .ex-finish:hover, .l2-scene > .ex-finish:focus-visible { transform: scale(1.02); background: rgba(255,255,255,.14) !important; box-shadow: 0 0 0 .3cqw #fff, 0 0 0 .6cqw rgba(124,77,255,.45); outline: none; }
+.l2-scene > .ex-finish.is-ready { box-shadow: 0 0 0 .4cqw #4cd964, 0 0 2.6cqw .4cqw rgba(76,217,100,.8); animation: mv-shine 1.4s ease-in-out infinite; }
+.l2-scene > .ex-finish.is-cheer { animation: ex-beat .5s ease-out; }
 @media (max-width: 600px) {
   .lesson-intro-screen { padding: 6px; }
   .lesson-intro-art { width: min(100%, calc((100vh - 12px) * 1.7779)); }
