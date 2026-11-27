@@ -15,7 +15,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const lesson2Pages = () => Array.from(document.querySelectorAll("[data-l2-page]"));
   const lessonOf = (page) => Number(page.dataset.lesson || 2);
   const lessonPages = (L) => lesson2Pages().filter((page) => lessonOf(page) === L);
-  const LESSON_TITLES = { 2: "Qog‘oz varag‘i bilan ishlash", 3: "Manzara yaratamiz: Uycha va daraxtlar", 4: "Manzara yaratamiz: To‘lqinlar uzra suzayotgan kemacha" };
+  const LESSON_TITLES = { 2: "Qog‘oz varag‘i bilan ishlash", 3: "Manzara yaratamiz: Uycha va daraxtlar", 4: "Manzara yaratamiz: To‘lqinlar uzra suzayotgan kemacha", 5: "Manzara yaratamiz: Kamalak ranglari" };
   const safetyScreens = () => Array.from(document.querySelectorAll("[data-safety-page]"));
   const hasSafetyScreen = () => safetyScreens().length > 0;
   const hideSafetyScreen = () => safetyScreens().forEach((screen) => screen.classList.add("hidden"));
@@ -3617,6 +3617,149 @@ document.addEventListener("DOMContentLoaded", () => {
     page.querySelectorAll(".l2-back, .l2-next, .knowledge-dot").forEach((b) => b.addEventListener("click", () => panel.classList.add("hidden")));
     newGame();
   })();
+  // 5-dars 1-bosqich: «Kamalakni bo'ya» o'yini va «Nega kamalak paydo bo'ladi?» savoli
+  document.querySelectorAll(".rb-svg").forEach((svg) => {
+    const scene = svg.parentElement;
+    const page = scene.closest("[data-l2-page]");
+    const feedback = page.querySelector(".l2-feedback");
+    const bands = Array.from(svg.querySelectorAll(".rb-band"));
+    const panel = scene.querySelector(".rb-panel");
+    const pTitle = panel.querySelector(".rb-title"), pBody = panel.querySelector(".rb-body"), pFoot = panel.querySelector(".rb-foot");
+    const confBox = scene.querySelector(".rb-confetti");
+    const ORDER = "qizil, olovrang, sariq, yashil, havorang, ko‘k, binafsha";
+    const shuffle = (a) => { a = a.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
+    let game = null;
+    let actx = null;
+    function note(i) {
+      try {
+        actx = actx || new (window.AudioContext || window.webkitAudioContext)();
+        const o = actx.createOscillator(), g = actx.createGain();
+        o.frequency.value = [262, 294, 330, 349, 392, 440, 494][i] || 523;
+        o.type = "triangle"; g.gain.setValueAtTime(0.18, actx.currentTime); g.gain.exponentialRampToValueAtTime(0.001, actx.currentTime + 0.5);
+        o.connect(g); g.connect(actx.destination); o.start(); o.stop(actx.currentTime + 0.5);
+      } catch (e) { /* ovoz bo'lmasa ham o'yin ishlaydi */ }
+    }
+    function confetti(n) {
+      for (let i = 0; i < n; i++) {
+        const s = document.createElement("span");
+        s.textContent = ["🌈", "⭐", "🎨", "☀️", "🎉"][i % 5];
+        s.style.left = Math.random() * 96 + "%";
+        s.style.animationDuration = 1.8 + Math.random() * 1.6 + "s";
+        s.style.animationDelay = Math.random() * 0.5 + "s";
+        confBox.appendChild(s);
+        setTimeout(() => s.remove(), 4200);
+      }
+    }
+    function flash(el, cls) { el.classList.remove(cls); void el.getBoundingClientRect(); el.classList.add(cls); setTimeout(() => el.classList.remove(cls), 700); }
+    function closeBtn() {
+      const x = document.createElement("button");
+      x.type = "button"; x.className = "rb-close"; x.textContent = "✕"; x.setAttribute("aria-label", "Yopish");
+      x.addEventListener("click", () => { panel.classList.add("hidden"); });
+      return x;
+    }
+    function renderScore() {
+      pFoot.innerHTML = "";
+      const s = document.createElement("span");
+      s.className = "rb-score";
+      s.textContent = "🌈 " + game.done.size + " / 7" + (game.miss ? "  ·  xato: " + game.miss : "");
+      const again = document.createElement("button");
+      again.type = "button"; again.className = "rb-again"; again.textContent = "↻ Qaytadan";
+      again.addEventListener("click", startGame);
+      pFoot.append(s, again);
+    }
+    function startGame() {
+      game = { done: new Set(), pick: null, miss: 0 };
+      scene.classList.add("rb-playing");
+      bands.forEach((b) => { b.classList.add("is-gray"); b.classList.remove("is-on"); });
+      panel.classList.remove("hidden");
+      pTitle.innerHTML = "";
+      pTitle.append("🎨 Kamalak rangsiz qolibdi! Bo‘yoqni tanlang, so‘ng kamalakdagi joyiga bosing.", closeBtn());
+      pBody.innerHTML = "";
+      pBody.className = "rb-body rb-drops";
+      shuffle(bands.map((b, i) => i)).forEach((i) => {
+        const d = document.createElement("button");
+        d.type = "button"; d.className = "rb-drop"; d.dataset.i = i;
+        d.style.setProperty("--c", bands[i].dataset.col);
+        d.innerHTML = "<i></i><span>" + bands[i].dataset.name + "</span>";
+        d.addEventListener("click", () => {
+          if (game.done.has(i)) return;
+          pBody.querySelectorAll(".rb-drop").forEach((x) => x.classList.toggle("is-pick", x === d));
+          game.pick = i;
+          feedback.textContent = "🖌 «" + bands[i].dataset.name + "» bo‘yog‘i tanlandi. Endi kamalakda shu rang turadigan yoyni bosing!";
+        });
+        pBody.appendChild(d);
+      });
+      renderScore();
+      feedback.textContent = "🎨 Kamalakni bo‘yaymiz! Eslatma: tashqaridan ichkariga — " + ORDER + ".";
+    }
+    function win() {
+      scene.classList.remove("rb-playing");
+      const stars = game.miss === 0 ? "⭐⭐⭐" : game.miss <= 3 ? "⭐⭐" : "⭐";
+      feedback.textContent = "🏆 Barakalla! Kamalak yana rang-barang bo‘ldi! " + stars + " (xatolar: " + game.miss + "). Kamalak ranglari: " + ORDER + ".";
+      pTitle.innerHTML = "";
+      pTitle.append("🏆 Kamalak tayyor! " + stars, closeBtn());
+      pBody.className = "rb-body";
+      pBody.textContent = "Siz 7 ta rangni to‘g‘ri joyiga qo‘ydingiz: " + ORDER + ".";
+      bands.forEach((b, i) => setTimeout(() => { flash(b, "is-flash"); note(i); }, i * 110));
+      confetti(30);
+      renderScore();
+    }
+    bands.forEach((b, i) => b.addEventListener("click", () => {
+      if (!scene.classList.contains("rb-playing")) {
+        flash(b, "is-flash"); note(i);
+        feedback.textContent = "🌈 " + (i + 1) + "-rang: " + b.dataset.name + (i === 0 ? " — kamalakning eng tashqi rangi." : i === 6 ? " — kamalakning eng ichki rangi." : ".");
+        return;
+      }
+      if (game.done.has(i)) { feedback.textContent = "✅ Bu yoy allaqachon «" + b.dataset.name + "» rangga bo‘yalgan."; return; }
+      if (game.pick === null) { flash(b, "is-wrong"); feedback.textContent = "👇 Avval pastdagi bo‘yoqlardan birini tanlang!"; return; }
+      const drop = pBody.querySelector('.rb-drop[data-i="' + game.pick + '"]');
+      if (game.pick !== i) {
+        game.miss++;
+        flash(b, "is-wrong"); flash(drop, "is-wrong");
+        feedback.textContent = "🤔 «" + bands[game.pick].dataset.name + "» bu yerda emas. Tartibni eslang: " + ORDER + ".";
+        renderScore();
+        return;
+      }
+      game.done.add(i);
+      b.classList.remove("is-gray"); b.classList.add("is-on"); flash(b, "is-flash"); note(i);
+      drop.classList.remove("is-pick"); drop.classList.add("is-done"); drop.disabled = true;
+      game.pick = null;
+      renderScore();
+      if (game.done.size === 7) win();
+      else feedback.textContent = "✅ To‘g‘ri! " + (i + 1) + "-rang — " + b.dataset.name + ". Keyingi bo‘yoqni tanlang! (" + game.done.size + " / 7)";
+    }));
+    const Q = { q: "Yomg‘irdan keyin osmonda nega kamalak paydo bo‘ladi?", right: "Quyosh nurlari yomg‘ir tomchilaridan o‘tib, 7 ta rangga ajraladi", wrong: ["Bulutlar rangli bo‘yoq bilan bo‘yalgani uchun", "Shamol gullardan rang olib kelgani uchun"], why: "☀️ + 💧 = 🌈 Quyosh nuri oq ko‘rinadi, lekin u aslida 7 ta rangdan iborat. Nur yomg‘ir tomchilaridan o‘tganda ranglarga ajralib, osmonda kamalak hosil bo‘ladi!" };
+    function openQuestion() {
+      if (scene.classList.contains("rb-playing")) scene.classList.remove("rb-playing"), bands.forEach((b) => b.classList.remove("is-gray"));
+      panel.classList.remove("hidden");
+      pTitle.innerHTML = "";
+      pTitle.append("❓ " + Q.q, closeBtn());
+      pBody.innerHTML = "";
+      pBody.className = "rb-body rb-opts";
+      pFoot.innerHTML = "";
+      shuffle([Q.right].concat(Q.wrong)).forEach((t) => {
+        const o = document.createElement("button");
+        o.type = "button"; o.textContent = t;
+        o.addEventListener("click", () => {
+          if (t !== Q.right) { flash(o, "is-wrong"); feedback.textContent = "🤔 Yo‘q, unday emas. Quyosh va yomg‘ir tomchilarini eslang!"; return; }
+          pBody.querySelectorAll("button").forEach((x) => { x.disabled = true; });
+          o.classList.add("is-right");
+          feedback.textContent = "✅ To‘g‘ri! " + Q.why;
+          confetti(14);
+          const go = document.createElement("button");
+          go.type = "button"; go.className = "rb-again"; go.textContent = "🎨 Endi kamalakni bo‘yaymiz!";
+          go.addEventListener("click", startGame);
+          pFoot.innerHTML = ""; pFoot.appendChild(go);
+        });
+        pBody.appendChild(o);
+      });
+      feedback.textContent = "❓ Savolni o‘qing va to‘g‘ri javobni tanlang.";
+    }
+    scene.querySelector(".rb-start").addEventListener("click", startGame);
+    scene.querySelector(".rb-ask").addEventListener("click", openQuestion);
+    scene.querySelector(".rb-cloud").addEventListener("click", openQuestion);
+  });
+
   // Rasmlar: ochilgan sahifa rasmi darhol, qo'shni sahifalarniki oldindan yuklanadi; yuklanguncha belgi ko'rinadi
   (function () {
     const pages = lesson2Pages();
