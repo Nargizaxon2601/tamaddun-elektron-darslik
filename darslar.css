@@ -1057,6 +1057,14 @@ body.lesson-problem-active .topbar { display: none; }
 .l2-scene > .k4-word.is-wrong { animation: match-shake .4s ease; }
 .l2-scene > .k4-game { z-index: 4; font-size: 1.3cqw; padding: 0; display: grid; place-items: center; }
 .l2-scene > .k4-score { z-index: 4; display: grid; place-items: center; font-size: 1.2cqw; }
+/* Materiallarni tayyorlash */
+.l2-scene > .mt-item { z-index: 3; border-radius: 1.2cqw; transition: transform .2s cubic-bezier(.2,.8,.2,1.4), box-shadow .2s, background .2s; }
+.l2-scene > .mt-item:hover, .l2-scene > .mt-item:focus-visible { transform: translateY(-4px) scale(1.05); background: rgba(255,255,255,.2) !important; box-shadow: 0 0 0 .3cqw #fff, 0 0 0 .6cqw rgba(124,77,255,.45); outline: none; }
+.l2-scene > .mt-item.is-ready { box-shadow: 0 0 0 .3cqw #22c55e, 0 0 1.4cqw rgba(34,197,94,.6); }
+.l2-scene > .mt-item.is-ready::after { content: "✓"; position: absolute; right: -.6cqw; top: -.6cqw; width: 2cqw; height: 2cqw; border-radius: 50%; background: #22c55e; color: #fff; font-weight: 900; font-size: 1.2cqw; display: grid; place-items: center; box-shadow: 0 .2cqw .5cqw rgba(0,0,0,.25); }
+.l2-scene > .mt-item.is-pop { animation: ex-beat .45s ease-out; }
+.l2-scene > .mt-score { z-index: 4; display: grid; place-items: center; font-size: 1.2cqw; }
+.l2-scene > .mt-score.is-win { background: #dcfce7; box-shadow: 0 0 0 .3cqw #22c55e; }
 @media (max-width: 600px) {
   .lesson-intro-screen { padding: 6px; }
   .lesson-intro-art { width: min(100%, calc((100vh - 12px) * 1.7779)); }

@@ -1591,7 +1591,7 @@ document.addEventListener("DOMContentLoaded", () => {
         check.setAttribute("aria-pressed", String(on));
         const n = page.querySelectorAll(".l2-check.is-checked").length;
         feedback.textContent = n === checks.length
-          ? "🎉 Barakalla! Hamma savollar ustida o‘ylab ko‘rdingiz."
+          ? (page.dataset.checkDone || "🎉 Barakalla! Hamma savollar ustida o‘ylab ko‘rdingiz.")
           : (on ? (check.dataset.say || "🤔 " + check.getAttribute("aria-label") + " O‘ylab ko‘ring va javobingizni ayting!") : "Belgi olib tashlandi.") + " Belgilandi: " + n + " / " + checks.length;
       });
     });
@@ -1844,7 +1844,7 @@ document.addEventListener("DOMContentLoaded", () => {
     function reset() {
       next = 1;
       steps.forEach((s) => s.classList.remove("is-done", "is-current", "is-wrong"));
-      scene.querySelectorAll(".fold-badge").forEach((b) => b.classList.remove("is-on"));
+      scene.querySelectorAll(".fold-badge[data-step]").forEach((b) => b.classList.remove("is-on"));
       scene.querySelectorAll(".xt-cover[data-step]").forEach((c) => c.classList.remove("is-open"));
       scene.classList.remove("fold-cutting");
       restart.classList.add("hidden");
@@ -4105,6 +4105,26 @@ document.addEventListener("DOMContentLoaded", () => {
       startBtn.textContent = "🎯 O‘yin ketmoqda…";
       nextRound();
     });
+  });
+
+  // Materiallarni tayyorlash: har bir materialni bosib belgilash, hisoblagich
+  new Set(Array.from(document.querySelectorAll(".mt-item")).map((m) => m.parentElement)).forEach((scene) => {
+    const page = scene.closest("[data-l2-page]");
+    const feedback = page.querySelector(".l2-feedback");
+    const items = Array.from(scene.querySelectorAll(".mt-item"));
+    const score = scene.querySelector(".mt-score");
+    items.forEach((it) => it.addEventListener("click", () => {
+      const on = !it.classList.contains("is-ready");
+      it.classList.toggle("is-ready", on);
+      it.setAttribute("aria-pressed", String(on));
+      it.classList.remove("is-pop"); void it.offsetWidth; it.classList.add("is-pop");
+      const n = items.filter((x) => x.classList.contains("is-ready")).length;
+      score.textContent = (n === items.length ? "✅ " : "🧺 ") + n + " / " + items.length;
+      score.classList.toggle("is-win", n === items.length);
+      feedback.textContent = n === items.length
+        ? "🎉 Barcha materiallar tayyor! Rangli qog‘oz, oq qog‘oz, moviy karton, PVA yelimi va qaychi — ishni boshlashimiz mumkin!"
+        : (on ? it.dataset.say + " (" + n + " / " + items.length + ")" : "↩ «" + it.getAttribute("aria-label") + "» stoldan olindi. (" + n + " / " + items.length + ")");
+    }));
   });
 
   // Rasmlar: ochilgan sahifa rasmi darhol, qo'shni sahifalarniki oldindan yuklanadi; yuklanguncha belgi ko'rinadi
