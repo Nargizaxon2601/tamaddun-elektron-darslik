@@ -1832,18 +1832,20 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   })();
   // 2-dars 4-bosqich 2/4: qadamlarni to'g'ri tartibda bosish
-  (function setupFoldSteps() {
-    const steps = Array.from(document.querySelectorAll(".fold-step"));
+  document.querySelectorAll(".l2-scene").forEach((foldScene) => (function setupFoldSteps() {
+    const steps = Array.from(foldScene.querySelectorAll(".fold-step"));
     if (!steps.length) return;
-    const scene = steps[0].parentElement;
+    const scene = foldScene;
     const page = scene.closest("[data-l2-page]");
     const feedback = page.querySelector(".l2-feedback");
-    const restart = document.getElementById("foldRestart");
+    const restart = scene.querySelector(".fold-restart");
+    const doneText = scene.dataset.foldDone || "Barakalla! Siz qog‘ozni to‘g‘ri buklab, 4 ta tasma qirqdingiz!";
     let next = 1;
     function reset() {
       next = 1;
       steps.forEach((s) => s.classList.remove("is-done", "is-current", "is-wrong"));
       scene.querySelectorAll(".fold-badge").forEach((b) => b.classList.remove("is-on"));
+      scene.querySelectorAll(".xt-cover[data-step]").forEach((c) => c.classList.remove("is-open"));
       scene.classList.remove("fold-cutting");
       restart.classList.add("hidden");
       feedback.textContent = feedback.dataset.hint;
@@ -1861,10 +1863,12 @@ document.addEventListener("DOMContentLoaded", () => {
         steps.forEach((s) => s.classList.remove("is-current"));
         step.classList.add("is-done", "is-current");
         scene.querySelector('.fold-badge[data-step="' + n + '"]').classList.add("is-on");
+        const cover = scene.querySelector('.xt-cover[data-step="' + n + '"]');
+        if (cover) cover.classList.add("is-open");
         next++;
         if (next > steps.length) {
           scene.classList.remove("fold-cutting"); void scene.offsetWidth; scene.classList.add("fold-cutting");
-          feedback.textContent = "✂️ " + n + "-qadam: " + step.dataset.say + " 🎉 Barakalla! Siz qog‘ozni to‘g‘ri buklab, 4 ta tasma qirqdingiz!";
+          feedback.textContent = "✅ " + n + "-qadam: " + step.dataset.say + " 🎉 " + doneText;
           restart.classList.remove("hidden");
         } else {
           feedback.textContent = "✅ " + n + "-qadam: " + step.dataset.say + " Endi " + next + "-qadamni toping!";
@@ -1872,7 +1876,7 @@ document.addEventListener("DOMContentLoaded", () => {
       });
     });
     restart.addEventListener("click", reset);
-  })();
+  })());
   // 2-dars 4-bosqich 3/4: har qatorda qadamlarni tartib bilan bosib shakl yasash, so'ng «Shaklni top»
   (function setupShapeSteps() {
     const steps = Array.from(document.querySelectorAll(".shape-step"));
