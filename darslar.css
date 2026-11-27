@@ -817,6 +817,13 @@ body.lesson-problem-active .topbar { display: none; }
 .sq-pick button { padding: .55cqw 1.1cqw; border: 0; border-radius: 99px; background: linear-gradient(180deg,#f1ecff,#ddd0ff); color: #3b1f8f; font-family: inherit; font-weight: 900; font-size: 1.3cqw; line-height: 1.2; cursor: pointer; box-shadow: 0 .25cqw 0 #b9a6ff; transition: transform .12s; }
 .sq-pick button:hover { transform: translateY(-2px); }
 .sq-pick button.is-wrong { background: linear-gradient(180deg,#ffe1e1,#ffc2c2); box-shadow: 0 0 0 .2cqw #ff5252; animation: fold-shake .4s; }
+/* 3-dars 4-bosqich 2/2: manzara tarkibi — kartochka va rasm qismlari bog'lanadi */
+.l2-scene > .pic-part, .l2-scene > .pic-card { z-index: 3; border-radius: 1.4cqw; transition: transform .2s cubic-bezier(.2,.8,.2,1.4), box-shadow .18s, background .18s; }
+.l2-scene > .pic-part:hover, .l2-scene > .pic-part:focus-visible, .l2-scene > .pic-card:hover, .l2-scene > .pic-card:focus-visible { background: rgba(255,255,255,.16) !important; box-shadow: 0 0 0 .25cqw #fff, 0 0 0 .5cqw rgba(124,77,255,.45); transform: scale(1.03); outline: none; }
+.l2-scene > .pic-card.is-active { box-shadow: 0 0 0 .35cqw #ffb21a, 0 0 1.8cqw rgba(255,178,26,.85); transform: translateY(-4px); }
+.l2-scene > .pic-card.is-seen:not(.is-active) { box-shadow: 0 0 0 .25cqw #4cd964; }
+.l2-scene > .pic-mark { position: absolute; z-index: 2; pointer-events: none; border-radius: 1.4cqw; opacity: 0; box-shadow: 0 0 0 .35cqw #ffb21a, 0 0 2.2cqw .4cqw rgba(255,190,40,.9); background: rgba(255,240,170,.18); transition: opacity .25s; }
+.l2-scene > .pic-mark.is-on { opacity: 1; animation: mv-shine 1.2s ease-in-out infinite; }
 @media (max-width: 600px) {
   .lesson-intro-screen { padding: 6px; }
   .lesson-intro-art { width: min(100%, calc((100vh - 12px) * 1.7779)); }

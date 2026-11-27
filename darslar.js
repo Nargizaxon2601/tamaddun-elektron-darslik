@@ -1592,7 +1592,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const n = page.querySelectorAll(".l2-check.is-checked").length;
         feedback.textContent = n === checks.length
           ? "🎉 Barakalla! Hamma savollar ustida o‘ylab ko‘rdingiz."
-          : (on ? "🤔 " + check.getAttribute("aria-label") + " O‘ylab ko‘ring va javobingizni ayting!" : "Belgi olib tashlandi.") + " Belgilandi: " + n + " / " + checks.length;
+          : (on ? (check.dataset.say || "🤔 " + check.getAttribute("aria-label") + " O‘ylab ko‘ring va javobingizni ayting!") : "Belgi olib tashlandi.") + " Belgilandi: " + n + " / " + checks.length;
       });
     });
     page.querySelectorAll("[data-l2-dot]").forEach((dot) => {
@@ -2740,6 +2740,24 @@ document.addEventListener("DOMContentLoaded", () => {
         feedback.textContent = "🪄 Qadamlarga qarang va taxmin qiling: qirqgandan keyin qanday shakl hosil bo‘ladi?";
       });
     });
+  })();
+  // 3-dars 4-bosqich 2/2: «Manzara tarkibi» kartochkalari namunadagi qismlarni yoritadi (va aksincha)
+  (function setupPictureParts() {
+    const cards = Array.from(document.querySelectorAll(".pic-card"));
+    if (!cards.length) return;
+    const scene = cards[0].parentElement;
+    const page = scene.closest("[data-l2-page]");
+    const feedback = page.querySelector(".l2-feedback");
+    const seen = new Set();
+    function show(part) {
+      scene.querySelectorAll(".pic-mark").forEach((m) => m.classList.toggle("is-on", m.dataset.part === part));
+      cards.forEach((c) => c.classList.toggle("is-active", c.dataset.part === part));
+      const card = cards.find((c) => c.dataset.part === part);
+      card.classList.add("is-seen");
+      seen.add(part);
+      feedback.textContent = card.dataset.say + (seen.size === cards.length ? " 🎉 Manzaraning hamma qismlarini o‘rgandingiz!" : " (" + seen.size + " / " + cards.length + ")");
+    }
+    scene.querySelectorAll(".pic-card, .pic-part").forEach((el) => el.addEventListener("click", () => show(el.dataset.part)));
   })();
   $("backToQuarters").addEventListener("click",()=>{$("quarterMapScreen").classList.add("hidden");$("quarterScreen").classList.remove("hidden");renderQuarterHub();window.scrollTo(0,0)});
   $("previousQuarter").addEventListener("click",()=>{if(activeQuarter>0)openQuarter(activeMapCourse.quarters[activeQuarter-1].id)});$("nextQuarter").addEventListener("click",()=>{if(activeQuarter<3)openQuarter(activeMapCourse.quarters[activeQuarter+1].id)});
