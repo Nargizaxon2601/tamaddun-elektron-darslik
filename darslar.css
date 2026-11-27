@@ -22,7 +22,7 @@ body {
       rgba(225, 244, 255, 0.9),
       rgba(241, 238, 255, 0.91)
     ),
-    url("images/classroom.png") center/cover fixed;
+    url("images/classroom.webp") center/cover fixed;
 }
 button {
   font: inherit;
@@ -519,6 +519,9 @@ body.lesson-problem-active .topbar { display: none; }
 @keyframes final-fall { to { transform: translateY(115cqw) rotate(540deg); opacity: .2; } }
 /* 2-DARS SAHIFALARI */
 .l2-scene { container-type: inline-size; }
+.l2-scene.img-loading { background: linear-gradient(110deg, #e8f3ff 30%, #ffffff 50%, #e8f3ff 70%) 0 0 / 300% 100%; animation: imgShimmer 1.4s linear infinite; }
+.l2-scene.img-loading::after { content: "⏳ Rasm yuklanmoqda…"; position: absolute; left: 50%; top: 2.5%; transform: translateX(-50%); padding: 10px 20px; border-radius: 999px; background: #fff; color: #1e3a8a; font-weight: 800; box-shadow: 0 6px 18px rgba(30,58,138,.18); pointer-events: none; z-index: 60; }
+@keyframes imgShimmer { to { background-position: -300% 0; } }
 .l2-scene > .l2-item { z-index: 3; border-radius: 1.4cqw; transition: transform .2s cubic-bezier(.2,.8,.2,1.4), background .18s, box-shadow .18s; }
 .l2-scene > .l2-item:hover,
 .l2-scene > .l2-item:focus-visible { transform: translateY(-4px) scale(1.05); background: rgba(255,255,255,.16) !important; box-shadow: 0 0 0 .3cqw #fff, 0 0 0 .6cqw rgba(124,77,255,.45); outline: none; }

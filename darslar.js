@@ -132,11 +132,11 @@ document.addEventListener("DOMContentLoaded", () => {
   };
 
   const exercises = [
-    { title: "Qo‘llarni yuqoriga ko‘taring!", image: "exercise-1.png" },
-    { title: "O‘ngga va chapga egiling!", image: "exercise-2.png" },
-    { title: "Joyingizda 5 marta sakrang!", image: "exercise-3.png" },
-    { title: "Katta tabassum qiling!", image: "exercise-4.png" },
-    { title: "«Men Vatanimni sevaman!» deb ayting!", image: "exercise-5.png" },
+    { title: "Qo‘llarni yuqoriga ko‘taring!", image: "exercise-1.webp" },
+    { title: "O‘ngga va chapga egiling!", image: "exercise-2.webp" },
+    { title: "Joyingizda 5 marta sakrang!", image: "exercise-3.webp" },
+    { title: "Katta tabassum qiling!", image: "exercise-4.webp" },
+    { title: "«Men Vatanimni sevaman!» deb ayting!", image: "exercise-5.webp" },
   ];
 
   const questions = [
@@ -231,7 +231,7 @@ document.addEventListener("DOMContentLoaded", () => {
     stages: [
       {
         title: "Darsga kirish",
-        image: "_hero_banner.png",
+        image: "_hero_banner.webp",
         advice: "Atrofingizdagi buyumlarga diqqat bilan qarang.",
         content: `
           <h3>Salom, bilimdon! 👋</h3>
@@ -242,7 +242,7 @@ document.addEventListener("DOMContentLoaded", () => {
       },
       {
         title: "Vaziyat va tahlil",
-        image: "classroom.png",
+        image: "classroom.webp",
         advice: "Ishni boshlashdan oldin ish joyingizni tartibga keltiring.",
         type: "situation",
         content: `
@@ -266,7 +266,7 @@ document.addEventListener("DOMContentLoaded", () => {
       },
       {
         title: "Yangi mavzu bayoni",
-        image: "safety-tools.png",
+        image: "safety-tools.webp",
         advice:
           "Har bir ish qurolining vazifasi va xavfsiz ishlatish qoidasini o‘rganing.",
         type: "workshop",
@@ -313,7 +313,7 @@ document.addEventListener("DOMContentLoaded", () => {
       },
       {
         title: "Jismoniy daqiqa",
-        image: "exercise-1.png",
+        image: "exercise-1.webp",
         advice:
           "Harakatlarni o‘zingiz bajaring. Har bir mashqdan keyin belgi qo‘ying.",
         type: "exercise",
@@ -337,7 +337,7 @@ document.addEventListener("DOMContentLoaded", () => {
       },
       {
         title: "Amaliy ish",
-        image: "paper-craft.png",
+        image: "paper-craft.webp",
         advice: "Amaliy ishda tozalik va xavfsizlikka rioya qiling.",
         content: `
           <h3>🌿 Tabiiy materiallarni tayyorlaymiz</h3>
@@ -353,7 +353,7 @@ document.addEventListener("DOMContentLoaded", () => {
       },
       {
         title: "Mustahkamlovchi o‘yin",
-        image: "technology-tools-game.png",
+        image: "technology-tools-game.webp",
         advice: "Barabanni aylantiring, savolni o‘qing va javobni tanlang.",
         type: "drum",
         content: `
@@ -374,7 +374,7 @@ document.addEventListener("DOMContentLoaded", () => {
       },
       {
         title: "Yakun va rag‘bat",
-        image: "reward.png",
+        image: "reward.webp",
         advice: "Har bir yangi bilim — katta yutuq!",
         content: `
           <div class="final-card">
@@ -420,7 +420,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     $("quarterGrid").innerHTML =
       '<div class="map-artwork">' +
-      '<img src="images/adventure-map-main.png" alt="TAMADDUN ta’lim sarguzashti xaritasi: to‘rt chorak hududi">' +
+      '<img src="images/adventure-map-main.webp" alt="TAMADDUN ta’lim sarguzashti xaritasi: to‘rt chorak hududi">' +
       hotspots + '</div>';
 
     document.querySelectorAll("[data-quarter-id]").forEach((button) => {
@@ -459,7 +459,7 @@ document.addEventListener("DOMContentLoaded", () => {
       $("adventureMap").innerHTML =
         '<div class="quarter-adventure-map" aria-label="1-chorak interaktiv dars xaritasi">' +
           '<div class="q1-map-canvas">' +
-            '<img src="images/TAMADDUN_1-chorak_Kuz_sarguzashti_xarita.png" ' +
+            '<img src="images/TAMADDUN_1-chorak_Kuz_sarguzashti_xarita.webp" ' +
               'alt="1-chorak: Kuz sarguzashti xaritasi. 1 dan 11 gacha dars manzillari">' +
             stations +
           '</div>' +
@@ -3617,6 +3617,32 @@ document.addEventListener("DOMContentLoaded", () => {
     page.querySelectorAll(".l2-back, .l2-next, .knowledge-dot").forEach((b) => b.addEventListener("click", () => panel.classList.add("hidden")));
     newGame();
   })();
+  // Rasmlar: ochilgan sahifa rasmi darhol, qo'shni sahifalarniki oldindan yuklanadi; yuklanguncha belgi ko'rinadi
+  (function () {
+    const pages = lesson2Pages();
+    const sceneImg = (page) => page && page.querySelector(".l2-scene > img");
+    const warm = (page) => { const img = sceneImg(page); if (img && img.loading === "lazy") img.loading = "eager"; };
+    pages.forEach((page) => {
+      const img = sceneImg(page);
+      if (!img) return;
+      const scene = img.parentElement;
+      const done = () => scene.classList.remove("img-loading");
+      if (!(img.complete && img.naturalWidth)) { scene.classList.add("img-loading"); img.addEventListener("load", done); img.addEventListener("error", done); }
+    });
+    const onShow = (page) => {
+      const img = sceneImg(page);
+      const same = lessonPages(lessonOf(page));
+      const i = same.indexOf(page);
+      const next = () => [same[i + 1], same[i - 1], same[i + 2]].forEach((p) => { const n = sceneImg(p); if (n) n.fetchPriority = "low"; warm(p); });
+      if (!img) return;
+      img.fetchPriority = "high";
+      warm(page);
+      if (img.complete && img.naturalWidth) next(); else img.addEventListener("load", next, { once: true });
+    };
+    const mo = new MutationObserver((list) => list.forEach((m) => { if (!m.target.classList.contains("hidden")) onShow(m.target); }));
+    pages.forEach((page) => mo.observe(page, { attributes: true, attributeFilter: ["class"] }));
+  })();
+
   $("backToQuarters").addEventListener("click",()=>{$("quarterMapScreen").classList.add("hidden");$("quarterScreen").classList.remove("hidden");renderQuarterHub();window.scrollTo(0,0)});
   $("previousQuarter").addEventListener("click",()=>{if(activeQuarter>0)openQuarter(activeMapCourse.quarters[activeQuarter-1].id)});$("nextQuarter").addEventListener("click",()=>{if(activeQuarter<3)openQuarter(activeMapCourse.quarters[activeQuarter+1].id)});
   $("returnToMap").addEventListener("click",()=>{document.body.classList.remove("lesson-intro-active","lesson-problem-active");$("problemSituationScreen").classList.add("hidden");hideKnowledgeScreen();hideSafetyScreen();hideExerciseScreen();$("lessonIntroScreen").classList.add("hidden");$("learningScreen").classList.add("hidden");$("quarterMapScreen").classList.remove("hidden");renderQuarterMap();window.scrollTo(0,0)});
@@ -3746,7 +3772,7 @@ document.addEventListener("DOMContentLoaded", () => {
       })
       .join("");
 
-    $("heroImage").src = "images/_hero_banner.png";
+    $("heroImage").src = "images/_hero_banner.webp";
     $("stageImage").src = "images/" + stage.image;
     $("stageImage").alt = stage.title;
     $("stageEyebrow").textContent = stageIndex + 1 + "-BOSQICH";
@@ -3756,7 +3782,7 @@ document.addEventListener("DOMContentLoaded", () => {
     $("adviceText").textContent = stage.advice;
 
     $("heroImage").onerror = () => {
-      $("heroImage").src = "images/classroom.png";
+      $("heroImage").src = "images/classroom.webp";
     };
     $("stageImage").onerror = () => {
       $("stageImage").style.visibility = "hidden";

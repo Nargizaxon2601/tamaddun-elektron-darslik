@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>TAMADDUN — Interaktiv dars</title>
-    <link rel="stylesheet" href="darslar.css?v=65" />
+    <link rel="stylesheet" href="darslar.css?v=67" />
   </head>
   <body>
     <header class="topbar">
@@ -74,18 +74,18 @@
 <main class="adventure-screen hidden" id="quarterMapScreen"><section class="adventure-heading map-heading" id="quarterMapHeading"><button class="adventure-back" id="backToQuarters">← Choraklar xaritasi</button><span class="eyebrow">TEXNOLOGIYA · 1-SINF</span><h1 id="quarterMapTitle"></h1><p id="quarterMapDescription"></p></section><div class="map-controls"><button class="map-action secondary" id="previousQuarter">← Oldingi chorak</button><button class="map-action secondary" id="nextQuarter">Keyingi chorak →</button></div><section class="adventure-map" id="adventureMap"></section></main>
     <main class="lesson-intro-screen hidden" id="lessonIntroScreen" aria-label="1-darsga kirish">
       <div class="lesson-intro-art">
-        <img src="images/1_tex_1s_1dars_kirish.png" alt="1-dars: Texnologiyaga ilk qadam — sarguzasht boshlanishi" />
+        <img loading="lazy" decoding="async" src="images/1_tex_1s_1dars_kirish.webp" alt="1-dars: Texnologiyaga ilk qadam — sarguzasht boshlanishi" />
         <button type="button" class="lesson-intro-control intro-back-control" id="introBackToMap" aria-label="Xaritaga qaytish"><span class="intro-control-icon" aria-hidden="true">←</span><span class="intro-control-label">Xaritaga qaytish</span></button>
         <button type="button" class="lesson-intro-control intro-continue-control" id="introContinue" aria-label="Darsning birinchi bosqichini boshlash"><span class="intro-control-icon" aria-hidden="true">→</span><span class="intro-control-label">Darsni boshlash</span></button>
       </div>
     </main>
     <main class="lesson-intro-screen lesson-problem-screen hidden" id="problemSituationScreen" aria-label="Muammoli vaziyat: xavfsiz ish usulini tanlang">
       <div class="problem-scene">
-        <img src="images/1_tex_1s_1dars_muammoli_vaziyat.png" alt="Muammoli vaziyat: ish qurollaridan xavfsiz va tartibli foydalanish" />
+        <img loading="lazy" decoding="async" src="images/1_tex_1s_1dars_muammoli_vaziyat.webp" alt="Muammoli vaziyat: ish qurollaridan xavfsiz va tartibli foydalanish" />
         <button type="button" class="problem-choice unsafe-choice" data-problem-choice="unsafe" aria-label="Noto‘g‘ri holat: qaychi bilan ehtiyotsiz ishlash"><span class="sr-only">Noto‘g‘ri holatni tanlash</span></button>
         <button type="button" class="problem-choice safe-choice" data-problem-choice="safe" aria-label="To‘g‘ri holat: qaychidan xavfsiz foydalanish"><span class="sr-only">To‘g‘ri holatni tanlash</span></button>
-        <button type="button" class="problem-mascot-hotspot robot-hotspot" aria-label="Robotchani ajratib ko‘rish" aria-pressed="false"><img class="character-cutout robot-cutout" src="images/1_tex_1s_1dars_muammoli_vaziyat.png" alt="" aria-hidden="true" /></button>
-        <button type="button" class="problem-mascot-hotspot fox-hotspot" aria-label="Tulkini ajratib ko‘rish" aria-pressed="false"><img class="character-cutout fox-cutout" src="images/1_tex_1s_1dars_muammoli_vaziyat.png" alt="" aria-hidden="true" /></button>
+        <button type="button" class="problem-mascot-hotspot robot-hotspot" aria-label="Robotchani ajratib ko‘rish" aria-pressed="false"><img class="character-cutout robot-cutout" src="images/1_tex_1s_1dars_muammoli_vaziyat.webp" alt="" aria-hidden="true" /></button>
+        <button type="button" class="problem-mascot-hotspot fox-hotspot" aria-label="Tulkini ajratib ko‘rish" aria-pressed="false"><img class="character-cutout fox-cutout" src="images/1_tex_1s_1dars_muammoli_vaziyat.webp" alt="" aria-hidden="true" /></button>
         <button type="button" class="lesson-intro-control problem-back-control" id="problemBackToIntro" aria-label="Kirish sahifasiga qaytish"><span class="intro-control-icon" aria-hidden="true">←</span><span class="intro-control-label">Kirishga qaytish</span></button>
         <button type="button" class="lesson-intro-control intro-continue-control problem-continue-control" id="problemContinue" aria-label="Keyingi bosqichga o‘tish"><span class="intro-control-icon" aria-hidden="true">→</span><span class="intro-control-label">Davom etish</span></button>
       </div>
@@ -93,7 +93,7 @@
     </main>
     <main class="lesson-intro-screen lesson-problem-screen knowledge-screen hidden" id="knowledgeScreen" aria-label="Kundalik bilimlarni aniqlash: tanigan buyumlarni belgilang">
       <div class="problem-scene knowledge-scene">
-        <img src="images/1_tex_1s_1dars_kundalik_bilimlarni_aniqlash.webp" alt="Kundalik bilimlarni aniqlash: qaychi, yelim, qalam, bo‘yoq, mo‘yqalam, plastilin, qog‘oz va karton" />
+        <img loading="lazy" decoding="async" src="images/1_tex_1s_1dars_kundalik_bilimlarni_aniqlash.webp" alt="Kundalik bilimlarni aniqlash: qaychi, yelim, qalam, bo‘yoq, mo‘yqalam, plastilin, qog‘oz va karton" />
         <button type="button" class="knowledge-card" data-tool="0" style="left:24.40%;top:1.91%;width:13.28%;height:18.49%" aria-label="Qaychi haqida bilish"><span class="sr-only">Qaychi</span></button>
         <button type="button" class="knowledge-card" data-tool="1" style="left:38.46%;top:1.91%;width:12.86%;height:18.49%" aria-label="Yelim haqida bilish"><span class="sr-only">Yelim</span></button>
         <button type="button" class="knowledge-card" data-tool="2" style="left:52.21%;top:1.91%;width:12.98%;height:18.49%" aria-label="Qalam haqida bilish"><span class="sr-only">Qalam</span></button>
@@ -132,7 +132,7 @@
     </main>
     <main class="lesson-intro-screen lesson-problem-screen safety-screen hidden" id="safetyScreen1" data-safety-page="1" aria-label="4-bosqich: Texnologiya darslarida xavfsizlik texnikasi, 1/7">
       <div class="problem-scene knowledge-scene safety-scene" style="aspect-ratio:1674 / 940">
-        <img src="images/1_tex_1s_1dars_4bosqich_1.webp" alt="Texnologiya darslarida xavfsizlik texnikasi: ish o‘rningizni tayyorlab oling" />
+        <img loading="lazy" decoding="async" src="images/1_tex_1s_1dars_4bosqich_1.webp" alt="Texnologiya darslarida xavfsizlik texnikasi: ish o‘rningizni tayyorlab oling" />
         <button type="button" class="safety-rule" data-rule="0" data-say="To‘g‘ri! Partaga qog‘oz yoki kleyonka to‘shasak, u iflos bo‘lmaydi." style="left:42.71%;top:51.91%;width:34.65%;height:8.40%" aria-pressed="false" aria-label="Partani iflos qilmaslik uchun uning ustiga qog‘oz yoki kleyonka to‘shang"><span class="safety-tick" style="left:3.79%;top:43.04%" aria-hidden="true"></span></button>
         <button type="button" class="safety-rule" data-rule="1" data-say="Barakalla! Materiallar tartibli tursa, kerakli narsani tez topamiz." style="left:42.71%;top:62.02%;width:36.02%;height:5.74%" aria-pressed="false" aria-label="Materiallaringizni tartib bilan joylashtiring"><span class="safety-tick" style="left:3.65%;top:50.00%" aria-hidden="true"></span></button>
         <button type="button" class="safety-rule" data-rule="2" data-say="Ajoyib! Ortiqcha narsalar portfelda tursa, ish joyi keng va xavfsiz bo‘ladi." style="left:42.71%;top:69.15%;width:34.65%;height:8.72%" aria-pressed="false" aria-label="Ortiqcha narsalarni portfelingizga solib qo‘ying"><span class="safety-tick" style="left:4.31%;top:48.78%" aria-hidden="true"></span></button>
@@ -157,7 +157,7 @@
     </main>
     <main class="lesson-intro-screen lesson-problem-screen safety-screen hidden" id="safetyScreen2" data-safety-page="2" aria-label="4-bosqich: Dars jarayonida o‘zimizni qanday tutamiz, 2/7">
       <div class="problem-scene knowledge-scene safety-scene" style="aspect-ratio:1673 / 940">
-        <img src="images/1_tex_1s_1dars_4bosqich_2.webp" alt="Dars jarayonida o‘zimizni qanday tutamiz: fartuk va yengcha, mashg‘ulot davomida, o‘qituvchini tinglash" />
+        <img loading="lazy" decoding="async" src="images/1_tex_1s_1dars_4bosqich_2.webp" alt="Dars jarayonida o‘zimizni qanday tutamiz: fartuk va yengcha, mashg‘ulot davomida, o‘qituvchini tinglash" />
         <button type="button" class="safety-rule" data-rule="0" data-say="To‘g‘ri! Fartuk va yengcha kiyimlarimizni yelim, bo‘yoq va plastilindan asraydi." style="left:23.01%;top:19.36%;width:55.41%;height:17.02%" aria-pressed="false" aria-label="Fartuk va yengchani kiyib oling"><span class="safety-badge" aria-hidden="true"></span></button>
         <button type="button" class="safety-rule" data-rule="1" data-say="Barakalla! To‘g‘ri o‘tirib, jim ishlasak, hech kimga xalaqit bermaymiz." style="left:23.01%;top:37.45%;width:55.41%;height:22.87%" aria-pressed="false" aria-label="Mashg‘ulot davomida o‘tirgan holda, to‘g‘ri o‘tirib ishlang, xalaqit bermang"><span class="safety-badge" aria-hidden="true"></span></button>
         <button type="button" class="safety-rule" data-rule="2" data-say="Ajoyib! Yordam kerak bo‘lsa, qo‘lingizni ko‘taring." style="left:23.01%;top:61.70%;width:55.41%;height:21.49%" aria-pressed="false" aria-label="O‘qituvchingizni diqqat bilan tinglang"><span class="safety-badge" aria-hidden="true"></span></button>
@@ -178,7 +178,7 @@
     </main>
     <main class="lesson-intro-screen lesson-problem-screen safety-screen hidden" id="safetyScreen3" data-safety-page="3" aria-label="4-bosqich: Ish qurollari va tabiiy materiallar bilan tanishuv, 3/7">
       <div class="problem-scene knowledge-scene safety-scene" style="aspect-ratio:1672 / 941">
-        <img src="images/1_tex_1s_1dars_4bosqich_3.webp" alt="Ish qurollari va tabiiy materiallar bilan tanishuv: qaychi, yelim, qalamlar, bo‘yoqlar" />
+        <img loading="lazy" decoding="async" src="images/1_tex_1s_1dars_4bosqich_3.webp" alt="Ish qurollari va tabiiy materiallar bilan tanishuv: qaychi, yelim, qalamlar, bo‘yoqlar" />
         <button type="button" class="safety-rule" data-rule="0" data-say="To‘g‘ri! Qaychi bilan ehtiyot bo‘lib qirqamiz va uni doim g‘ilofda saqlaymiz." style="left:19.74%;top:38.26%;width:60.41%;height:12.11%" aria-pressed="false" aria-label="Qaychi"><span class="safety-badge" aria-hidden="true"></span></button>
         <button type="button" class="safety-rule" data-rule="1" data-say="Barakalla! Yelimni yupqa qilib surtamiz, shunda detallar yaxshi yopishadi." style="left:19.74%;top:51.65%;width:60.41%;height:10.31%" aria-pressed="false" aria-label="Yelim"><span class="safety-badge" aria-hidden="true"></span></button>
         <button type="button" class="safety-rule" data-rule="2" data-say="Ajoyib! Qalam bilan chizamiz va shakllarni belgilab olamiz." style="left:19.74%;top:63.12%;width:60.41%;height:11.05%" aria-pressed="false" aria-label="Qalamlar"><span class="safety-badge" aria-hidden="true"></span></button>
@@ -200,7 +200,7 @@
     </main>
     <main class="lesson-intro-screen lesson-problem-screen safety-screen hidden" id="safetyScreen4" data-safety-page="4" aria-label="4-bosqich: Materiallar bilan tanishuv, 4/7">
       <div class="problem-scene knowledge-scene safety-scene" style="aspect-ratio:1672 / 941">
-        <img src="images/1_tex_1s_1dars_4bosqich_4.webp" alt="Materiallar bilan tanishuv: mo‘yqalamlar, plastilin taxtachasi, plastilin, steklar, karton, paxta" />
+        <img loading="lazy" decoding="async" src="images/1_tex_1s_1dars_4bosqich_4.webp" alt="Materiallar bilan tanishuv: mo‘yqalamlar, plastilin taxtachasi, plastilin, steklar, karton, paxta" />
         <button type="button" class="safety-rule" data-rule="0" data-say="To‘g‘ri! Mo‘yqalamni ishlatib bo‘lgach, suvda yuvib, quritib qo‘yamiz." style="left:20.33%;top:12.96%;width:59.51%;height:13.82%" aria-pressed="false" aria-label="Mo‘yqalamlar"><span class="safety-badge" aria-hidden="true"></span></button>
         <button type="button" class="safety-rule" data-rule="1" data-say="Barakalla! Taxtacha partani iflos qilmasdan, saranjom ishlashga yordam beradi." style="left:20.33%;top:27.63%;width:59.51%;height:11.37%" aria-pressed="false" aria-label="Plastilin taxtachasi"><span class="safety-badge" aria-hidden="true"></span></button>
         <button type="button" class="safety-rule" data-rule="2" data-say="Ajoyib! Plastilin yumshoq, undan turli shakllar yasaymiz." style="left:20.33%;top:39.85%;width:59.51%;height:11.16%" aria-pressed="false" aria-label="Plastilin"><span class="safety-badge" aria-hidden="true"></span></button>
@@ -224,7 +224,7 @@
     </main>
     <main class="lesson-intro-screen lesson-problem-screen safety-screen hidden" id="safetyScreen5" data-safety-page="5" aria-label="4-bosqich: Xavfsizlik qoidalari va tabiiy materiallar, 5/7">
       <div class="problem-scene knowledge-scene safety-scene" style="aspect-ratio:1672 / 941">
-        <img src="images/1_tex_1s_1dars_4bosqich_5.webp" alt="Xavfsizlik qoidalari va tabiiy materiallar: g‘uddalar, eman va kashtan yong‘oqlari, daraxt barglari, urug‘lar, yong‘oq po‘choqlari" />
+        <img loading="lazy" decoding="async" src="images/1_tex_1s_1dars_4bosqich_5.webp" alt="Xavfsizlik qoidalari va tabiiy materiallar: g‘uddalar, eman va kashtan yong‘oqlari, daraxt barglari, urug‘lar, yong‘oq po‘choqlari" />
         <button type="button" class="safety-rule" data-rule="0" data-say="To‘g‘ri! Qaychi bilan doim ehtiyot bo‘lib ishlaymiz." style="left:24.82%;top:17.85%;width:25.42%;height:6.59%" aria-pressed="false" aria-label="Qaychi bilan ehtiyot bo‘lib ishlang"><span class="safety-badge safety-badge-mini" style="left:3.06%;top:29.03%" aria-hidden="true"></span></button>
         <button type="button" class="safety-rule" data-rule="1" data-say="Barakalla! Yelim va bo‘yoqni hech qachon og‘izga olmaymiz." style="left:24.82%;top:24.44%;width:25.42%;height:5.74%" aria-pressed="false" aria-label="Yelim va bo‘yoqlarni tatib ko‘rmang"><span class="safety-badge safety-badge-mini" style="left:3.06%;top:18.52%" aria-hidden="true"></span></button>
         <button type="button" class="safety-rule" data-rule="2" data-say="Ajoyib! Dars tugagach, hamma narsani joyiga qo‘yamiz." style="left:24.82%;top:30.18%;width:25.42%;height:8.50%" aria-pressed="false" aria-label="Dars tugagach, barcha anjomlarni joy-joyiga qo‘ying"><span class="safety-badge safety-badge-mini" style="left:3.06%;top:12.50%" aria-hidden="true"></span></button>
@@ -253,7 +253,7 @@
     </main>
     <main class="lesson-intro-screen lesson-problem-screen safety-screen hidden" id="safetyScreen6" data-safety-page="6" aria-label="4-bosqich: Tabiiy materiallar qanday tayyorlanadi, 6/7">
       <div class="problem-scene knowledge-scene safety-scene" style="aspect-ratio:1672 / 941">
-        <img src="images/1_tex_1s_1dars_4bosqich_6.webp" alt="Tabiiy materiallar qanday tayyorlanadi: yig‘iladi, yuviladi, quritiladi, quti yoki paketga solinadi" />
+        <img loading="lazy" decoding="async" src="images/1_tex_1s_1dars_4bosqich_6.webp" alt="Tabiiy materiallar qanday tayyorlanadi: yig‘iladi, yuviladi, quritiladi, quti yoki paketga solinadi" />
         <button type="button" class="safety-rule" data-rule="0" data-say="1-qadam: materiallarni sindirmasdan, ehtiyotlab yig‘amiz." style="left:18.24%;top:12.54%;width:30.92%;height:29.33%" aria-pressed="false" aria-label="1. Sindirmasdan, ehtiyotlab yig‘iladi"><span class="safety-badge" aria-hidden="true"></span></button>
         <button type="button" class="safety-rule" data-rule="1" data-say="2-qadam: kir va changini suvda tozalab yuvamiz." style="left:50.96%;top:12.54%;width:30.50%;height:29.33%" aria-pressed="false" aria-label="2. Kirlari tozalab yuviladi"><span class="safety-badge" aria-hidden="true"></span></button>
         <button type="button" class="safety-rule" data-rule="2" data-say="3-qadam: qo‘lsochiq ustiga yoyib quritamiz." style="left:18.24%;top:43.36%;width:30.92%;height:27.21%" aria-pressed="false" aria-label="3. Qo‘lsochiq ustida quritiladi"><span class="safety-badge" aria-hidden="true"></span></button>
@@ -278,7 +278,7 @@
     </main>
     <main class="lesson-intro-screen lesson-problem-screen safety-screen hidden" id="safetyScreen7" data-safety-page="7" aria-label="4-bosqich: Sinov sahifasi, 7/7">
       <div class="problem-scene knowledge-scene safety-scene match-game" id="matchGame" data-tasks="Qirqish uchun|Yopishtirish uchun|Chizish uchun|Rang berish uchun|Plastilinga shakl berish uchun" style="aspect-ratio:1672 / 941">
-        <img src="images/1_tex_1s_1dars_4bosqich_7.webp" alt="Sinov sahifasi: ish qurollarini ularning vazifasi bilan moslashtiring" />
+        <img loading="lazy" decoding="async" src="images/1_tex_1s_1dars_4bosqich_7.webp" alt="Sinov sahifasi: ish qurollarini ularning vazifasi bilan moslashtiring" />
         <div class="match-tile" data-slot="0" style="left:52.990%;top:30.287%;width:25.000%;height:10.840%;background-size:400.000% 922.549%" aria-hidden="true"></div>
         <div class="match-tile" data-slot="1" style="left:52.990%;top:41.339%;width:25.000%;height:10.840%;background-size:400.000% 922.549%" aria-hidden="true"></div>
         <div class="match-tile" data-slot="2" style="left:52.990%;top:52.285%;width:25.000%;height:10.840%;background-size:400.000% 922.549%" aria-hidden="true"></div>
@@ -314,7 +314,7 @@
     </main>
     <main class="lesson-intro-screen lesson-problem-screen exercise-screen hidden" id="exerciseScreen" aria-label="5-bosqich: Quvnoq jismoniy mashqlar">
       <div class="problem-scene knowledge-scene exercise-scene" style="aspect-ratio:1672 / 941">
-        <img src="images/1_tex_1s_1dars_5bosqich.webp" alt="Quvnoq jismoniy mashqlar: quyoshga cho‘zilamiz, daraxt shoxlari, quyonchadek sakraymiz, kapalak parvozi, usta qo‘llar" />
+        <img loading="lazy" decoding="async" src="images/1_tex_1s_1dars_5bosqich.webp" alt="Quvnoq jismoniy mashqlar: quyoshga cho‘zilamiz, daraxt shoxlari, quyonchadek sakraymiz, kapalak parvozi, usta qo‘llar" />
         <button type="button" class="exercise-card" data-exercise="0" data-mode="sec" data-count="5" style="left:17.22%;top:19.98%;width:13.28%;height:57.60%" aria-label="Quyoshga cho‘zilamiz mashqini boshlash" aria-pressed="false"><span class="ex-check" style="left:50.45%;top:4.98%" aria-hidden="true"></span><span class="ex-counter" aria-hidden="true"></span></button>
         <button type="button" class="exercise-card" data-exercise="1" data-mode="rep" data-count="4" style="left:30.86%;top:19.98%;width:12.92%;height:57.60%" aria-label="Daraxt shoxlari mashqini boshlash" aria-pressed="false"><span class="ex-check" style="left:50.00%;top:4.98%" aria-hidden="true"></span><span class="ex-counter" aria-hidden="true"></span></button>
         <button type="button" class="exercise-card" data-exercise="2" data-mode="rep" data-count="5" style="left:44.14%;top:19.98%;width:12.80%;height:57.60%" aria-label="Quyonchadek sakraymiz mashqini boshlash" aria-pressed="false"><span class="ex-check" style="left:50.00%;top:4.98%" aria-hidden="true"></span><span class="ex-counter" aria-hidden="true"></span></button>
@@ -337,7 +337,7 @@
     </main>
     <main class="lesson-intro-screen lesson-problem-screen build-screen hidden" id="buildScreen" aria-label="6-bosqich: Amaliy ish — Kuzgi kirpicha">
       <div class="problem-scene knowledge-scene build-scene" id="buildScene" style="aspect-ratio:1671 / 941">
-        <img src="images/1_tex_1s_1dars_6bosqich.webp" alt="Amaliy ish: materiallarni ish maydoniga olib borib, kuzgi kirpicha yasang" />
+        <img loading="lazy" decoding="async" src="images/1_tex_1s_1dars_6bosqich.webp" alt="Amaliy ish: materiallarni ish maydoniga olib borib, kuzgi kirpicha yasang" />
         <button type="button" class="build-source" data-piece="gudda" style="left:18.432%;top:14.346%;width:8.318%;height:13.496%" aria-label="G‘uddani ish maydoniga olib borish"></button>
         <button type="button" class="build-source" data-piece="plastilin" style="left:27.528%;top:14.346%;width:8.259%;height:13.496%" aria-label="Plastilinni ish maydoniga olib borish"></button>
         <button type="button" class="build-source" data-piece="koz" style="left:18.432%;top:29.330%;width:8.318%;height:11.583%" aria-label="Ko‘zlarni ish maydoniga olib borish"></button>
@@ -368,8 +368,8 @@
     </main>
     <main class="lesson-intro-screen lesson-problem-screen drum-screen hidden" id="drumScreen" aria-label="7-bosqich: Baraban metodi">
       <div class="problem-scene knowledge-scene drum-scene" id="drumScene" style="aspect-ratio:1671 / 941">
-        <img src="images/1_tex_1s_1dars_7bosqich.webp" alt="Baraban metodi: barabanni aylantiring va chiqqan savolga javob bering" />
-        <button type="button" class="drum-wheel" id="drumWheel" style="left:37.672%;top:21.998%;width:24.656%;height:43.783%" aria-label="Barabanni aylantirish"><img src="images/baraban-disk.webp" alt="" draggable="false"></button>
+        <img loading="lazy" decoding="async" src="images/1_tex_1s_1dars_7bosqich.webp" alt="Baraban metodi: barabanni aylantiring va chiqqan savolga javob bering" />
+        <button type="button" class="drum-wheel" id="drumWheel" style="left:37.672%;top:21.998%;width:24.656%;height:43.783%" aria-label="Barabanni aylantirish"><img loading="lazy" decoding="async" src="images/baraban-disk.webp" alt="" draggable="false"></button>
         <svg class="drum-pin" style="left:48.235%;top:17.003%;width:3.591%;height:9.777%" viewBox="0 0 60 92" aria-hidden="true"><path d="M30 90 C 22 70 4 52 4 30 A 26 26 0 1 1 56 30 C 56 52 38 70 30 90 Z" fill="#ef1b1b" stroke="#fff" stroke-width="4"/><circle cx="30" cy="30" r="10" fill="#fff"/></svg>
         <button type="button" class="drum-spin" id="drumSpin" style="left:40.694%;top:68.013%;width:18.851%;height:8.502%" aria-label="Aylantirish"></button>
         <span class="drum-star" data-star="0" style="left:53.501%;top:78.215%;width:4.309%;height:7.439%" aria-hidden="true">★</span>
@@ -398,7 +398,7 @@
     </main>
     <main class="lesson-intro-screen lesson-problem-screen final-screen hidden" id="finalScreen" aria-label="8-bosqich: Dars yakuni">
       <div class="problem-scene knowledge-scene final-scene" id="finalScene" style="aspect-ratio:1670 / 942">
-        <img src="images/1_tex_1s_1dars_8bosqich.webp" alt="Dars yakuni: baholash va rag‘bat, bugungi darsda, uyga vazifa, keyingi dars" />
+        <img loading="lazy" decoding="async" src="images/1_tex_1s_1dars_8bosqich.webp" alt="Dars yakuni: baholash va rag‘bat, bugungi darsda, uyga vazifa, keyingi dars" />
         <button type="button" class="final-medal" data-medal="alo" data-say="🥇 A‘lo! Siz bugun juda zo‘r ishladingiz!" style="left:19.042%;top:19.108%;width:8.383%;height:16.773%" aria-pressed="false" aria-label="Baho: A‘lo!"></button>
         <button type="button" class="final-medal" data-medal="faol" data-say="🥈 Faol! Darsda faol qatnashdingiz, barakalla!" style="left:28.623%;top:19.108%;width:8.204%;height:16.773%" aria-pressed="false" aria-label="Baho: Faol!"></button>
         <button type="button" class="final-medal" data-medal="yaxshi" data-say="🥉 Yaxshi! Keyingi darsda yanada zo‘r bo‘ladi!" style="left:38.204%;top:19.108%;width:8.802%;height:16.773%" aria-pressed="false" aria-label="Baho: Yaxshi!"></button>
@@ -427,7 +427,7 @@
     </main>
     <main class="lesson-intro-screen lesson-problem-screen l2-screen hidden" id="l2Screen1" data-l2-page="1" aria-label="2-dars, 1-bosqich: Sarguzasht boshlanadi">
       <div class="problem-scene knowledge-scene l2-scene" style="aspect-ratio:1670 / 942">
-        <img src="images/1_tex_1s_2dars_1bosqich.webp" alt="2-dars, 1-bosqich: Qog‘ozlar olamiga sayohat! Qog‘oz varag‘i bilan ishlashni o‘rganamiz" />
+        <img loading="lazy" decoding="async" src="images/1_tex_1s_2dars_1bosqich.webp" alt="2-dars, 1-bosqich: Qog‘ozlar olamiga sayohat! Qog‘oz varag‘i bilan ishlashni o‘rganamiz" />
         <button type="button" class="l2-item" data-say="Rangli qog‘ozlar — bugungi darsimizning asosiy materiali!" style="left:19.042%;top:64.968%;width:18.563%;height:17.622%" aria-pressed="false" aria-label="Rangli qog‘ozlar"></button>
         <button type="button" class="l2-item" data-say="Qog‘oz kemacha — qog‘ozni buklab yasaladi." style="left:37.725%;top:68.153%;width:9.701%;height:10.616%" aria-pressed="false" aria-label="Qog‘oz kemacha"></button>
         <button type="button" class="l2-item" data-say="Qog‘oz uycha — qog‘ozdan qirqib, yopishtirib yasaladi." style="left:47.784%;top:63.482%;width:8.623%;height:16.348%" aria-pressed="false" aria-label="Qog‘oz uycha"></button>
@@ -453,7 +453,7 @@
     </main>
     <main class="lesson-intro-screen lesson-problem-screen l2-screen hidden" id="l2Screen2" data-l2-page="2" aria-label="2-dars, 2-bosqich: Muammoli vaziyat">
       <div class="problem-scene knowledge-scene l2-scene" style="aspect-ratio:1670 / 942">
-        <img src="images/1_tex_1s_2dars_2bosqich.webp" alt="2-dars, 2-bosqich: Muammoli vaziyat — Qanday shakllar yasash mumkin?" />
+        <img loading="lazy" decoding="async" src="images/1_tex_1s_2dars_2bosqich.webp" alt="2-dars, 2-bosqich: Muammoli vaziyat — Qanday shakllar yasash mumkin?" />
         <button type="button" class="l2-item" data-say="Bu oddiy qog‘oz varag‘i. Undan turli shakllar yasash mumkin!" style="left:24.551%;top:18.259%;width:18.204%;height:32.059%" aria-pressed="false" aria-label="Oddiy qog‘oz varag‘i"></button>
         <button type="button" class="l2-item" data-say="To‘g‘ri to‘rtburchak — qog‘ozni uzunasiga qirqib hosil qilamiz." style="left:48.383%;top:15.393%;width:15.928%;height:9.873%" aria-pressed="false" aria-label="To‘g‘ri to‘rtburchak"></button>
         <button type="button" class="l2-item" data-say="Kvadrat — to‘rtta tomoni teng shakl." style="left:67.425%;top:15.074%;width:9.102%;height:14.862%" aria-pressed="false" aria-label="Kvadrat"></button>
@@ -482,7 +482,7 @@
     </main>
     <main class="lesson-intro-screen lesson-problem-screen l2-screen hidden" id="l2Screen3" data-l2-page="3" aria-label="2-dars, 3-bosqich: O‘tilgan mavzuni takrorlash">
       <div class="problem-scene knowledge-scene l2-scene" style="aspect-ratio:1670 / 942">
-        <img src="images/1_tex_1s_2dars_3bosqich.webp" alt="2-dars, 3-bosqich: Oldingi darsni esga olamiz — «Sehrli ustaning xaltasi» o‘yini va «Savol–javob» metodi" />
+        <img loading="lazy" decoding="async" src="images/1_tex_1s_2dars_3bosqich.webp" alt="2-dars, 3-bosqich: Oldingi darsni esga olamiz — «Sehrli ustaning xaltasi» o‘yini va «Savol–javob» metodi" />
         <button type="button" class="knowledge-dot" data-l2-dot="0" style="left:31.497%;top:90.021%" aria-label="1-bosqich"></button>
         <button type="button" class="knowledge-dot" data-l2-dot="1" style="left:36.647%;top:90.021%" aria-label="2-bosqich"></button>
         <button type="button" class="knowledge-dot" data-l2-dot="2" style="left:41.796%;top:90.021%" aria-label="3-bosqich"></button>
@@ -514,7 +514,7 @@
     </main>
     <main class="lesson-intro-screen lesson-problem-screen l2-screen hidden" id="l2Screen4" data-l2-page="4" data-l2-stage="3" aria-label="2-dars, 4-bosqich: Qog‘oz varag‘ining tomonlari">
       <div class="problem-scene knowledge-scene l2-scene" style="aspect-ratio:1672 / 941">
-        <img src="images/1_tex_1s_2dars_4bosqich_1.webp" alt="2-dars, 4-bosqich (1/4): Qog‘oz varag‘ining tomonlarini aniqlaymiz" />
+        <img loading="lazy" decoding="async" src="images/1_tex_1s_2dars_4bosqich_1.webp" alt="2-dars, 4-bosqich (1/4): Qog‘oz varag‘ining tomonlarini aniqlaymiz" />
         <button type="button" class="l2-item" data-say="📄 Bugun qog‘oz varag‘ini buklash, qirqish va undan turli geometrik shakllar yasashni o‘rganamiz." style="left:11.364%;top:15.940%;width:77.153%;height:10.096%" aria-pressed="false" aria-label="Dars maqsadi"></button>
         <button type="button" class="l2-item" data-say="👧 Bitta qog‘oz varag‘idan ko‘plab turli shakllarni qirqib olish mumkin." style="left:20.933%;top:28.162%;width:30.383%;height:10.627%" aria-pressed="false" aria-label="Qizcha aytadi"></button>
         <button type="button" class="l2-item" data-say="👦 Eng muhimi — tartibli, e’tiborli bo‘lish va shoshilmaslik." style="left:60.706%;top:27.418%;width:27.093%;height:11.902%" aria-pressed="false" aria-label="Bolakay aytadi"></button>
@@ -565,7 +565,7 @@
     </main>
     <main class="lesson-intro-screen lesson-problem-screen l2-screen hidden" id="l2Screen5" data-l2-page="5" data-l2-stage="3" aria-label="2-dars, 4-bosqich: Qog‘ozni buklash va qirqish">
       <div class="problem-scene knowledge-scene l2-scene" style="aspect-ratio:1671 / 941">
-        <img src="images/1_tex_1s_2dars_4bosqich_2.webp" alt="2-dars, 4-bosqich (2/4): Qog‘ozni buklaymiz va tasma shaklida qirqamiz" />
+        <img loading="lazy" decoding="async" src="images/1_tex_1s_2dars_4bosqich_2.webp" alt="2-dars, 4-bosqich (2/4): Qog‘ozni buklaymiz va tasma shaklida qirqamiz" />
         <button type="button" class="l2-item" data-say="👧 Varaq chetlari bir-biriga mos tushishiga, buklangan joyi esa tekis bo‘lishiga e’tibor bering." style="left:27.229%;top:46.759%;width:54.279%;height:9.352%" aria-pressed="false" aria-label="Qizchaning maslahati"></button>
         <button type="button" class="knowledge-dot" data-l2-dot="0" style="left:31.418%;top:89.904%" aria-label="1-bosqich"></button>
         <button type="button" class="knowledge-dot" data-l2-dot="1" style="left:36.565%;top:89.904%" aria-label="2-bosqich"></button>
@@ -602,7 +602,7 @@
     </main>
     <main class="lesson-intro-screen lesson-problem-screen l2-screen hidden" id="l2Screen6" data-l2-page="6" data-l2-stage="3" aria-label="2-dars, 4-bosqich: Qog‘oz tasmasidan shakllar">
       <div class="problem-scene knowledge-scene l2-scene" style="aspect-ratio:1671 / 941">
-        <img src="images/1_tex_1s_2dars_4bosqich_3.webp" alt="2-dars, 4-bosqich (3/4): Qog‘oz tasmasidan shakllar yasaymiz — to‘g‘ri to‘rtburchak, kvadrat, doira" />
+        <img loading="lazy" decoding="async" src="images/1_tex_1s_2dars_4bosqich_3.webp" alt="2-dars, 4-bosqich (3/4): Qog‘oz tasmasidan shakllar yasaymiz — to‘g‘ri to‘rtburchak, kvadrat, doira" />
         <button type="button" class="l2-item" data-say="📏 Qog‘oz tasmasini teng ikkiga, so‘ngra yana bir marta ikkiga buklang. Ochib, buklangan izlar bo‘ylab qirqing — to‘g‘ri to‘rtburchaklar hosil bo‘ladi." style="left:62.717%;top:15.940%;width:20.347%;height:24.655%" aria-pressed="false" aria-label="To‘g‘ri to‘rtburchak yasash"></button>
         <button type="button" class="l2-item" data-say="🟪 To‘g‘ri to‘rtburchakni diagonaliga buklang. Ortiqcha qismini qirqib tashlang — kvadrat hosil bo‘ladi." style="left:61.640%;top:43.783%;width:21.424%;height:18.066%" aria-pressed="false" aria-label="Kvadrat yasash"></button>
         <button type="button" class="l2-item" data-say="🟣 Kvadratning burchaklarini yumaloq qilib qirqib tashlang — doira hosil bo‘ladi." style="left:59.844%;top:65.037%;width:23.220%;height:18.916%" aria-pressed="false" aria-label="Doira yasash"></button>
@@ -646,7 +646,7 @@
     </main>
     <main class="lesson-intro-screen lesson-problem-screen l2-screen hidden" id="l2Screen7" data-l2-page="7" data-l2-stage="4" aria-label="2-dars, 4-bosqich: Shakllarni o‘zgartirish va albomga yopishtirish">
       <div class="problem-scene knowledge-scene l2-scene" style="aspect-ratio:1672 / 941">
-        <img src="images/1_tex_1s_2dars_4bosqich_4.webp" alt="2-dars, 4-bosqich (4/4): Geometrik shakllarni o‘zgartiramiz va albomga yopishtiramiz" />
+        <img loading="lazy" decoding="async" src="images/1_tex_1s_2dars_4bosqich_4.webp" alt="2-dars, 4-bosqich (4/4): Geometrik shakllarni o‘zgartiramiz va albomga yopishtiramiz" />
         <button type="button" class="l2-item" data-say="🤖 Endi tayyor shakllarni yana o‘zgartirib, yangi shakllar hosil qilamiz!" style="left:7.775%;top:15.728%;width:16.029%;height:18.066%" aria-pressed="false" aria-label="Robotcha aytadi"></button>
         <button type="button" class="l2-item" data-say="🦊 Tayyor bo‘lgan barcha shakllarni albomimizga tartib bilan yopishtiramiz! Albomni bosing." style="left:69.498%;top:14.346%;width:16.328%;height:25.186%" aria-pressed="false" aria-label="Tulkivoy aytadi"></button>
         <button type="button" class="l2-item" data-say="🟦🔺⚪ Shakl do‘stlar sizdan juda xursand! Barakalla!" style="left:71.471%;top:70.988%;width:20.036%;height:12.115%" aria-pressed="false" aria-label="Shakl do‘stlar"></button>
@@ -694,7 +694,7 @@
     </main>
     <main class="lesson-intro-screen lesson-problem-screen l2-screen hidden" id="l2Screen8" data-l2-page="8" data-l2-stage="4" aria-label="2-dars, 5-bosqich: Jismoniy daqiqa">
       <div class="problem-scene knowledge-scene l2-scene" style="aspect-ratio:1672 / 941">
-        <img src="images/1_tex_1s_2dars_5bosqich.webp" alt="2-dars, 5-bosqich: Jismoniy mashqlantirish — 5 ta mashq" />
+        <img loading="lazy" decoding="async" src="images/1_tex_1s_2dars_5bosqich.webp" alt="2-dars, 5-bosqich: Jismoniy mashqlantirish — 5 ta mashq" />
         <button type="button" class="l2-item" data-say="🤖 Keling, biroz harakatlanib, qaddimizni tiklaymiz!" style="left:16.268%;top:9.352%;width:13.756%;height:22.529%" aria-pressed="false" aria-label="Robotcha aytadi"></button>
         <button type="button" class="l2-item" data-say="🦊 Bu mashqlar bizga kuch, chaqqonlik va diqqat beradi!" style="left:69.856%;top:9.352%;width:14.593%;height:22.529%" aria-pressed="false" aria-label="Tulkivoy aytadi"></button>
         <button type="button" class="knowledge-dot" data-l2-dot="0" style="left:31.400%;top:89.904%" aria-label="1-bosqich"></button>
@@ -736,7 +736,7 @@
     </main>
     <main class="lesson-intro-screen lesson-problem-screen l2-screen hidden" id="l2Screen9" data-l2-page="9" data-l2-stage="5" aria-label="2-dars, 6-bosqich: Amaliy usta xona">
       <div class="problem-scene knowledge-scene l2-scene" style="aspect-ratio:1671 / 941">
-        <img src="images/1_tex_1s_2dars_6bosqich.webp" alt="2-dars, 6-bosqich: Amaliy usta xona — geometrik shakllardan kompozitsiya" />
+        <img loading="lazy" decoding="async" src="images/1_tex_1s_2dars_6bosqich.webp" alt="2-dars, 6-bosqich: Amaliy usta xona — geometrik shakllardan kompozitsiya" />
         <button type="button" class="l2-item" data-say="🤖 Keling, kitobdagi namunaga o‘xshash geometrik shakllardan kompozitsiya yasaymiz!" style="left:15.679%;top:8.714%;width:14.123%;height:19.129%" aria-pressed="false" aria-label="Robotcha aytadi"></button>
         <button type="button" class="l2-item" data-say="🦊 Shakllarni ketma-ketlikda kesib, albom varag‘iga tartib bilan yopishtiramiz!" style="left:70.497%;top:4.463%;width:15.560%;height:18.385%" aria-pressed="false" aria-label="Tulkivoy aytadi"></button>
         <button type="button" class="l2-item" data-say="✂️ Amaliy ish: geometrik shakllardan kompozitsiya yasaymiz. Chapdagi shakllarni ish maydoniga surib olib boring!" style="left:30.521%;top:10.627%;width:39.198%;height:10.414%" aria-pressed="false" aria-label="Amaliy ish"></button>
@@ -783,7 +783,7 @@
     </main>
     <main class="lesson-intro-screen lesson-problem-screen l2-screen hidden" id="l2Screen10" data-l2-page="10" data-l2-stage="6" aria-label="2-dars, 7-bosqich: Arqon tortish o‘yini">
       <div class="problem-scene knowledge-scene l2-scene" style="aspect-ratio:1672 / 941">
-        <img src="images/1_tex_1s_2dars_7bosqich.webp" alt="2-dars, 7-bosqich: Bilimlar bellashuvi — «Arqon tortish» o‘yini" />
+        <img loading="lazy" decoding="async" src="images/1_tex_1s_2dars_7bosqich.webp" alt="2-dars, 7-bosqich: Bilimlar bellashuvi — «Arqon tortish» o‘yini" />
         <button type="button" class="l2-item" data-say="🤖 Har bir to‘g‘ri javob — arqon o‘sha jamoa tomoniga siljiydi!" style="left:40.670%;top:17.003%;width:20.455%;height:14.878%" aria-pressed="false" aria-label="Robotcha aytadi"></button>
         <button type="button" class="l2-item" data-say="🦊 Tez javob bering, jamoangizni g‘alabaga olib chiqing!" style="left:70.873%;top:6.376%;width:15.849%;height:20.191%" aria-pressed="false" aria-label="Tulkivoy aytadi"></button>
         <button type="button" class="l2-item" data-say="📋 Qoidalar: savolga tez va to‘g‘ri javob bering. Har bir to‘g‘ri javobdan keyin arqon siljiydi. Arqonni birinchi bo‘lib o‘z tomoniga 5 marta tortgan jamoa g‘olib bo‘ladi!" style="left:30.203%;top:79.915%;width:39.474%;height:18.066%" aria-pressed="false" aria-label="Qoidalar"></button>
@@ -814,7 +814,7 @@
     </main>
     <main class="lesson-intro-screen lesson-problem-screen l2-screen hidden" id="l2Screen11" data-l2-page="11" data-l2-stage="7" aria-label="2-dars, 8-bosqich: Darsni yakunlash">
       <div class="problem-scene knowledge-scene l2-scene" style="aspect-ratio:1670 / 941">
-        <img src="images/1_tex_1s_2dars_8bosqich.webp" alt="2-dars, 8-bosqich: Darsni yakunlash — baholash, rag‘batlantirish, uyga vazifa" />
+        <img loading="lazy" decoding="async" src="images/1_tex_1s_2dars_8bosqich.webp" alt="2-dars, 8-bosqich: Darsni yakunlash — baholash, rag‘batlantirish, uyga vazifa" />
         <button type="button" class="l2-item" data-say="🤖 Bugungi darsda o‘rganganlarimizni umumlashtirdik. Endi darsimizni yakunlaymiz!" style="left:23.952%;top:14.346%;width:52.994%;height:15.197%" aria-pressed="false" aria-label="Robotcha aytadi"></button>
         <button type="button" class="l2-item" data-say="🏠 Uyga vazifa: bugungi darsda o‘rgangan geometrik shakllarni daftaringizda chizib, nomlab keling!" style="left:68.862%;top:45.696%;width:27.844%;height:19.979%" aria-pressed="false" aria-label="Uyga vazifa"></button>
         <button type="button" class="knowledge-hero" data-hero="robot" style="left:5.689%;top:11.158%;width:14.970%;height:23.911%;clip-path:polygon(6.0% 11.1%, 26.0% 0.0%, 42.0% 15.6%, 70.0% 28.9%, 90.0% 44.4%, 100.0% 60.0%, 90.0% 77.8%, 74.0% 86.7%, 62.0% 100.0%, 22.0% 100.0%, 10.0% 86.7%, 2.0% 60.0%, 0.0% 33.3%)" aria-label="Robotcha" aria-pressed="false"></button>
@@ -846,7 +846,7 @@
     </main>
     <main class="lesson-intro-screen lesson-problem-screen l2-screen hidden" id="l2Screen3_1" data-l2-page="3_1" data-lesson="3" aria-label="3-dars, 1-bosqich: Manzara yaratamiz">
       <div class="problem-scene knowledge-scene l2-scene" style="aspect-ratio:1672 / 941">
-        <img src="images/1_tex_1s_3dars_1bosqich.webp" alt="3-dars, 1-bosqich: Manzara yaratamiz — Uycha va daraxtlar" />
+        <img loading="lazy" decoding="async" src="images/1_tex_1s_3dars_1bosqich.webp" alt="3-dars, 1-bosqich: Manzara yaratamiz — Uycha va daraxtlar" />
         <button type="button" class="l2-item" data-say="🤖 Salom, bolajonlar! Bugun yangi manzara yaratish sayohatiga chiqamiz!" style="left:2.093%;top:20.191%;width:24.222%;height:29.756%" aria-pressed="false" aria-label="Robotcha aytadi"></button>
         <button type="button" class="l2-item" data-say="🦊 Keling, rangli shakllar yordamida kuz manzarasini birga yarataylik!" style="left:73.864%;top:20.723%;width:24.222%;height:27.630%" aria-pressed="false" aria-label="Tulkivoy aytadi"></button>
         <button type="button" class="l2-item" data-say="📖 3-dars: Manzara yaratamiz — Uycha va daraxtlar." style="left:24.522%;top:1.063%;width:50.837%;height:33.475%" aria-pressed="false" aria-label="Dars mavzusi"></button>
@@ -896,7 +896,7 @@
     </main>
     <main class="lesson-intro-screen lesson-problem-screen l2-screen hidden" id="l2Screen3_2" data-l2-page="3_2" data-lesson="3" data-l2-stage="1" aria-label="3-dars, 2-bosqich: Muammoli vaziyat">
       <div class="problem-scene knowledge-scene l2-scene" style="aspect-ratio:1671 / 941">
-        <img src="images/1_tex_1s_3dars_2bosqich.webp" alt="3-dars, 2-bosqich: Muammoli vaziyat — kuz manzarasini qaysi shakllardan yaratamiz?" />
+        <img loading="lazy" decoding="async" src="images/1_tex_1s_3dars_2bosqich.webp" alt="3-dars, 2-bosqich: Muammoli vaziyat — kuz manzarasini qaysi shakllardan yaratamiz?" />
         <button type="button" class="l2-item" data-say="🤖 Bolajonlar, biz kuz manzarasini yaratmoqchimiz. Lekin qanday shakllardan foydalansak bo‘ladi?" style="left:6.284%;top:12.752%;width:23.639%;height:37.194%" aria-pressed="false" aria-label="Robotcha so‘raydi"></button>
         <button type="button" class="l2-item" data-say="🦊 Uycha, daraxtlar va quyoshni qaysi geometrik shakllardan yasash mumkin, deb o‘ylaysiz?" style="left:71.813%;top:11.690%;width:25.733%;height:32.944%" aria-pressed="false" aria-label="Tulkivoy so‘raydi"></button>
         <button type="button" class="l2-item" data-say="💡 Muammo: berilgan geometrik shakllardan kuz manzarasini qanday yaratamiz? Stoldagi shakllarni doskadagi chiziqlarga surib ko‘ring!" style="left:15.260%;top:81.296%;width:67.325%;height:15.940%" aria-pressed="false" aria-label="Muammo"></button>
@@ -934,7 +934,7 @@
     </main>
     <main class="lesson-intro-screen lesson-problem-screen l2-screen hidden" id="l2Screen3_3" data-l2-page="3_3" data-lesson="3" data-l2-stage="2" aria-label="3-dars, 3-bosqich: O‘tgan mavzuni mustahkamlash">
       <div class="problem-scene knowledge-scene l2-scene" style="aspect-ratio:1672 / 941">
-        <img src="images/1_tex_1s_3dars_3bosqich.webp" alt="3-dars, 3-bosqich: O‘tgan mavzuni mustahkamlash — «Xatoni top» o‘yini va «Sehrli qog‘oz» metodi" />
+        <img loading="lazy" decoding="async" src="images/1_tex_1s_3dars_3bosqich.webp" alt="3-dars, 3-bosqich: O‘tgan mavzuni mustahkamlash — «Xatoni top» o‘yini va «Sehrli qog‘oz» metodi" />
         <button type="button" class="l2-item" data-say="🤖 Bolajonlar, avvalgi darsda qog‘oz bilan qanday ishlashni o‘rgangan edik. Keling, bu bilimlarimizni qiziqarli o‘yin va mashqlar orqali mustahkamlaymiz!" style="left:23.624%;top:10.627%;width:54.426%;height:15.409%" aria-pressed="false" aria-label="Robotcha aytadi"></button>
         <button type="button" class="l2-item" data-say="⭐ Bugun «Xatoni top» o‘yini va «Sehrli qog‘oz» metodi orqali qog‘oz bilan ishlash ko‘nikmalarimizni mustahkamlaymiz!" style="left:16.029%;top:85.547%;width:68.002%;height:12.009%" aria-pressed="false" aria-label="Xulosa"></button>
         <button type="button" class="knowledge-hero" data-hero="robot" style="left:5.084%;top:12.752%;width:15.550%;height:19.129%;clip-path:polygon(9.6% 11.1%, 32.7% 0.0%, 59.6% 11.1%, 78.8% 27.8%, 94.2% 44.4%, 100.0% 66.7%, 82.7% 83.3%, 63.5% 100.0%, 25.0% 100.0%, 5.8% 77.8%, 0.0% 44.4%)" aria-label="Robotcha" aria-pressed="false"></button>
@@ -966,7 +966,7 @@
     </main>
     <main class="lesson-intro-screen lesson-problem-screen l2-screen hidden" id="l2Screen3_4" data-l2-page="3_4" data-lesson="3" data-l2-stage="3" aria-label="3-dars, 4-bosqich: Yangi bilim berish">
       <div class="problem-scene knowledge-scene l2-scene" data-fold-done="Barakalla! Ish rejasini to‘g‘ri tartibda tuzdingiz — endi manzara yaratishga tayyormiz!" style="aspect-ratio:1672 / 941">
-        <img src="images/1_tex_1s_3dars_4bosqich_1.webp" alt="3-dars, 4-bosqich (1/2): Manzara yaratamiz — kerakli materiallar va ish rejasi" />
+        <img loading="lazy" decoding="async" src="images/1_tex_1s_3dars_4bosqich_1.webp" alt="3-dars, 4-bosqich (1/2): Manzara yaratamiz — kerakli materiallar va ish rejasi" />
         <button type="button" class="l2-item" data-say="🤖 Bolajonlar, bugun biz geometrik shakllardan kuz manzarasini yaratamiz!" style="left:17.943%;top:12.221%;width:20.335%;height:20.723%" aria-pressed="false" aria-label="Robotcha aytadi"></button>
         <button type="button" class="l2-item" data-say="🍂 Kuz — yilning go‘zal fasli. Quyosh nurlari mayinlashadi. Daraxtlarning barglari tillarang va olovrang tusga kiradi." style="left:60.706%;top:11.690%;width:23.026%;height:20.723%" aria-pressed="false" aria-label="Tulkivoy aytadi"></button>
         <button type="button" class="l2-item" data-say="🌳 Kuzda daraxt barglari sarg‘ayib, to‘kila boshlaydi. Bugun shunday daraxtni shakllardan yasaymiz!" style="left:42.165%;top:14.878%;width:15.251%;height:19.129%" aria-pressed="false" aria-label="Kuz daraxti"></button>
@@ -1011,7 +1011,7 @@
     </main>
     <main class="lesson-intro-screen lesson-problem-screen l2-screen hidden" id="l2Screen3_5" data-l2-page="3_5" data-lesson="3" data-l2-stage="3" aria-label="3-dars, 4-bosqich: Yangi bilim berish (2-sahifa)">
       <div class="problem-scene knowledge-scene l2-scene" style="aspect-ratio:1672 / 941">
-        <img src="images/1_tex_1s_3dars_4bosqich_2.webp" alt="3-dars, 4-bosqich (2/2): Ishlash qoidalari va tayyor manzara namunasi" />
+        <img loading="lazy" decoding="async" src="images/1_tex_1s_3dars_4bosqich_2.webp" alt="3-dars, 4-bosqich (2/2): Ishlash qoidalari va tayyor manzara namunasi" />
         <button type="button" class="l2-item" data-say="🤖 Endi ishlash qoidalarini o‘rganamiz va tayyor manzara namunasini ko‘rib chiqamiz!" style="left:14.354%;top:11.158%;width:18.660%;height:23.911%" aria-pressed="false" aria-label="Robotcha aytadi"></button>
         <button type="button" class="l2-item" data-say="🦊 Mana, uycha, daraxtlar va quyoshdan iborat tayyor manzara!" style="left:68.182%;top:11.158%;width:17.943%;height:23.911%" aria-pressed="false" aria-label="Tulkivoy aytadi"></button>
         <button type="button" class="l2-item" data-say="☁️ Bulutlar — oq rangli yumaloq shakllardan yasalgan." style="left:48.565%;top:17.003%;width:16.627%;height:8.077%" aria-pressed="false" aria-label="Bulut"></button>
@@ -1053,7 +1053,7 @@
     </main>
     <main class="lesson-intro-screen lesson-problem-screen l2-screen hidden" id="l2Screen3_6" data-l2-page="3_6" data-lesson="3" data-l2-stage="4" aria-label="3-dars, 5-bosqich: Jismoniy daqiqa">
       <div class="problem-scene knowledge-scene l2-scene" data-ex-done="🏆 A’lo! 5 ta mashqning hammasini bajardingiz. Endi darsni davom ettirishga tayyormiz!" style="aspect-ratio:1769 / 889">
-        <img src="images/1_tex_1s_3dars_5bosqich.webp" alt="3-dars, 5-bosqich: Keling, birga mashq qilamiz! — 5 ta jismoniy mashq" />
+        <img loading="lazy" decoding="async" src="images/1_tex_1s_3dars_5bosqich.webp" alt="3-dars, 5-bosqich: Keling, birga mashq qilamiz! — 5 ta jismoniy mashq" />
         <button type="button" class="l2-item" data-say="🤖 Endi biroz harakat qilamiz! Birga jismoniy mashqlarni bajaramiz!" style="left:17.524%;top:0.562%;width:17.241%;height:23.622%" aria-pressed="false" aria-label="Robotcha aytadi"></button>
         <button type="button" class="l2-item" data-say="🦊 Mashqlar sog‘lig‘imizni mustahkamlaydi va darsda faol bo‘lishimizga yordam beradi!" style="left:65.574%;top:0.000%;width:19.220%;height:24.184%" aria-pressed="false" aria-label="Tulkivoy aytadi"></button>
         <button type="button" class="knowledge-dot" data-l2-dot="0" style="left:37.705%;top:94.488%" aria-label="1-bosqich"></button>
@@ -1096,7 +1096,7 @@
     </main>
     <main class="lesson-intro-screen lesson-problem-screen l2-screen hidden" id="l2Screen3_7" data-l2-page="3_7" data-lesson="3" data-l2-stage="5" aria-label="3-dars, 6-bosqich: Amaliy ish">
       <div class="problem-scene knowledge-scene l2-scene" style="aspect-ratio:1672 / 941">
-        <img src="images/1_tex_1s_3dars_6bosqich.webp" alt="3-dars, 6-bosqich: Amaliy ish — geometrik shakllardan manzara yaratamiz" />
+        <img loading="lazy" decoding="async" src="images/1_tex_1s_3dars_6bosqich.webp" alt="3-dars, 6-bosqich: Amaliy ish — geometrik shakllardan manzara yaratamiz" />
         <button type="button" class="l2-item" data-say="🤖 Endi o‘rgangan bilimlarimizni amaliyotda sinab ko‘ramiz!" style="left:17.045%;top:10.096%;width:16.148%;height:20.935%" aria-pressed="false" aria-label="Robotcha aytadi"></button>
         <button type="button" class="l2-item" data-say="🦊 Qog‘oz va shakllar yordamida uycha, daraxtlar va quyoshli manzara tayyorlaymiz!" style="left:60.706%;top:9.033%;width:17.344%;height:22.848%" aria-pressed="false" aria-label="Tulkivoy aytadi"></button>
         <button type="button" class="l2-item" data-say="🎨 Chapdagi shakllarni ish maydoniga surib olib boring. Chiziqli joyga yaqin qo‘ysangiz, shakl o‘sha joyga yopishadi va kerakli rangga kiradi!" style="left:35.287%;top:13.284%;width:24.522%;height:18.597%" aria-pressed="false" aria-label="Keling, birga manzara yaratamiz!"></button>
@@ -1145,7 +1145,7 @@
     </main>
     <main class="lesson-intro-screen lesson-problem-screen l2-screen hidden" id="l2Screen3_8" data-l2-page="3_8" data-lesson="3" data-l2-stage="6" aria-label="3-dars, 7-bosqich: Mustahkamlash">
       <div class="problem-scene knowledge-scene l2-scene" style="aspect-ratio:1671 / 941">
-        <img src="images/1_tex_1s_3dars_7bosqich.webp" alt="3-dars, 7-bosqich: Mustahkamlash — «Xotira sinovi» o‘yini" />
+        <img loading="lazy" decoding="async" src="images/1_tex_1s_3dars_7bosqich.webp" alt="3-dars, 7-bosqich: Mustahkamlash — «Xotira sinovi» o‘yini" />
         <button type="button" class="l2-item" data-say="🤖 Endi o‘rganganlarimizni qiziqarli o‘yin bilan mustahkamlaymiz!" style="left:17.056%;top:10.096%;width:17.056%;height:22.317%" aria-pressed="false" aria-label="Robotcha aytadi"></button>
         <button type="button" class="l2-item" data-say="🦊 Diqqat bilan qarang, manzarani yodda saqlang, so‘ng savollarga javob bering!" style="left:63.734%;top:10.096%;width:17.654%;height:21.785%" aria-pressed="false" aria-label="Tulkivoy aytadi"></button>
         <button type="button" class="l2-item" data-say="🧠 «Xotira sinovi»: «5 soniya» tugmasini bosing — manzarani 5 soniya ichida yodda saqlang. Keyin manzara yashiriladi va 3 ta savolga javob berasiz!" style="left:35.308%;top:14.878%;width:27.528%;height:19.129%" aria-pressed="false" aria-label="Xotira sinovi"></button>
@@ -1193,7 +1193,7 @@
     </main>
     <main class="lesson-intro-screen lesson-problem-screen l2-screen hidden" id="l2Screen3_9" data-l2-page="3_9" data-lesson="3" data-l2-stage="7" aria-label="3-dars, 8-bosqich: Dars yakuni">
       <div class="problem-scene knowledge-scene l2-scene" style="aspect-ratio:1670 / 942">
-        <img src="images/1_tex_1s_3dars_8bosqich.webp" alt="3-dars, 8-bosqich: Dars yakuni — xulosalar, dars natijasi va o‘zingizni baholang" />
+        <img loading="lazy" decoding="async" src="images/1_tex_1s_3dars_8bosqich.webp" alt="3-dars, 8-bosqich: Dars yakuni — xulosalar, dars natijasi va o‘zingizni baholang" />
         <button type="button" class="l2-item" data-say="🤖 Bugungi darsda biz manzara — uycha va daraxtlar yaratishni o‘rgandik!" style="left:17.066%;top:11.146%;width:17.665%;height:22.293%" aria-pressed="false" aria-label="Robotcha aytadi"></button>
         <button type="button" class="l2-item" data-say="🦊 Ajoyib! Sizlar geometrik shakllar yordamida chiroyli manzara yasay oldingiz!" style="left:62.874%;top:10.616%;width:18.263%;height:22.293%" aria-pressed="false" aria-label="Tulkivoy aytadi"></button>
         <button type="button" class="l2-item" data-say="🌟 Bugun: shakllarni tanidik, ulardan uycha, daraxtlar va quyosh yasadik, ishni tartib bilan bajardik!" style="left:35.928%;top:13.800%;width:26.048%;height:20.170%" aria-pressed="false" aria-label="Bugun nimalarni o‘rgandik?"></button>
@@ -1232,7 +1232,7 @@
     </main>
     <main class="lesson-intro-screen lesson-problem-screen l2-screen hidden" id="l2Screen4_1" data-l2-page="4_1" data-lesson="4" data-l2-stage="0" aria-label="4-dars, 1-bosqich: Darsga kirish">
       <div class="problem-scene knowledge-scene l2-scene" style="aspect-ratio:1672 / 941">
-        <img src="images/1_tex_1s_4dars_1bosqich.webp" alt="4-dars, 1-bosqich: To‘lqinlar uzra suzayotgan kemacha" />
+        <img loading="lazy" decoding="async" src="images/1_tex_1s_4dars_1bosqich.webp" alt="4-dars, 1-bosqich: To‘lqinlar uzra suzayotgan kemacha" />
         <button type="button" class="l2-item" data-say="🤖 Assalomu alaykum, bolajonlar! Bugun biz geometrik shakllardan to‘lqinlar uzra suzayotgan kemacha yasaymiz!" style="left:15.849%;top:10.096%;width:20.634%;height:29.224%" aria-pressed="false" aria-label="Robotcha aytadi"></button>
         <button type="button" class="l2-item" data-say="🦊 Kema, to‘lqinlar va quyoshli osmon bilan chiroyli manzara yaratamiz. Qani, bu qiziqarli ishni birga bajaramizmi?" style="left:63.397%;top:9.564%;width:21.232%;height:27.099%" aria-pressed="false" aria-label="Tulkivoy aytadi"></button>
         <button type="button" class="l2-item" data-say="📖 4-dars: «To‘lqinlar uzra suzayotgan kemacha»." style="left:35.885%;top:4.251%;width:26.914%;height:26.567%" aria-pressed="false" aria-label="Dars mavzusi"></button>
@@ -1289,7 +1289,7 @@
     </main>
     <main class="lesson-intro-screen lesson-problem-screen l2-screen hidden" id="l2Screen4_2" data-l2-page="4_2" data-lesson="4" data-l2-stage="1" aria-label="4-dars, 2-bosqich: Muammoli vaziyat">
       <div class="problem-scene knowledge-scene l2-scene" style="aspect-ratio:1671 / 941">
-        <img src="images/1_tex_1s_4dars_2bosqich.webp" alt="4-dars, 2-bosqich: Muammoli vaziyat — kemacha haqida savollar" />
+        <img loading="lazy" decoding="async" src="images/1_tex_1s_4dars_2bosqich.webp" alt="4-dars, 2-bosqich: Muammoli vaziyat — kemacha haqida savollar" />
         <button type="button" class="l2-item" data-say="🤖 Do‘stlar, qarang! Dengizda chiroyli kemacha suzib yuribdi. Keling, birgalikda o‘ylab ko‘ramiz!" style="left:15.260%;top:11.158%;width:20.048%;height:26.036%" aria-pressed="false" aria-label="Robotcha aytadi"></button>
         <button type="button" class="l2-item" data-say="🦊 Men ham shunday kemacha yasab, uni go‘zal dengiz manzarasiga joylashtirmoqchiman. Bunga qanday ijodiy yechim topamiz?" style="left:65.230%;top:9.564%;width:19.749%;height:30.287%" aria-pressed="false" aria-label="Tulkivoy aytadi"></button>
         <button type="button" class="l2-item" data-say="❓ Muammoli vaziyat: tayyor kemacha yo‘q — uni o‘zimiz yasashimiz kerak! Kartochkalardagi savollarga javob berib, yechim topamiz." style="left:35.907%;top:1.063%;width:27.828%;height:14.346%" aria-pressed="false" aria-label="Muammoli vaziyat"></button>
@@ -1330,7 +1330,7 @@
     </main>
     <main class="lesson-intro-screen lesson-problem-screen l2-screen hidden" id="l2Screen4_3" data-l2-page="4_3" data-lesson="4" data-l2-stage="2" aria-label="4-dars, 3-bosqich: Do‘ppi yashirma">
       <div class="problem-scene knowledge-scene l2-scene" style="aspect-ratio:1672 / 941">
-        <img src="images/1_tex_1s_4dars_3bosqich.webp" alt="4-dars, 3-bosqich: «Do‘ppi yashirma» o‘yini — o‘tilgan mavzuni mustahkamlash" />
+        <img loading="lazy" decoding="async" src="images/1_tex_1s_4dars_3bosqich.webp" alt="4-dars, 3-bosqich: «Do‘ppi yashirma» o‘yini — o‘tilgan mavzuni mustahkamlash" />
         <button type="button" class="l2-item" data-say="🤖 Assalomu alaykum, do‘stlar! «Do‘ppi yashirma» o‘yinini boshlaymiz! Do‘ppilardan birini tanlang!" style="left:11.962%;top:10.096%;width:20.335%;height:23.911%" aria-pressed="false" aria-label="Robotcha aytadi"></button>
         <button type="button" class="l2-item" data-say="🦊 Do‘ppi ichida bizga tanish mavzu bo‘yicha sirli topshiriq yashiringan. Topshiriqni bajaring, jamoangiz bilan fikr almashing va yulduzcha oling!" style="left:69.677%;top:7.439%;width:21.232%;height:31.881%" aria-pressed="false" aria-label="Tulkivoy aytadi"></button>
         <button type="button" class="l2-item" data-say="🎩 «Do‘ppi yashirma» — o‘tilgan mavzuni mustahkamlash o‘yini. Ikki jamoa navbat bilan do‘ppi tanlaydi!" style="left:32.297%;top:1.063%;width:35.287%;height:20.191%" aria-pressed="false" aria-label="Do‘ppi yashirma"></button>
@@ -1364,7 +1364,7 @@
     </main>
     <main class="lesson-intro-screen lesson-problem-screen l2-screen hidden" id="l2Screen4_4" data-l2-page="4_4" data-lesson="4" data-l2-stage="3" aria-label="4-dars, 4-bosqich: Yangi bilim">
       <div class="problem-scene knowledge-scene l2-scene" data-pic-done=" 🎉 Barakalla! Kemachadagi hamma shakllarni topdingiz!" style="aspect-ratio:1672 / 941">
-        <img src="images/1_tex_1s_4dars_4bosqich_1.webp" alt="4-dars, 4-bosqich (1/2): Yangi bilim — kemacha namunasi va kerakli materiallar" />
+        <img loading="lazy" decoding="async" src="images/1_tex_1s_4dars_4bosqich_1.webp" alt="4-dars, 4-bosqich (1/2): Yangi bilim — kemacha namunasi va kerakli materiallar" />
         <button type="button" class="l2-item" data-say="🤖 Odamlar suvda kemalarda sayohat qiladilar. Ular dengiz va okeanlarda, daryo va ko‘llarda suzishlari mumkin." style="left:11.364%;top:21.785%;width:40.670%;height:11.690%" aria-pressed="false" aria-label="Robotcha aytadi"></button>
         <button type="button" class="l2-item" data-say="✂️ Bugun siz geometrik shakllardan to‘lqinlar uzra suzayotgan kemacha yasaysiz. Oddiy shakllardan chiroyli manzara hosil qilish mumkin. Ishni diqqat bilan va toza-ozoda bajaring!" style="left:12.859%;top:34.538%;width:39.175%;height:19.129%" aria-pressed="false" aria-label="Bugungi ish"></button>
         <button type="button" class="l2-item" data-say="📖 «To‘lqinlar uzra suzayotgan kemacha» — yangi bilim: mavzu bilan tanishish." style="left:29.904%;top:1.063%;width:40.670%;height:20.191%" aria-pressed="false" aria-label="Dars mavzusi"></button>
@@ -1424,7 +1424,7 @@
     </main>
     <main class="lesson-intro-screen lesson-problem-screen l2-screen hidden" id="l2Screen4_5" data-l2-page="4_5" data-lesson="4" data-l2-stage="3" aria-label="4-dars, 4-bosqich: Yangi bilim (2-sahifa)">
       <div class="problem-scene knowledge-scene l2-scene" data-fold-done="Barakalla! Ish rejasini to‘g‘ri tartibda tuzdingiz — endi kemacha yasashga tayyormiz!" data-pic-done=" 🎉 Kemachaning hamma qismlarini bilib oldingiz!" style="aspect-ratio:1671 / 941">
-        <img src="images/1_tex_1s_4dars_4bosqich_2.webp" alt="4-dars, 4-bosqich (2/2): Ish rejasi va kemacha qanday shakllardan iborat" />
+        <img loading="lazy" decoding="async" src="images/1_tex_1s_4dars_4bosqich_2.webp" alt="4-dars, 4-bosqich (2/2): Ish rejasi va kemacha qanday shakllardan iborat" />
         <button type="button" class="l2-item" data-say="👧 Kemacha katta yoki kichik bo‘ladi. Yelkanlar turli ranglarda bo‘lishi mumkin. Har bir ish o‘ziga xos va betakror chiqadi!" style="left:46.379%;top:20.191%;width:40.515%;height:11.902%" aria-pressed="false" aria-label="Eslatma"></button>
         <button type="button" class="l2-item" data-say="📖 «To‘lqinlar uzra suzayotgan kemacha» — yangi bilim: mavzu bilan tanishish." style="left:29.922%;top:1.063%;width:40.694%;height:19.129%" aria-pressed="false" aria-label="Dars mavzusi"></button>
         <button type="button" class="l2-item" data-say="📘 4-dars. Manzara yaratamiz. 4-bosqich." style="left:1.197%;top:1.275%;width:27.229%;height:6.376%" aria-pressed="false" aria-label="Dars nomi"></button>
@@ -1490,7 +1490,7 @@
     </main>
     <main class="lesson-intro-screen lesson-problem-screen l2-screen hidden" id="l2Screen4_6" data-l2-page="4_6" data-lesson="4" data-l2-stage="4" aria-label="4-dars, 5-bosqich: Jismoniy mashqlantirish">
       <div class="problem-scene knowledge-scene l2-scene" data-ex-done="🏆 Barakalla! 6 ta mashqning hammasini bajardingiz. Kemacha sayohati yakunlandi — endi darsni davom ettiramiz!" style="aspect-ratio:1672 / 941">
-        <img src="images/1_tex_1s_4dars_5bosqich.webp" alt="4-dars, 5-bosqich: Jismoniy mashqlantirish — kemacha sayohati mashqlari" />
+        <img loading="lazy" decoding="async" src="images/1_tex_1s_4dars_5bosqich.webp" alt="4-dars, 5-bosqich: Jismoniy mashqlantirish — kemacha sayohati mashqlari" />
         <button type="button" class="l2-item" data-say="🤖 Keling, kemacha sayohatiga chiqamiz! Harakatlarni birgalikda bajaramiz!" style="left:9.270%;top:10.096%;width:18.541%;height:27.099%" aria-pressed="false" aria-label="Robotcha aytadi"></button>
         <button type="button" class="l2-item" data-say="🦊 Musiqa ostida mashqlarni qilib, kuchimizni va kayfiyatimizni oshiramiz! «🎵 Musiqa» tugmasini yoqing!" style="left:75.658%;top:8.502%;width:19.139%;height:26.567%" aria-pressed="false" aria-label="Tulkivoy aytadi"></button>
         <button type="button" class="l2-item" data-say="📘 4-dars. Manzara yaratamiz. 5-bosqich: jismoniy mashqlantirish." style="left:1.196%;top:1.275%;width:26.914%;height:6.164%" aria-pressed="false" aria-label="Dars nomi"></button>
@@ -1539,7 +1539,7 @@
     </main>
     <main class="lesson-intro-screen lesson-problem-screen l2-screen hidden" id="l2Screen4_7" data-l2-page="4_7" data-lesson="4" data-l2-stage="5" aria-label="4-dars, 6-bosqich: Amaliy ish">
       <div class="problem-scene knowledge-scene l2-scene" data-ls="kema" style="aspect-ratio:1671 / 941">
-        <img src="images/1_tex_1s_4dars_6bosqich.webp" alt="4-dars, 6-bosqich: Amaliy ish — geometrik shakllardan kemacha yasaymiz" />
+        <img loading="lazy" decoding="async" src="images/1_tex_1s_4dars_6bosqich.webp" alt="4-dars, 6-bosqich: Amaliy ish — geometrik shakllardan kemacha yasaymiz" />
         <button type="button" class="l2-item" data-say="🤖 Endi biz geometrik shakllardan foydalanib, kemachani o‘zimiz yasaymiz!" style="left:19.749%;top:0.850%;width:14.363%;height:24.123%" aria-pressed="false" aria-label="Robotcha aytadi"></button>
         <button type="button" class="l2-item" data-say="🦊 Diqqat bilan ishlang, shakllarni tanlab, to‘g‘ri joylashtiring va chiroyli kemacha yarating!" style="left:65.829%;top:1.063%;width:15.859%;height:22.529%" aria-pressed="false" aria-label="Tulkivoy aytadi"></button>
         <button type="button" class="l2-item" data-say="📖 «To‘lqinlar uzra suzayotgan kemacha» — 6-bosqich: Amaliy ish." style="left:35.907%;top:0.531%;width:28.725%;height:18.066%" aria-pressed="false" aria-label="Dars mavzusi"></button>
@@ -1598,7 +1598,7 @@
     </main>
     <main class="lesson-intro-screen lesson-problem-screen l2-screen hidden" id="l2Screen4_8" data-l2-page="4_8" data-lesson="4" data-l2-stage="6" aria-label="4-dars, 7-bosqich: Mavzu mustahkamlash — Sirli orol">
       <div class="problem-scene knowledge-scene l2-scene" style="aspect-ratio:1672 / 941">
-        <img src="images/1_tex_1s_4dars_7bosqich.webp" alt="4-dars, 7-bosqich: «Sirli orol» — ikki jamoa xazinaga suzadi" />
+        <img loading="lazy" decoding="async" src="images/1_tex_1s_4dars_7bosqich.webp" alt="4-dars, 7-bosqich: «Sirli orol» — ikki jamoa xazinaga suzadi" />
         <button type="button" class="l2-item" data-say="🤖 Bolajonlar! Ikki jamoa bilan dengizdan o‘tib, sirli orol xazinasiga yetib boramiz. Sizlar tayyormisiz?" style="left:17.344%;top:4.251%;width:15.251%;height:18.597%" aria-pressed="false" aria-label="Robotcha aytadi"></button>
         <button type="button" class="l2-item" data-say="🦊 Ajoyib sarguzasht boshlanadi! Har bir bekatda topshiriqni bajaringlar, bilimlaringizni ko‘rsatinglar va xazinaga yetinglar!" style="left:66.986%;top:3.188%;width:15.251%;height:19.660%" aria-pressed="false" aria-label="Tulkivoy aytadi"></button>
         <button type="button" class="l2-item" data-say="📖 «To‘lqinlar uzra suzayotgan kemacha» — 7-bosqich: mavzuni mustahkamlash." style="left:33.194%;top:0.531%;width:33.792%;height:16.472%" aria-pressed="false" aria-label="Dars mavzusi"></button>
@@ -1640,7 +1640,7 @@
     </main>
     <main class="lesson-intro-screen lesson-problem-screen l2-screen hidden" id="l2Screen4_9" data-l2-page="4_9" data-lesson="4" data-l2-stage="7" data-think-done="🏆 Barakalla! Bilimlaringizni a’lo baholadingiz — siz haqiqiy kemasozsiz! ⛵" aria-label="4-dars, 8-bosqich: Darsni yakunlash">
       <div class="problem-scene knowledge-scene l2-scene" style="aspect-ratio:1672 / 941">
-        <img src="images/1_tex_1s_4dars_8bosqich.webp" alt="4-dars, 8-bosqich: Darsni yakunlash — baholash, uyga vazifa, o‘zini baholash" />
+        <img loading="lazy" decoding="async" src="images/1_tex_1s_4dars_8bosqich.webp" alt="4-dars, 8-bosqich: Darsni yakunlash — baholash, uyga vazifa, o‘zini baholash" />
         <button type="button" class="l2-item" data-say="🤖 Ajoyib ish! Siz bugun geometrik shakllardan foydalanib, chiroyli kemacha yaratishni o‘rgandingiz!" style="left:19.737%;top:1.594%;width:14.952%;height:23.911%" aria-pressed="false" aria-label="Robotcha aytadi"></button>
         <button type="button" class="l2-item" data-say="🦊 Tabriklayman, bolajonlar! Siz juda ijodkor, e’tiborli va mehnatkash kemasozlarga aylandingiz!" style="left:65.789%;top:1.594%;width:15.550%;height:23.379%" aria-pressed="false" aria-label="Tulkivoy aytadi"></button>
         <button type="button" class="l2-item" data-say="📖 «To‘lqinlar uzra suzayotgan kemacha» — 8-bosqich: darsni yakunlash." style="left:35.885%;top:0.531%;width:28.708%;height:19.129%" aria-pressed="false" aria-label="Dars mavzusi"></button>
@@ -1724,7 +1724,7 @@
             <div class="hero-picture">
               <img
                 id="heroImage"
-                src="images/_hero_banner.png"
+                src="images/_hero_banner.webp"
                 alt="Dars tasviri"
               />
             </div>
@@ -1749,7 +1749,7 @@
             <div class="workspace-image">
               <img
                 id="stageImage"
-                src="images/_hero_banner.png"
+                src="images/_hero_banner.webp"
                 alt="Bosqich rasmi"
               />
             </div>
@@ -1774,7 +1774,7 @@
 
       <aside class="lesson-rightbar">
         <div class="mascot-card">
-          <img src="images/robot.png" alt="Robot yordamchi" />
+          <img loading="lazy" decoding="async" src="images/robot.webp" alt="Robot yordamchi" />
           <div class="mascot-message">
             <b>Ajoyib!</b>
             <p>Birgalikda yangi bilimlarni kashf qilamiz!</p>
@@ -1804,6 +1804,6 @@
       </aside>
     </main>
 
-    <script src="darslar.js?v=66"></script>
+    <script src="darslar.js?v=67"></script>
   </body>
 </html>
