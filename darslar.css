@@ -877,6 +877,18 @@ body.lesson-problem-active .topbar { display: none; }
 .l2-scene > .self-rate.is-pop { animation: ex-beat .45s ease-out; }
 .l2-scene > .self-mark { position: absolute; z-index: 4; pointer-events: none; display: grid; place-items: center; color: #22b14c; font-weight: 900; font-size: 3cqw; line-height: 1; text-shadow: 0 .15cqw 0 #fff; transform: scale(0); transition: transform .3s cubic-bezier(.2,.8,.2,1.6); }
 .l2-scene > .self-mark.is-on { transform: scale(1); }
+/* 4-dars 2-bosqich: «Muammoli vaziyat» savol kartochkalari */
+.l2-scene > .think-card { z-index: 3; border-radius: 1.8cqw; transition: transform .2s cubic-bezier(.2,.8,.2,1.4), box-shadow .18s, background .18s; }
+.l2-scene > .think-card:hover, .l2-scene > .think-card:focus-visible { transform: translateY(-4px); background: rgba(255,255,255,.18) !important; box-shadow: 0 0 0 .3cqw #fff, 0 0 0 .6cqw rgba(124,77,255,.45); outline: none; }
+.l2-scene > .think-card.is-active { box-shadow: 0 0 0 .35cqw #ffb21a, 0 0 2cqw rgba(255,178,26,.85); }
+.l2-scene > .think-card.is-done:not(.is-active) { box-shadow: 0 0 0 .3cqw #4cd964, 0 0 1.4cqw rgba(76,217,100,.6); }
+.l2-scene > .think-main:not(.is-done):not(.is-active) { animation: mv-shine 1.6s ease-in-out infinite; }
+.l2-scene > .think-panel { height: auto !important; max-height: 60%; overflow: auto; }
+.think-close { border: 0; background: #f1ecff; color: #6a3fd0; width: 2.4cqw; height: 2.4cqw; border-radius: 50%; font: 900 1.2cqw/1 Nunito, sans-serif; cursor: pointer; }
+.think-why { margin: 0; font: 800 1.35cqw/1.3 Nunito, sans-serif; color: #0d6b23; text-align: center; }
+.think-why:empty { display: none; }
+.think-why .qa-next { margin-top: .6cqw; }
+.l2-scene > .think-score.is-win { box-shadow: 0 0 0 .3cqw #4cd964, 0 0 1.4cqw rgba(76,217,100,.7); }
 @media (max-width: 600px) {
   .lesson-intro-screen { padding: 6px; }
   .lesson-intro-art { width: min(100%, calc((100vh - 12px) * 1.7779)); }

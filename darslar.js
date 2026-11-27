@@ -3137,6 +3137,83 @@ document.addEventListener("DOMContentLoaded", () => {
       wasHidden = hidden;
     }).observe(page, { attributes: true, attributeFilter: ["class"] });
   })();
+  // 4-dars 2-bosqich: «Muammoli vaziyat» — savol kartochkalari, javob tanlash oynasi
+  (function setupThinkCards() {
+    document.querySelectorAll(".think-panel").forEach((panel) => {
+      const scene = panel.parentElement;
+      const page = scene.closest("[data-l2-page]");
+      const feedback = page.querySelector(".l2-feedback");
+      const cards = Array.from(scene.querySelectorAll(".think-card"));
+      const score = scene.querySelector(".think-score");
+      const opts = panel.querySelector(".think-options");
+      const why = panel.querySelector(".think-why");
+      const solved = new Set();
+      let cur = null;
+      const shuffle = (a) => { a = a.slice(); for (let i = a.length - 1; i > 0; i--) { const r = Math.floor(Math.random() * (i + 1)); [a[i], a[r]] = [a[r], a[i]]; } return a; };
+      function close() {
+        panel.classList.add("hidden");
+        cards.forEach((c) => c.classList.remove("is-active"));
+        cur = null;
+      }
+      function open(card) {
+        cur = card;
+        cards.forEach((c) => c.classList.toggle("is-active", c === card));
+        const q = card.dataset.q;
+        panel.querySelector(".think-num").textContent = q === "6" ? "💡 Asosiy savol" : "❓ " + q + "-savol";
+        panel.querySelector(".think-text").textContent = card.dataset.text.replace(/^Asosiy savol: /, "");
+        why.textContent = "";
+        opts.innerHTML = "";
+        const list = card.dataset.opts.split("|").map((t, i) => ({ t, ok: String(i) === card.dataset.right }));
+        shuffle(list).forEach((o, i) => {
+          const b = document.createElement("button");
+          b.type = "button";
+          b.textContent = "ABC"[i] + ") " + o.t;
+          b.addEventListener("click", () => answer(b, o.ok));
+          opts.appendChild(b);
+        });
+        panel.classList.remove("hidden");
+        feedback.textContent = (q === "6" ? "💡 Asosiy savol: " : "❓ " + q + "-savol: ") + panel.querySelector(".think-text").textContent;
+        opts.querySelector("button").focus({ preventScroll: true });
+      }
+      function nextBtn() {
+        const rest = cards.filter((c) => !solved.has(c.dataset.q));
+        if (!rest.length) return;
+        const b = document.createElement("button");
+        b.type = "button";
+        b.className = "qa-next";
+        b.textContent = "Keyingi savol ➡";
+        b.addEventListener("click", () => open(rest[0]));
+        why.appendChild(document.createElement("br"));
+        why.appendChild(b);
+      }
+      function answer(btn, ok) {
+        if (!ok) {
+          btn.classList.remove("is-wrong"); void btn.offsetWidth; btn.classList.add("is-wrong");
+          feedback.textContent = "🤔 Unchalik to‘g‘ri emas. Yana bir o‘ylab ko‘ring!";
+          return;
+        }
+        opts.querySelectorAll("button").forEach((b) => b.classList.remove("is-wrong"));
+        btn.classList.add("is-right");
+        const q = cur.dataset.q;
+        solved.add(q);
+        cur.classList.add("is-done");
+        scene.querySelector('.think-ok[data-q="' + q + '"]').classList.add("is-on");
+        score.textContent = "⭐ " + solved.size + " / " + cards.length;
+        why.textContent = cur.dataset.why;
+        if (solved.size === cards.length) {
+          feedback.textContent = "🏆 Barakalla! Hamma savollarga javob topdingiz. Yechim tayyor: geometrik shakllardan kemacha applikatsiyasini yasaymiz! ➡ Keyingi sahifaga o‘ting.";
+          score.classList.add("is-win");
+        } else {
+          feedback.textContent = cur.dataset.why + " (" + solved.size + " / " + cards.length + ")";
+          nextBtn();
+        }
+      }
+      cards.forEach((c) => c.addEventListener("click", () => open(c)));
+      panel.querySelector(".think-close").addEventListener("click", close);
+      page.addEventListener("keydown", (e) => { if (e.key === "Escape" && cur) close(); });
+      page.querySelectorAll(".l2-back, .l2-next, .knowledge-dot").forEach((b) => b.addEventListener("click", close));
+    });
+  })();
   $("backToQuarters").addEventListener("click",()=>{$("quarterMapScreen").classList.add("hidden");$("quarterScreen").classList.remove("hidden");renderQuarterHub();window.scrollTo(0,0)});
   $("previousQuarter").addEventListener("click",()=>{if(activeQuarter>0)openQuarter(activeMapCourse.quarters[activeQuarter-1].id)});$("nextQuarter").addEventListener("click",()=>{if(activeQuarter<3)openQuarter(activeMapCourse.quarters[activeQuarter+1].id)});
   $("returnToMap").addEventListener("click",()=>{document.body.classList.remove("lesson-intro-active","lesson-problem-active");$("problemSituationScreen").classList.add("hidden");hideKnowledgeScreen();hideSafetyScreen();hideExerciseScreen();$("lessonIntroScreen").classList.add("hidden");$("learningScreen").classList.add("hidden");$("quarterMapScreen").classList.remove("hidden");renderQuarterMap();window.scrollTo(0,0)});
