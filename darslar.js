@@ -3893,6 +3893,131 @@ document.addEventListener("DOMContentLoaded", () => {
     setScore();
   });
 
+  // 5-dars 3-bosqich: «Baliq skeleti» — kataklarni to'ldirish o'yini
+  document.querySelectorAll(".fb-cell").length && (function () {
+    new Set(Array.from(document.querySelectorAll(".fb-cell")).map((c) => c.parentElement)).forEach((scene) => {
+      const page = scene.closest("[data-l2-page]");
+      const feedback = page.querySelector(".l2-feedback");
+      const cells = Array.from(scene.querySelectorAll(".fb-cell"));
+      const pop = scene.querySelector(".fb-pop");
+      const popQ = pop.querySelector(".fb-pop-q"), popOpts = pop.querySelector(".fb-pop-opts");
+      const score = scene.querySelector(".fb-score");
+      const confBox = scene.querySelector(".fb-confetti");
+      const CAT = {
+        shakl: { title: "🔺 Kemacha uchun qaysi geometrik shakl kerak?", group: "Shakllar", words: ["Uchburchak", "Trapetsiya", "Doira", "To‘g‘ri to‘rtburchak", "Kvadrat"] },
+        qism: { title: "⛵ Kemacha nimalardan iborat edi?", group: "Qismlar", words: ["Korpus", "Yelkan", "Machta", "Illyuminator", "Bayroqcha"] },
+        mat: { title: "📚 Qanday materiallardan foydalandik?", group: "Materiallar", words: ["Rangli qog‘oz", "Karton", "PVA yelimi", "Qaychi"] },
+        ish: { title: "🧴 Ish qaysi tartibda bajarildi?", group: "Ish jarayoni", steps: ["Shakllarni chizib, qirqib olamiz", "Fonga joylab, yelimlaymiz"] }
+      };
+      const OTHER = ["Plastilin", "Bo‘yoq cho‘tkasi", "Avval yelimlab, keyin chizamiz", "Daraxt barglari"];
+      const groupOf = (w) => Object.keys(CAT).find((k) => (CAT[k].words || CAT[k].steps).includes(w));
+      const shuffle = (a) => { a = a.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
+      let cur = null, miss = 0, finished = false;
+      function confetti(n) {
+        for (let i = 0; i < n; i++) {
+          const s = document.createElement("span");
+          s.textContent = ["🐟", "⭐", "⛵", "🌈", "🎉"][i % 5];
+          s.style.left = Math.random() * 96 + "%";
+          s.style.animationDuration = 1.8 + Math.random() * 1.6 + "s";
+          s.style.animationDelay = Math.random() * 0.5 + "s";
+          confBox.appendChild(s);
+          setTimeout(() => s.remove(), 4200);
+        }
+      }
+      function flash(el, cls) { el.classList.remove(cls); void el.offsetWidth; el.classList.add(cls); setTimeout(() => el.classList.remove(cls), 700); }
+      const filled = () => cells.filter((c) => c.dataset.val);
+      function setScore() {
+        const n = filled().length;
+        score.textContent = n === cells.length ? (finished ? "🏆 9 / 9 · ↻ Qaytadan" : "🐟 9 / 9 · Xulosani bosing!") : "🐟 " + n + " / " + cells.length + (miss ? " · xato: " + miss : "");
+        score.classList.toggle("is-win", n === cells.length);
+      }
+      function closePop() { pop.classList.add("hidden"); cells.forEach((c) => c.classList.remove("is-open")); cur = null; }
+      function open(cell) {
+        if (cell.dataset.val) { feedback.textContent = "✅ «" + cell.dataset.val + "» — " + CAT[cell.dataset.cat].group.toLowerCase() + " guruhiga to‘g‘ri qo‘yilgan."; return; }
+        cur = cell;
+        cells.forEach((c) => c.classList.toggle("is-open", c === cell));
+        const cat = cell.dataset.cat, C = CAT[cat];
+        const used = cells.filter((c) => c.dataset.cat === cat && c.dataset.val).map((c) => c.dataset.val);
+        let right, opts;
+        if (cat === "ish") {
+          right = C.steps[Number(cell.dataset.k)];
+          opts = C.steps.filter((s) => !used.includes(s)).concat(["Avval yelimlab, keyin chizamiz"]);
+          popQ.textContent = C.title + " — " + (Number(cell.dataset.k) + 1) + "-qadam";
+        } else {
+          const free = C.words.filter((w) => !used.includes(w));
+          const mine = shuffle(free).slice(0, 2);
+          const others = shuffle(Object.keys(CAT).filter((k) => k !== cat && k !== "ish").flatMap((k) => CAT[k].words).concat(OTHER.filter((w) => !w.startsWith("Avval")))).slice(0, 2);
+          opts = mine.concat(others);
+          popQ.textContent = C.title;
+        }
+        popOpts.innerHTML = "";
+        shuffle(opts).forEach((w) => {
+          const b = document.createElement("button");
+          b.type = "button"; b.textContent = w;
+          b.addEventListener("click", () => choose(w, b));
+          popOpts.appendChild(b);
+        });
+        // oyna katak yonida chiqadi
+        const top = parseFloat(cell.style.top), left = parseFloat(cell.style.left), w = parseFloat(cell.style.width);
+        const below = cat === "shakl" || cat === "qism";
+        pop.style.left = Math.min(Math.max(left + w / 2 - 15, 1), 69) + "%";
+        pop.style.top = below ? (top + 8.5) + "%" : "auto";
+        pop.style.bottom = below ? "auto" : (100 - top + 1) + "%";
+        pop.classList.remove("hidden");
+        feedback.textContent = C.title + " Mos javobni tanlang.";
+      }
+      function choose(w, btn) {
+        const cell = cur; if (!cell) return;
+        const cat = cell.dataset.cat;
+        let ok;
+        if (cat === "ish") ok = w === CAT.ish.steps[Number(cell.dataset.k)];
+        else ok = CAT[cat].words.includes(w);
+        if (!ok) {
+          miss++; flash(btn, "is-wrong");
+          const g = groupOf(w);
+          if (cat === "ish") feedback.textContent = w.startsWith("Avval") ? "🤔 Yo‘q! Avval shakllarni chizib qirqamiz, keyin yelimlaymiz." : "🤔 Bu qadam keyinroq bajariladi. Qaysi ish birinchi bo‘ladi?";
+          else feedback.textContent = g ? "🤔 «" + w + "» — bu " + CAT[g].group.toLowerCase() + " guruhiga kiradi. Bu yerga boshqasi kerak!" : "🤔 «" + w + "» kemacha yasashda ishlatilmagan. Yana o‘ylab ko‘ring!";
+          setScore();
+          return;
+        }
+        cell.dataset.val = w;
+        cell.querySelector("span").textContent = (cat === "ish" ? (Number(cell.dataset.k) + 1) + ". " : "") + w;
+        cell.classList.add("is-filled"); flash(cell, "is-pop");
+        closePop();
+        const n = filled().length;
+        feedback.textContent = n === cells.length ? "🎉 Barcha kataklar to‘ldi! Endi baliq dumidagi «Xulosa»ni bosing!" : "✅ To‘g‘ri! «" + w + "» — " + CAT[cat].group.toLowerCase() + ". (" + n + " / " + cells.length + ")";
+        if (n === cells.length) scene.querySelector(".fb-tail").classList.add("is-ready");
+        setScore();
+      }
+      function reset() {
+        cells.forEach((c) => { delete c.dataset.val; c.querySelector("span").textContent = ""; c.classList.remove("is-filled"); });
+        miss = 0; finished = false; closePop();
+        scene.querySelector(".fb-tail").classList.remove("is-ready", "is-done");
+        setScore();
+        feedback.textContent = "↻ Baliq skeleti yana bo‘sh. Kataklarni bosib, qaytadan to‘ldiring!";
+      }
+      cells.forEach((c) => c.addEventListener("click", (e) => { e.stopPropagation(); if (cur === c) closePop(); else open(c); }));
+      pop.addEventListener("click", (e) => e.stopPropagation());
+      page.addEventListener("click", (e) => { if (cur && !pop.contains(e.target)) closePop(); });
+      scene.querySelector(".fb-head").addEventListener("click", () => {
+        flash(scene.querySelector(".fb-head"), "is-pop");
+        feedback.textContent = "🐟 Asosiy muammo: kemachani qanday qilib chiroyli va mustahkam yasash mumkin? Javobni skelet suyaklaridan topamiz!";
+      });
+      scene.querySelector(".fb-tail").addEventListener("click", () => {
+        const tail = scene.querySelector(".fb-tail");
+        const n = filled().length;
+        if (n < cells.length) { flash(tail, "is-wrong"); feedback.textContent = "🐟 Xulosaga hali erta! Avval " + (cells.length - n) + " ta bo‘sh katakni to‘ldiring."; return; }
+        finished = true; tail.classList.add("is-done"); flash(tail, "is-pop");
+        const v = (cat) => cells.filter((c) => c.dataset.cat === cat).map((c) => c.dataset.val.toLowerCase()).join(", ");
+        feedback.textContent = "💡 Xulosa: sifatli kemacha uchun to‘g‘ri shakllar (" + v("shakl") + "), barcha qismlar (" + v("qism") + "), mos materiallar (" + v("mat") + ") va to‘g‘ri ish tartibi kerak: avval chizib qirqamiz, keyin joylab yelimlaymiz! 🏆";
+        confetti(30);
+        setScore();
+      });
+      score.addEventListener("click", () => { if (filled().length === cells.length) reset(); });
+      setScore();
+    });
+  })();
+
   // Rasmlar: ochilgan sahifa rasmi darhol, qo'shni sahifalarniki oldindan yuklanadi; yuklanguncha belgi ko'rinadi
   (function () {
     const pages = lesson2Pages();
