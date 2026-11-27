@@ -930,6 +930,26 @@ body.lesson-problem-active .topbar { display: none; }
 .shape-wave { clip-path: polygon(0 40%, 8% 15%, 17% 40%, 25% 15%, 33% 40%, 42% 15%, 50% 40%, 58% 15%, 67% 40%, 75% 15%, 83% 40%, 92% 15%, 100% 40%, 100% 100%, 0 100%); }
 .l2-scene > .ls-ghost.shape-trap, .l2-scene > .ls-ghost.shape-wave { border: 0; background: rgba(142,79,214,.18); }
 .l2-scene[data-ls="kema"] .ls-bg { background: linear-gradient(180deg, #6cc6ff 0%, #bfe7ff 60%, #e6f6ff 100%); }
+/* 4-dars 7-bosqich: «Sirli orol» o'yini */
+.l2-scene > .so-st, .l2-scene > .so-team, .l2-scene > .so-treasure { z-index: 3; border-radius: 3cqw; transition: transform .2s cubic-bezier(.2,.8,.2,1.4), box-shadow .2s, background .2s; }
+.l2-scene > .so-st:hover, .l2-scene > .so-st:focus-visible, .l2-scene > .so-team:hover, .l2-scene > .so-team:focus-visible, .l2-scene > .so-treasure:hover, .l2-scene > .so-treasure:focus-visible { background: rgba(255,255,255,.18) !important; box-shadow: 0 0 0 .25cqw #fff; outline: none; }
+.l2-scene > .so-st.is-next { box-shadow: 0 0 0 .3cqw #ffb21a, 0 0 1.8cqw rgba(255,178,26,.9); animation: mv-shine 1.2s ease-in-out infinite; }
+.l2-scene > .so-st.is-done { background: rgba(76,217,100,.18) !important; }
+.l2-scene > .so-team.is-turn { box-shadow: 0 0 0 .35cqw #ffb21a, 0 0 2cqw rgba(255,178,26,.9); transform: scale(1.05); }
+.l2-scene > .so-treasure.is-won { box-shadow: 0 0 0 .4cqw #ffd54a, 0 0 3cqw 1cqw rgba(255,214,64,.95); animation: mv-shine 1s ease-in-out infinite; }
+.l2-scene > .so-boat { position: absolute; z-index: 6; pointer-events: none; display: grid; place-items: center; border-radius: 50%; font-size: 3cqw; line-height: 1; background: radial-gradient(circle at 35% 30%, #fff, #cfe6ff 75%); box-shadow: 0 0 0 .3cqw #1e6fe0, 0 .5cqw 1cqw rgba(0,0,0,.3); transition: left .9s cubic-bezier(.4,.1,.3,1), top .9s cubic-bezier(.4,.1,.3,1); }
+.l2-scene > .so-boat[data-team="1"] { background: radial-gradient(circle at 35% 30%, #fff, #d4f7d6 75%); box-shadow: 0 0 0 .3cqw #22a33a, 0 .5cqw 1cqw rgba(0,0,0,.3); }
+.l2-scene > .so-boat.is-turn { animation: l2-bob 1.2s ease-in-out infinite; }
+.l2-scene > .so-boat.is-sail { animation: so-sail .9s ease-in-out; }
+@keyframes so-sail { 25% { transform: rotate(-12deg) scale(1.15); } 75% { transform: rotate(10deg) scale(1.15); } }
+.l2-scene > .so-go { z-index: 5; border: .25cqw solid #fff; border-radius: 99px; background: linear-gradient(180deg,#43b4ff,#1677e0) !important; color: #fff; font-family: inherit; font-weight: 900; font-size: 1.35cqw; line-height: 1.2; box-shadow: 0 .35cqw 0 #0d4f9e, 0 .6cqw 1.2cqw rgba(0,0,0,.2); animation: l2-bob 1.6s ease-in-out infinite; }
+.l2-scene > .so-go.is-team2 { background: linear-gradient(180deg,#5fe07a,#22a33a) !important; box-shadow: 0 .35cqw 0 #13762e, 0 .6cqw 1.2cqw rgba(0,0,0,.2); }
+.l2-scene > .so-panel { height: auto !important; max-height: 42%; overflow: auto; gap: .5cqw; padding: .9cqw 1.2cqw; }
+.so-panel .qa-head { font-size: 1.05cqw; }
+.so-panel .qa-text { font-size: 1.45cqw; }
+.so-panel .qa-options button { font-size: 1.2cqw; padding: .5cqw .9cqw; }
+.so-panel .think-why { font-size: 1.1cqw; }
+.so-panel .qa-next { font-size: 1.2cqw; padding: .5cqw 1.6cqw; }
 @media (max-width: 600px) {
   .lesson-intro-screen { padding: 6px; }
   .lesson-intro-art { width: min(100%, calc((100vh - 12px) * 1.7779)); }

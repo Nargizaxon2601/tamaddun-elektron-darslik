@@ -3463,6 +3463,155 @@ document.addEventListener("DOMContentLoaded", () => {
     page.querySelectorAll(".l2-back, .l2-next, .knowledge-dot").forEach((b) => b.addEventListener("click", () => panel.classList.add("hidden")));
     newGame();
   })();
+  // 4-dars 7-bosqich: «Sirli orol» — ikki jamoa kemasi bekatlar orqali xazinaga suzadi
+  (function setupSecretIsland() {
+    const panel = document.querySelector(".so-panel");
+    if (!panel) return;
+    const scene = panel.parentElement;
+    const page = scene.closest("[data-l2-page]");
+    const feedback = page.querySelector(".l2-feedback");
+    const W = 1672, H = 941;
+    const NAMES = ["🔵 1-jamoa «Ko‘k to‘lqinlar»", "🟢 2-jamoa «Yashil yelkanlar»"];
+    const ST = ["START", "1. Shakllar qo‘ltig‘i", "2. Yelkanlar dengizi", "3. To‘lqinlar bo‘g‘ozi", "4. Mayoq sinovi", "5. Kemasozlar sinovi", "Xazina"];
+    const PATH = [
+      [[195, 740], [285, 690], [105, 590], [255, 495], [285, 392], [420, 285], [735, 300]],
+      [[1480, 740], [1395, 690], [1580, 590], [1430, 495], [1440, 392], [1270, 285], [935, 300]]
+    ];
+    const Q = {
+      1: [["Kvadratning nechta tomoni bor?", ["4 ta", "3 ta", "5 ta"]], ["Qaysi shaklning burchagi yo‘q?", ["Doira", "Uchburchak", "Kvadrat"]], ["Uchburchakning nechta burchagi bor?", ["3 ta", "4 ta", "2 ta"]], ["Trapetsiyaning nechta tomoni bor?", ["4 ta", "3 ta", "6 ta"]]],
+      2: [["Kemaning yelkani qaysi shaklda edi?", ["Uchburchak", "Doira", "Kvadrat"]], ["Yelkanni nima harakatga keltiradi?", ["Shamol", "Quyosh", "Qum"]], ["Machta qaysi shaklga o‘xshaydi?", ["Ingichka to‘g‘ri to‘rtburchak", "Doira", "Yarimdoira"]]],
+      3: [["To‘lqinlarni nimadan yasadik?", ["Yirtib olingan qog‘oz tasmalardan", "Plastilindan", "Toshdan"]], ["To‘lqinlarni varaqning qayeriga yopishtiramiz?", ["Pastki qismiga", "Eng tepasiga", "Varaq orqasiga"]], ["Dengiz manzarasida nima bo‘ladi?", ["To‘lqinlar va chag‘alaylar", "Qor va archa", "Cho‘l va tuya"]]],
+      4: [["Mayoq nima uchun kerak?", ["Kemalarga yo‘l ko‘rsatadi", "Baliq tutadi", "Kemani bo‘yaydi"]], ["Qaychini qanday uzatamiz?", ["Dastasi bilan oldinga", "Uchi bilan oldinga", "Otib beramiz"]], ["Ish tugagach nima qilamiz?", ["Ish joyini yig‘ishtiramiz", "Hammasini sochib ketamiz", "Yelimni ochiq qoldiramiz"]]],
+      5: [["Shakllarni avval qanday joylashtiramiz?", ["Yelimlamasdan qo‘yib ko‘ramiz", "Darhol yopishtiramiz", "Umuman qo‘ymaymiz"]], ["Applikatsiya uchun qaysi yelim kerak?", ["PVA yelimi", "Suv", "Asal"]], ["Kema korpusi qaysi shaklda?", ["Trapetsiya", "Doira", "Uchburchak"]]]
+    };
+    const sts = Array.from(scene.querySelectorAll(".so-st"));
+    const teamBtns = Array.from(scene.querySelectorAll(".so-team"));
+    const boats = Array.from(scene.querySelectorAll(".so-boat"));
+    const go = scene.querySelector(".so-go");
+    const opts = panel.querySelector(".so-options");
+    const why = panel.querySelector(".so-why");
+    const treasure = scene.querySelector(".so-treasure");
+    const confBox = scene.querySelector(".so-confetti");
+    const shuffle = (a) => { a = a.slice(); for (let i = a.length - 1; i > 0; i--) { const r = Math.floor(Math.random() * (i + 1)); [a[i], a[r]] = [a[r], a[i]]; } return a; };
+    let g;
+    function placeBoat(t) {
+      const [x, y] = PATH[t][g.pos[t]];
+      boats[t].style.left = ((x - 35) / W * 100) + "%";
+      boats[t].style.top = ((y - 35) / H * 100) + "%";
+    }
+    function paint() {
+      teamBtns.forEach((b, t) => b.classList.toggle("is-turn", g.turn === t && !g.over));
+      boats.forEach((b, t) => b.classList.toggle("is-turn", g.turn === t && !g.over));
+      sts.forEach((s) => {
+        const t = Number(s.dataset.team), n = Number(s.dataset.st);
+        s.classList.toggle("is-next", !g.over && t === g.turn && n === g.pos[t] + 1);
+        s.classList.toggle("is-done", n <= g.pos[t]);
+      });
+      go.textContent = g.over ? "↻ Yangi o‘yin" : "▶ " + (g.turn + 1) + "-jamoa: topshiriq olish";
+      go.classList.toggle("is-team2", g.turn === 1 && !g.over);
+    }
+    function newGame(msg) {
+      g = { pos: [0, 0], turn: 0, q: null, open: false, over: false, decks: {} };
+      Object.keys(Q).forEach((k) => { g.decks[k] = shuffle(Q[k]); });
+      treasure.classList.remove("is-won");
+      panel.classList.add("hidden");
+      boats.forEach((b, t) => placeBoat(t));
+      paint();
+      feedback.textContent = msg || "⛵ " + NAMES[0] + " boshlaydi! «▶ Topshiriq olish»ni yoki 1-orolni bosing.";
+    }
+    function confetti(n) {
+      for (let i = 0; i < n; i++) {
+        const s = document.createElement("span");
+        s.textContent = ["💰", "💎", "⭐", "⛵", "🎉"][i % 5];
+        s.style.left = Math.random() * 96 + "%";
+        s.style.animationDuration = 1.8 + Math.random() * 1.6 + "s";
+        s.style.animationDelay = Math.random() * 0.5 + "s";
+        confBox.appendChild(s);
+        setTimeout(() => s.remove(), 4200);
+      }
+    }
+    function ask() {
+      if (g.over) { newGame("↻ Yangi o‘yin! " + NAMES[0] + " boshlaydi."); return; }
+      const t = g.turn, st = g.pos[t] + 1;
+      const cat = st <= 5 ? st : 1 + Math.floor(Math.random() * 5);
+      if (!g.decks[cat].length) g.decks[cat] = shuffle(Q[cat]);
+      g.q = g.decks[cat].pop();
+      g.open = true;
+      panel.querySelector(".so-where").textContent = NAMES[t] + " → " + (st === 6 ? "💰 Xazina (oxirgi topshiriq!)" : ST[st]);
+      panel.querySelector(".so-text").textContent = g.q[0];
+      why.textContent = "";
+      opts.innerHTML = "";
+      shuffle(g.q[1].map((x, i) => ({ x, ok: i === 0 }))).forEach((o, i) => {
+        const b = document.createElement("button");
+        b.type = "button";
+        b.textContent = "ABC"[i] + ") " + o.x;
+        b.addEventListener("click", () => answer(b, o.ok));
+        opts.appendChild(b);
+      });
+      panel.classList.remove("hidden");
+      feedback.textContent = "🏝 " + ST[st] + ": " + NAMES[t] + ", jamoangiz bilan maslahatlashing!";
+    }
+    function nextBtn(label, fn) {
+      const b = document.createElement("button");
+      b.type = "button"; b.className = "qa-next"; b.textContent = label;
+      b.addEventListener("click", fn);
+      why.appendChild(document.createElement("br"));
+      why.appendChild(b);
+    }
+    function closeAndPass() { panel.classList.add("hidden"); paint(); feedback.textContent = "⛵ Navbat: " + NAMES[g.turn] + ". «▶ Topshiriq olish»ni bosing!"; }
+    function answer(btn, ok) {
+      if (!g.open) { feedback.textContent = "Bu topshiriq bajarildi — davom eting!"; return; }
+      const t = g.turn;
+      g.open = false;
+      if (ok) {
+        btn.classList.add("is-right");
+        g.pos[t]++;
+        placeBoat(t);
+        boats[t].classList.remove("is-sail"); void boats[t].offsetWidth; boats[t].classList.add("is-sail");
+        if (g.pos[t] >= 6) {
+          g.over = true;
+          treasure.classList.add("is-won");
+          why.textContent = "🏆 " + NAMES[t] + " xazinaga birinchi yetib keldi va g‘olib bo‘ldi! 💰";
+          feedback.textContent = "🏆 " + NAMES[t] + " g‘olib! Ikkala jamoa ham zo‘r o‘ynadi — barakalla!";
+          confetti(34);
+          paint();
+          nextBtn("↻ Yangi o‘yin", () => newGame("↻ Yangi o‘yin! " + NAMES[0] + " boshlaydi."));
+          return;
+        }
+        why.textContent = "✅ To‘g‘ri! Kema «" + ST[g.pos[t]] + "»ga suzib bordi" + (g.pos[t] === 5 ? " — xazinaga bitta qadam qoldi!" : "!");
+        feedback.textContent = why.textContent;
+      } else {
+        btn.classList.add("is-wrong");
+        opts.querySelectorAll("button").forEach((b) => { if (b.textContent.slice(3) === g.q[1][0]) b.classList.add("is-right"); });
+        why.textContent = "🤔 Afsus, xato. To‘g‘ri javob: «" + g.q[1][0] + "». Kema joyida qoladi.";
+        feedback.textContent = why.textContent;
+      }
+      g.turn = 1 - t;
+      paint();
+      nextBtn("➡ Navbat: " + (g.turn + 1) + "-jamoa", () => { closeAndPass(); ask(); });
+    }
+    go.addEventListener("click", () => { if (g.open) { panel.classList.remove("hidden"); return; } ask(); });
+    sts.forEach((s) => s.addEventListener("click", () => {
+      const t = Number(s.dataset.team), n = Number(s.dataset.st);
+      if (g.open) { panel.classList.remove("hidden"); feedback.textContent = "📜 Avval ochiq topshiriqni bajaring!"; return; }
+      if (g.over) { feedback.textContent = "O‘yin tugadi! Yangi o‘yin uchun «↻ Yangi o‘yin»ni bosing."; return; }
+      if (t !== g.turn) { feedback.textContent = "⏳ Hozir " + NAMES[g.turn] + " navbati. Sabr qiling!"; return; }
+      if (n !== g.pos[t] + 1) { feedback.textContent = n <= g.pos[t] ? "✅ «" + ST[n] + "» bekatidan allaqachon o‘tdingiz!" : "🚫 Bekatlarni o‘tkazib yuborib bo‘lmaydi — avval «" + ST[g.pos[t] + 1] + "»!"; return; }
+      ask();
+    }));
+    teamBtns.forEach((b, t) => b.addEventListener("click", () => {
+      feedback.textContent = NAMES[t] + ": kema «" + ST[g.pos[t]] + "» da. " + (g.over ? "" : "Navbat: " + NAMES[g.turn] + ".");
+    }));
+    treasure.addEventListener("click", () => {
+      feedback.textContent = g.over ? "💰 Xazina topildi! G‘oliblarga olqishlar!" : "💰 Sirli orol xazinasi! Unga yetish uchun 5 ta bekatdan o‘tish kerak. 1-jamoa: " + g.pos[0] + "/5, 2-jamoa: " + g.pos[1] + "/5.";
+    });
+    panel.querySelector(".so-close").addEventListener("click", () => {
+      panel.classList.add("hidden");
+      if (!g.open && !g.over) closeAndPass();
+    });
+    page.querySelectorAll(".l2-back, .l2-next, .knowledge-dot").forEach((b) => b.addEventListener("click", () => panel.classList.add("hidden")));
+    newGame();
+  })();
   $("backToQuarters").addEventListener("click",()=>{$("quarterMapScreen").classList.add("hidden");$("quarterScreen").classList.remove("hidden");renderQuarterHub();window.scrollTo(0,0)});
   $("previousQuarter").addEventListener("click",()=>{if(activeQuarter>0)openQuarter(activeMapCourse.quarters[activeQuarter-1].id)});$("nextQuarter").addEventListener("click",()=>{if(activeQuarter<3)openQuarter(activeMapCourse.quarters[activeQuarter+1].id)});
   $("returnToMap").addEventListener("click",()=>{document.body.classList.remove("lesson-intro-active","lesson-problem-active");$("problemSituationScreen").classList.add("hidden");hideKnowledgeScreen();hideSafetyScreen();hideExerciseScreen();$("lessonIntroScreen").classList.add("hidden");$("learningScreen").classList.add("hidden");$("quarterMapScreen").classList.remove("hidden");renderQuarterMap();window.scrollTo(0,0)});
