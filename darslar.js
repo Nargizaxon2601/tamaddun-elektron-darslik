@@ -2671,6 +2671,72 @@ document.addEventListener("DOMContentLoaded", () => {
       feedback.textContent = "↻ Doska tozalandi. Qaytadan boshlang!";
     });
   })();
+  // 3-dars 3-bosqich: «Xatoni top» o'yini va «Sehrli qog'oz» metodi
+  (function setupFindMistake() {
+    const scoreEl = document.getElementById("xtScore");
+    if (!scoreEl) return;
+    const scene = scoreEl.parentElement;
+    const page = scene.closest("[data-l2-page]");
+    const feedback = page.querySelector(".l2-feedback");
+    const WHY = {
+      1: "Chapdagi rasmda qog‘oz shoshib, qiyshiq va notekis qirqilgan. O‘ngdagi rasmda esa chiziq bo‘ylab tekis qirqilgan.",
+      2: "Chapdagi rasmda qog‘ozning chetlari bir-biriga mos tushmagan. O‘ngdagi rasmda chetlar teng, buklangan joy tekis."
+    };
+    const solved = new Set();
+    let miss = 0;
+    scene.querySelectorAll(".xt-card").forEach((card) => {
+      card.addEventListener("click", () => {
+        const r = card.dataset.row;
+        if (solved.has(r)) { feedback.textContent = (card.dataset.kind === "bad" ? "❌ " : "✅ ") + WHY[r]; return; }
+        if (card.dataset.kind === "good") {
+          miss++;
+          card.classList.remove("is-wrong"); void card.offsetWidth; card.classList.add("is-wrong");
+          feedback.textContent = "🤔 Bu rasmda hammasi to‘g‘ri bajarilgan. Diqqat bilan qarang — xato boshqa rasmda!";
+          return;
+        }
+        solved.add(r);
+        scene.querySelectorAll('.xt-card[data-row="' + r + '"]').forEach((c) => c.classList.add(c.dataset.kind === "bad" ? "is-bad" : "is-good"));
+        scene.querySelectorAll('.xt-cover[data-row="' + r + '"]').forEach((c) => c.classList.add("is-open"));
+        scoreEl.textContent = "⭐ " + solved.size + " / 2";
+        feedback.textContent = "🔎 Topdingiz! " + WHY[r] + (solved.size === 2 ? " 🎉 Ikkala xatoni ham topdingiz!" : " Endi keyingi qatordagi xatoni toping.");
+      });
+    });
+    scene.querySelectorAll(".sq-step").forEach((step) => {
+      step.addEventListener("click", () => {
+        scene.querySelectorAll(".sq-step").forEach((s) => s.classList.toggle("is-active", s === step));
+        feedback.textContent = "✂️ " + step.dataset.say;
+      });
+    });
+    const guessed = new Set();
+    scene.querySelectorAll(".sq-magic").forEach((magic) => {
+      const r = magic.dataset.row;
+      const pick = scene.querySelector('.sq-pick[data-row="' + r + '"]');
+      const [right, ...rest] = magic.dataset.opts.split("|");
+      magic.addEventListener("click", () => {
+        scene.querySelectorAll(".sq-pick").forEach((p) => p.classList.add("hidden"));
+        pick.innerHTML = "<p>Qanday shakl chiqadi?</p>";
+        [right, ...rest].sort(() => Math.random() - 0.5).forEach((opt) => {
+          const b = document.createElement("button");
+          b.type = "button";
+          b.textContent = opt;
+          b.addEventListener("click", () => {
+            if (opt !== right) {
+              b.classList.remove("is-wrong"); void b.offsetWidth; b.classList.add("is-wrong");
+              feedback.textContent = "🤔 Yo‘q, " + opt.toLowerCase() + " chiqmaydi. Qadamlarni qaytadan ko‘rib chiqing va yana taxmin qiling!";
+              return;
+            }
+            pick.classList.add("hidden");
+            magic.classList.add("is-open");
+            guessed.add(r);
+            feedback.textContent = "🪄 Sehr! To‘g‘ri taxmin — " + right.toLowerCase() + " hosil bo‘ldi!" + (guessed.size === 2 ? " 🎉 Ikkala sehrli qog‘ozni ham ochdingiz!" : " Endi ikkinchi sehrli qog‘ozni oching.");
+          });
+          pick.appendChild(b);
+        });
+        pick.classList.remove("hidden");
+        feedback.textContent = "🪄 Qadamlarga qarang va taxmin qiling: qirqgandan keyin qanday shakl hosil bo‘ladi?";
+      });
+    });
+  })();
   $("backToQuarters").addEventListener("click",()=>{$("quarterMapScreen").classList.add("hidden");$("quarterScreen").classList.remove("hidden");renderQuarterHub();window.scrollTo(0,0)});
   $("previousQuarter").addEventListener("click",()=>{if(activeQuarter>0)openQuarter(activeMapCourse.quarters[activeQuarter-1].id)});$("nextQuarter").addEventListener("click",()=>{if(activeQuarter<3)openQuarter(activeMapCourse.quarters[activeQuarter+1].id)});
   $("returnToMap").addEventListener("click",()=>{document.body.classList.remove("lesson-intro-active","lesson-problem-active");$("problemSituationScreen").classList.add("hidden");hideKnowledgeScreen();hideSafetyScreen();hideExerciseScreen();$("lessonIntroScreen").classList.add("hidden");$("learningScreen").classList.add("hidden");$("quarterMapScreen").classList.remove("hidden");renderQuarterMap();window.scrollTo(0,0)});

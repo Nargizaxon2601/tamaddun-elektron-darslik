@@ -796,6 +796,27 @@ body.lesson-problem-active .topbar { display: none; }
 .l2-scene > .mv-piece[data-key="window"] { z-index: 6; }
 .l2-scene > .mv-piece.is-shine { animation: mv-shine 1.4s ease-in-out infinite; }
 @keyframes mv-shine { 50% { filter: brightness(1.18) drop-shadow(0 0 .8cqw rgba(255,214,64,.9)); } }
+/* 3-dars 3-bosqich: «Xatoni top» va «Sehrli qog'oz» */
+.l2-scene > .xt-card, .l2-scene > .sq-step { z-index: 3; border-radius: 1.4cqw; transition: transform .2s cubic-bezier(.2,.8,.2,1.4), box-shadow .18s, background .18s; }
+.l2-scene > .xt-card:hover, .l2-scene > .xt-card:focus-visible, .l2-scene > .sq-step:hover, .l2-scene > .sq-step:focus-visible { transform: scale(1.03); background: rgba(255,255,255,.18) !important; box-shadow: 0 0 0 .25cqw #fff, 0 0 0 .5cqw rgba(124,77,255,.45); outline: none; }
+.l2-scene > .xt-card.is-bad { box-shadow: 0 0 0 .35cqw #ff5252, 0 0 1.6cqw rgba(255,82,82,.7); }
+.l2-scene > .xt-card.is-good { box-shadow: 0 0 0 .35cqw #2fbf55, 0 0 1.6cqw rgba(47,191,85,.6); }
+.l2-scene > .xt-card.is-wrong { animation: fold-shake .45s; }
+.l2-scene > .sq-step.is-active { box-shadow: 0 0 0 .3cqw #ffb21a, 0 0 1.6cqw rgba(255,178,26,.8); }
+.l2-scene > .xt-cover { position: absolute; z-index: 4; pointer-events: none; display: grid; place-items: center; border-radius: 50%; background: radial-gradient(circle at 35% 30%, #a98bff, #6a3fe0); color: #fff; font-family: inherit; font-weight: 900; font-size: 2.4cqw; line-height: 1; box-shadow: 0 0 0 .3cqw #fff, 0 .3cqw .8cqw rgba(0,0,0,.25); transition: transform .4s cubic-bezier(.2,.8,.2,1.4), opacity .4s; }
+.l2-scene > .xt-cover.is-open { transform: scale(0) rotate(180deg); opacity: 0; }
+.l2-scene > .xt-score { white-space: nowrap; font-size: 1.1cqw; }
+.l2-scene > .sq-magic { z-index: 5; display: grid; place-items: center; border-radius: 1.4cqw; background: linear-gradient(160deg,#8d63ff,#5b2ee6) !important; box-shadow: 0 0 0 .3cqw #fff, 0 .5cqw 1.2cqw rgba(61,26,168,.4); transition: transform .45s cubic-bezier(.2,.8,.2,1.4), opacity .45s; animation: l2-bob 1.8s ease-in-out infinite; }
+.l2-scene > .sq-magic span { display: flex; align-items: center; gap: .3cqw; color: #fff; font-size: 2.6cqw; line-height: 1; }
+.l2-scene > .sq-magic b { font-family: inherit; font-size: 3.4cqw; }
+.l2-scene > .sq-magic:hover { filter: brightness(1.1); }
+.l2-scene > .sq-magic.is-open { transform: scale(0) rotate(-90deg); opacity: 0; pointer-events: none; animation: none; }
+.l2-scene > .sq-pick { position: absolute; z-index: 6; display: flex; align-items: center; justify-content: center; gap: .7cqw; padding: 0 1cqw; border-radius: 1.4cqw; background: #fff; box-shadow: 0 0 0 .3cqw #8d63ff, 0 .6cqw 1.4cqw rgba(0,0,0,.2); animation: drum-pop .3s cubic-bezier(.2,.8,.2,1.3); }
+.l2-scene > .sq-pick.hidden { display: none; }
+.sq-pick p { margin: 0; font-family: inherit; font-weight: 900; font-size: 1.2cqw; line-height: 1.2; white-space: nowrap; color: #4b2aa8; }
+.sq-pick button { padding: .55cqw 1.1cqw; border: 0; border-radius: 99px; background: linear-gradient(180deg,#f1ecff,#ddd0ff); color: #3b1f8f; font-family: inherit; font-weight: 900; font-size: 1.3cqw; line-height: 1.2; cursor: pointer; box-shadow: 0 .25cqw 0 #b9a6ff; transition: transform .12s; }
+.sq-pick button:hover { transform: translateY(-2px); }
+.sq-pick button.is-wrong { background: linear-gradient(180deg,#ffe1e1,#ffc2c2); box-shadow: 0 0 0 .2cqw #ff5252; animation: fold-shake .4s; }
 @media (max-width: 600px) {
   .lesson-intro-screen { padding: 6px; }
   .lesson-intro-art { width: min(100%, calc((100vh - 12px) * 1.7779)); }
