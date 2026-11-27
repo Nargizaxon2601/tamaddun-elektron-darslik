@@ -770,6 +770,16 @@ body.lesson-problem-active .topbar { display: none; }
 .l2-scene > .l2-drawn-nav.l2-home-nav::before { content: "🏠"; font-size: 3.4cqw; }
 .l2-scene > .l2-drawn-nav:hover, .l2-scene > .l2-drawn-nav:focus-visible { transform: scale(1.08); outline: none; }
 .l2-scene > .l2-drawn-nav:active { transform: translateY(.2cqw); }
+/* 3-dars 1-bosqich: manzaradagi shakllar va «Shakllarni izla» */
+.l2-scene > .scene-shape { z-index: 3; border-radius: 1.2cqw; transition: transform .2s cubic-bezier(.2,.8,.2,1.4), box-shadow .18s, background .18s; }
+.l2-scene > .scene-shape[data-type="circle"] { border-radius: 50%; }
+.l2-scene > .scene-shape:hover, .l2-scene > .scene-shape:focus-visible { transform: scale(1.05); background: rgba(255,255,255,.2) !important; box-shadow: 0 0 0 .25cqw #fff, 0 0 0 .5cqw rgba(124,77,255,.45); outline: none; }
+.l2-scene > .scene-shape.is-active { box-shadow: 0 0 0 .3cqw #ffb21a, 0 0 1.8cqw rgba(255,178,26,.85); animation: l2-bob 1.2s ease-in-out infinite; }
+.l2-scene > .scene-shape.is-wrong { animation: fold-shake .45s; box-shadow: 0 0 0 .3cqw #ff5252; }
+.l2-scene > .scene-tick { width: 2.6cqw; height: 2.6cqw; font-size: 1.5cqw; }
+.l2-scene > .scene-hunt { font-size: 1.4cqw; line-height: 1.2; }
+.l2-scene > #sceneHuntScore { white-space: nowrap; font-size: 1.1cqw; }
+.l2-scene > .scene-hunt.is-running { font-size: 1.2cqw; }
 @media (max-width: 600px) {
   .lesson-intro-screen { padding: 6px; }
   .lesson-intro-art { width: min(100%, calc((100vh - 12px) * 1.7779)); }

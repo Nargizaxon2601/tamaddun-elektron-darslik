@@ -13,6 +13,9 @@ document.addEventListener("DOMContentLoaded", () => {
   let safetyResume = 0;
   const hasKnowledgeScreen = () => Boolean(document.getElementById("knowledgeScreen"));
   const lesson2Pages = () => Array.from(document.querySelectorAll("[data-l2-page]"));
+  const lessonOf = (page) => Number(page.dataset.lesson || 2);
+  const lessonPages = (L) => lesson2Pages().filter((page) => lessonOf(page) === L);
+  const LESSON_TITLES = { 2: "Qog‘oz varag‘i bilan ishlash", 3: "Manzara yaratamiz: Uycha va daraxtlar" };
   const safetyScreens = () => Array.from(document.querySelectorAll("[data-safety-page]"));
   const hasSafetyScreen = () => safetyScreens().length > 0;
   const hideSafetyScreen = () => safetyScreens().forEach((screen) => screen.classList.add("hidden"));
@@ -440,16 +443,16 @@ document.addEventListener("DOMContentLoaded", () => {
       const firstLesson = lessons.find((lesson) => lesson.openable);
       const stations = Array.from({ length: 11 }, (_, index) => {
         const number = index + 1;
-        const isLesson2 = number === 2 && lesson2Pages().length > 0;
+        const isLesson2 = number >= 2 && lessonPages(number).length > 0;
         const isAvailable = (number === 1 && firstLesson) || isLesson2;
         const isDone = Boolean(number === 1 && firstLesson && finishedLessons.has(firstLesson.id));
         const state = isAvailable ? (isDone ? " Bajarilgan" : " Mavjud dars") : " Kontent tayyorlanmoqda";
         const label = number === 11 ? "11-manzil" : number + "-dars";
         return '<button type="button" class="q1-map-station station-' + number +
           (isDone ? ' is-done' : '') + '" data-station-id="texnologiya-1-q1-station-' + number + '"' +
-          (isLesson2 ? ' data-lesson2="1"' : (isAvailable ? ' data-lesson-id="' + firstLesson.id + '"' : '')) +
+          (isLesson2 ? ' data-lesson2="' + number + '"' : (isAvailable ? ' data-lesson-id="' + firstLesson.id + '"' : '')) +
           ' aria-label="' + label + '.' + state + '"><span class="sr-only">' + label +
-          (isLesson2 ? ' — Qog‘oz varag‘i bilan ishlash, darsni ochish' : (isAvailable ? ' — ' + firstLesson.title + ', darsni ochish' : ' — kontent tayyorlanmoqda')) +
+          (isLesson2 ? ' — ' + (LESSON_TITLES[number] || "dars") + ', darsni ochish' : (isAvailable ? ' — ' + firstLesson.title + ', darsni ochish' : ' — kontent tayyorlanmoqda')) +
           '</span></button>';
       }).join("");
 
@@ -466,7 +469,7 @@ document.addEventListener("DOMContentLoaded", () => {
       document.querySelectorAll("[data-station-id]").forEach((button) => {
         button.addEventListener("click", () => {
           if (button.dataset.lesson2) {
-            openLesson2Page(0);
+            openLessonPage(Number(button.dataset.lesson2), 0);
             return;
           }
           if (button.dataset.lessonId) {
@@ -1524,12 +1527,12 @@ document.addEventListener("DOMContentLoaded", () => {
     $("finalHome").addEventListener("click", () => $("returnToMap").click());
   }
   // ===== 2-DARS: "Qog‘oz varag‘i bilan ishlash" — rasmli interaktiv sahifalar =====
-  let lesson2Index = 0;
+  // Bir nechta dars shu tizimdan foydalanadi: data-lesson="3" (yo'q bo'lsa — 2-dars)
   function hideLesson2() { lesson2Pages().forEach((page) => page.classList.add("hidden")); }
   // Nuqtalar darsning 8 bosqichini ko'rsatadi; bir bosqichda bir nechta sahifa bo'lishi mumkin (data-l2-stage)
   const lesson2Stage = (page, k) => (page.dataset.l2Stage !== undefined ? Number(page.dataset.l2Stage) : k);
-  function updateLesson2Dots(k) {
-    const page = lesson2Pages()[k];
+  function updateLessonDots(L, k) {
+    const page = lessonPages(L)[k];
     const stage = lesson2Stage(page, k);
     page.querySelectorAll("[data-l2-dot]").forEach((dot) => {
       const i = Number(dot.dataset.l2Dot);
@@ -1538,29 +1541,28 @@ document.addEventListener("DOMContentLoaded", () => {
       if (i === stage) dot.setAttribute("aria-current", "step"); else dot.removeAttribute("aria-current");
     });
   }
-  function openLesson2Stage(i, feedback) {
-    const pages = lesson2Pages();
-    const k = pages.findIndex((page, j) => lesson2Stage(page, j) === i);
-    if (k >= 0) openLesson2Page(k);
+  function openLessonStage(L, i, feedback) {
+    const k = lessonPages(L).findIndex((page, j) => lesson2Stage(page, j) === i);
+    if (k >= 0) openLessonPage(L, k);
     else if (feedback) feedback.textContent = (i + 1) + "-bosqich tez orada qo‘shiladi!";
   }
-  function openLesson2Page(k) {
-    const pages = lesson2Pages();
+  function openLessonPage(L, k) {
+    const pages = lessonPages(L);
     if (!pages.length) return;
     k = Math.max(0, Math.min(k, pages.length - 1));
-    lesson2Index = k;
     document.body.classList.remove("lesson-intro-active");
     document.body.classList.add("lesson-problem-active");
     ["lessonIntroScreen", "problemSituationScreen", "learningScreen", "quarterScreen", "quarterMapScreen"].forEach((id) => $(id).classList.add("hidden"));
     hideKnowledgeScreen();
     hideSafetyScreen();
     hideExerciseScreen();
-    pages.forEach((page, i) => page.classList.toggle("hidden", i !== k));
     const page = pages[k];
+    lesson2Pages().forEach((other) => other.classList.toggle("hidden", other !== page));
     page.querySelectorAll(".knowledge-hero").forEach((hero) => { hero.classList.remove("is-selected"); hero.setAttribute("aria-pressed", "false"); });
-    updateLesson2Dots(k);
+    updateLessonDots(L, k);
     window.scrollTo(0, 0);
   }
+  const openLesson2Page = (k) => openLessonPage(2, k);
   function lesson2ToMap() {
     hideLesson2();
     document.body.classList.remove("lesson-intro-active", "lesson-problem-active");
@@ -1568,7 +1570,7 @@ document.addEventListener("DOMContentLoaded", () => {
     renderQuarterMap();
     window.scrollTo(0, 0);
   }
-  lesson2Pages().forEach((page, k) => {
+  [...new Set(lesson2Pages().map(lessonOf))].forEach((L) => lessonPages(L).forEach((page, k) => {
     const feedback = page.querySelector(".l2-feedback");
     const seen = new Set();
     const items = page.querySelectorAll(".l2-item");
@@ -1594,15 +1596,15 @@ document.addEventListener("DOMContentLoaded", () => {
       });
     });
     page.querySelectorAll("[data-l2-dot]").forEach((dot) => {
-      dot.addEventListener("click", () => openLesson2Stage(Number(dot.dataset.l2Dot), feedback));
+      dot.addEventListener("click", () => openLessonStage(L, Number(dot.dataset.l2Dot), feedback));
     });
-    page.querySelector(".l2-back").addEventListener("click", () => (k === 0 || page.querySelector(".l2-back").dataset.home ? lesson2ToMap() : openLesson2Page(k - 1)));
+    page.querySelector(".l2-back").addEventListener("click", () => (k === 0 || page.querySelector(".l2-back").dataset.home ? lesson2ToMap() : openLessonPage(L, k - 1)));
     page.querySelector(".l2-next").addEventListener("click", () => {
       if (page.querySelector(".l2-next").dataset.home) lesson2ToMap();
-      else if (k < lesson2Pages().length - 1) openLesson2Page(k + 1);
+      else if (k < lessonPages(L).length - 1) openLessonPage(L, k + 1);
       else feedback.textContent = "Keyingi bosqich tez orada qo‘shiladi! Hozircha ← tugmasi bilan orqaga qaytishingiz mumkin.";
     });
-  });
+  }));
   // 2-dars 3-bosqich: «Sehrli ustaning xaltasi» (surib saralash) va «Savol–javob»
   (function setupBagAndQa() {
     const game = document.getElementById("bagGame");
@@ -2486,6 +2488,75 @@ document.addEventListener("DOMContentLoaded", () => {
     });
     // sahifa ochilganda kichik bayram
     new MutationObserver(() => { if (!page.classList.contains("hidden")) setTimeout(() => confetti(14), 300); }).observe(page, { attributes: true, attributeFilter: ["class"] });
+  })();
+  // 3-dars 1-bosqich: manzaradagi shakllarni nomlash va «Shakllarni izla» o'yini
+  (function setupSceneHunt() {
+    const hunt = document.getElementById("sceneHunt");
+    if (!hunt) return;
+    const scene = hunt.parentElement;
+    const page = scene.closest("[data-l2-page]");
+    const feedback = page.querySelector(".l2-feedback");
+    const scoreEl = document.getElementById("sceneHuntScore");
+    const shapes = Array.from(scene.querySelectorAll(".scene-shape"));
+    const TYPES = { circle: "doira", tri: "uchburchak", kvadrat: "kvadrat", rect: "to‘g‘ri to‘rtburchak" };
+    const seen = new Set();
+    let game = null;
+    const tick = (key, on) => scene.querySelector('.scene-tick[data-key="' + key + '"]').classList.toggle("is-on", on);
+    function clearMarks() { shapes.forEach((s) => s.classList.remove("is-active")); scene.querySelectorAll(".scene-tick").forEach((t) => t.classList.remove("is-on")); }
+    function askType() {
+      const type = game.order[game.t];
+      const total = shapes.filter((s) => s.dataset.type === type).length;
+      game.found = new Set();
+      clearMarks();
+      hunt.textContent = "Toping: " + TYPES[type] + " (0/" + total + ")";
+      feedback.textContent = "🔎 Manzaradagi hamma " + TYPES[type] + "larni toping! Jami " + total + " ta.";
+    }
+    function startGame() {
+      const order = Object.keys(TYPES).sort(() => Math.random() - 0.5);
+      game = { order, t: 0, score: 0, miss: 0, found: new Set() };
+      hunt.classList.add("is-running");
+      scoreEl.classList.remove("hidden");
+      scoreEl.textContent = "⭐ 0 / " + shapes.length;
+      askType();
+    }
+    function huntClick(s) {
+      const type = game.order[game.t];
+      if (game.found.has(s.dataset.key)) { feedback.textContent = "Bu shaklni allaqachon topdingiz! Boshqasini izlang."; return; }
+      if (s.dataset.type !== type) {
+        game.miss++;
+        s.classList.remove("is-wrong"); void s.offsetWidth; s.classList.add("is-wrong");
+        setTimeout(() => s.classList.remove("is-wrong"), 500);
+        feedback.textContent = "🤔 Bu — " + TYPES[s.dataset.type] + ". Bizga " + TYPES[type] + " kerak!";
+        return;
+      }
+      game.found.add(s.dataset.key);
+      game.score++;
+      tick(s.dataset.key, true);
+      scoreEl.textContent = "⭐ " + game.score + " / " + shapes.length;
+      const total = shapes.filter((x) => x.dataset.type === type).length;
+      hunt.textContent = "Toping: " + TYPES[type] + " (" + game.found.size + "/" + total + ")";
+      if (game.found.size < total) { feedback.textContent = "✅ To‘g‘ri! " + s.dataset.say + " Yana " + (total - game.found.size) + " ta qoldi."; return; }
+      game.t++;
+      if (game.t >= game.order.length) {
+        feedback.textContent = "🏆 Barakalla! Manzaradagi hamma shakllarni topdingiz! Xatolar: " + game.miss + ". Endi → tugmasi bilan davom eting.";
+        hunt.textContent = "↻ Yana o‘ynash";
+        hunt.classList.remove("is-running");
+        game = null;
+        return;
+      }
+      const msg = "🎉 Hamma " + TYPES[type] + "lar topildi! ";
+      askType();
+      feedback.textContent = msg + feedback.textContent;
+    }
+    shapes.forEach((s) => {
+      s.addEventListener("click", () => {
+        if (game) { huntClick(s); return; }
+        shapes.forEach((x) => x.classList.toggle("is-active", x === s));
+        seen.add(s.dataset.key);
+        feedback.textContent = "🔷 " + s.dataset.say + (seen.size === shapes.length ? " 🎉 Hamma shakllar bilan tanishdingiz! Endi «🔎 Shakllarni izla!» tugmasini bosing." : " (" + seen.size + " / " + shapes.length + ")");
+      });
+    });
+    hunt.addEventListener("click", startGame);
   })();
   $("backToQuarters").addEventListener("click",()=>{$("quarterMapScreen").classList.add("hidden");$("quarterScreen").classList.remove("hidden");renderQuarterHub();window.scrollTo(0,0)});
   $("previousQuarter").addEventListener("click",()=>{if(activeQuarter>0)openQuarter(activeMapCourse.quarters[activeQuarter-1].id)});$("nextQuarter").addEventListener("click",()=>{if(activeQuarter<3)openQuarter(activeMapCourse.quarters[activeQuarter+1].id)});
