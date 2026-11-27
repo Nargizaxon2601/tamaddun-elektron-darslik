@@ -889,6 +889,34 @@ body.lesson-problem-active .topbar { display: none; }
 .think-why:empty { display: none; }
 .think-why .qa-next { margin-top: .6cqw; }
 .l2-scene > .think-score.is-win { box-shadow: 0 0 0 .3cqw #4cd964, 0 0 1.4cqw rgba(76,217,100,.7); }
+/* 4-dars 3-bosqich: «Do'ppi yashirma» o'yini */
+.l2-scene > .dp-cap { z-index: 4; overflow: visible; border-radius: 0; background: transparent !important; transition: filter .2s; }
+.dp-cap .dp-sprite, .dp-cap .dp-reveal { position: absolute; inset: 0; pointer-events: none; }
+.dp-cap .dp-sprite { transition: transform .55s cubic-bezier(.2,.8,.2,1.3), filter .2s; transform-origin: 50% 100%; }
+.dp-cap .dp-reveal { display: grid; place-items: center; font-size: 4cqw; background: radial-gradient(circle at 50% 60%, #fff8cf 0 30%, #ffd54a 60%, #f2a400 100%); opacity: 0; transition: opacity .25s; }
+.l2-scene > .dp-cap:hover .dp-sprite, .l2-scene > .dp-cap:focus-visible .dp-sprite { transform: translateY(-4%) scale(1.04); filter: drop-shadow(0 0 1.2cqw rgba(255,214,64,.95)) brightness(1.08); }
+.l2-scene > .dp-cap:focus-visible { outline: none; }
+.dp-cap .dp-reveal { align-content: end; padding-bottom: 8%; gap: .3cqw; }
+.dp-reveal b { font-size: 1.4cqw; font-weight: 900; color: #8a3b00; }
+.l2-scene > .dp-cap.is-open .dp-reveal { opacity: 1; animation: mv-shine 1.2s ease-in-out infinite; }
+.l2-scene > .dp-cap.is-open .dp-sprite { transform: translateY(-62%) rotate(-10deg); filter: drop-shadow(0 1cqw 1cqw rgba(0,0,0,.35)); }
+.l2-scene > .dp-cap.is-mix { animation: dp-mix .45s ease-in-out 3 both; }
+@keyframes dp-mix { 25% { transform: translate(-10%, -6%) rotate(-6deg); } 50% { transform: translate(0, -10%); } 75% { transform: translate(10%, -6%) rotate(6deg); } }
+.l2-scene > .dp-team { z-index: 5; display: flex; align-items: center; justify-content: space-between; gap: .6cqw; padding: 0 1.1cqw; border: .25cqw solid #fff; border-radius: 99px; background: linear-gradient(180deg,#ffffff,#f1ecff) !important; color: #4b2aa8; font-family: inherit; font-size: 1.25cqw; line-height: 1.2; cursor: pointer; box-shadow: 0 .3cqw .9cqw rgba(40,20,90,.3); transition: transform .2s cubic-bezier(.2,.8,.2,1.4), box-shadow .2s; }
+.dp-team b { font-weight: 900; white-space: nowrap; }
+.dp-team span { font-weight: 900; color: #8a5a00; background: #fff3c4; padding: .1cqw .7cqw; border-radius: 99px; white-space: nowrap; }
+.l2-scene > .dp-team.is-turn { transform: scale(1.08); box-shadow: 0 0 0 .3cqw #ffb21a, 0 0 1.8cqw rgba(255,178,26,.9); }
+.l2-scene > .dp-team.is-star { animation: dp-star .7s cubic-bezier(.2,.8,.2,1.4); }
+@keyframes dp-star { 40% { transform: scale(1.25); box-shadow: 0 0 0 .4cqw #4cd964, 0 0 2.4cqw rgba(76,217,100,.9); } }
+.l2-scene > .dp-step.is-phase { box-shadow: 0 0 0 .3cqw #ffb21a, 0 0 1.6cqw rgba(255,178,26,.8); background: rgba(255,240,170,.18) !important; }
+.l2-scene > .dp-panel { height: auto !important; max-height: 46%; overflow: auto; gap: .5cqw; padding: .9cqw 1.2cqw; }
+.dp-panel .qa-head { font-size: 1.05cqw; }
+.dp-panel .qa-text { font-size: 1.45cqw; }
+.dp-panel .qa-options button { font-size: 1.2cqw; padding: .5cqw .9cqw; }
+.dp-panel .think-why { font-size: 1.1cqw; }
+.dp-panel .qa-next { font-size: 1.2cqw; padding: .5cqw 1.6cqw; }
+.dp-panel .qa-head { align-items: center; gap: 1cqw; }
+.dp-turn { flex: 1; text-align: center; color: #e64b85; }
 @media (max-width: 600px) {
   .lesson-intro-screen { padding: 6px; }
   .lesson-intro-art { width: min(100%, calc((100vh - 12px) * 1.7779)); }

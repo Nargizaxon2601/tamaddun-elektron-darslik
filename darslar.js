@@ -3214,6 +3214,177 @@ document.addEventListener("DOMContentLoaded", () => {
       page.querySelectorAll(".l2-back, .l2-next, .knowledge-dot").forEach((b) => b.addEventListener("click", close));
     });
   })();
+  // 4-dars 3-bosqich: «Do'ppi yashirma» — ikki jamoa, do'ppi ostidan topshiriq, yulduzchalar
+  (function setupDoppiGame() {
+    const panel = document.querySelector(".dp-panel");
+    if (!panel) return;
+    const scene = panel.parentElement;
+    const page = scene.closest("[data-l2-page]");
+    const feedback = page.querySelector(".l2-feedback");
+    const caps = Array.from(scene.querySelectorAll(".dp-cap"));
+    const teams = Array.from(scene.querySelectorAll(".dp-team"));
+    const steps = Array.from(scene.querySelectorAll(".dp-step"));
+    const opts = panel.querySelector(".dp-options");
+    const why = panel.querySelector(".dp-why");
+    const confBox = scene.querySelector(".dp-confetti");
+    const NAMES = ["⛵ Kemachalar", "🌊 To‘lqinlar"];
+    const TASKS = [
+      ["Kemachaning tanasi qaysi shaklda?", ["Trapetsiya", "Kvadrat", "Doira"]],
+      ["Kemaning yelkani ko‘pincha qaysi shaklda bo‘ladi?", ["Uchburchak", "Doira", "Oval"]],
+      ["Quyoshni qaysi shakldan yasaymiz?", ["Doira", "Uchburchak", "To‘g‘ri to‘rtburchak"]],
+      ["Uychaning tomi qaysi shaklda edi?", ["Uchburchak", "Kvadrat", "Yarimdoira"]],
+      ["Kvadratning nechta burchagi bor?", ["4 ta", "3 ta", "5 ta"]],
+      ["Uchburchakning nechta tomoni bor?", ["3 ta", "4 ta", "2 ta"]],
+      ["Applikatsiya uchun qaysi asboblar kerak?", ["Qaychi va yelim", "Bolg‘a va mix", "Qoshiq va vilka"]],
+      ["Qaychini do‘stimizga qanday uzatamiz?", ["Dastasi bilan oldinga", "Uchi bilan oldinga", "Otib beramiz"]],
+      ["Kemaning illyuminatori (derazasi) qaysi shaklda?", ["Doira", "Uchburchak", "Trapetsiya"]],
+      ["Daraxt tanasi qaysi shaklga o‘xshaydi?", ["To‘g‘ri to‘rtburchak", "Doira", "Uchburchak"]],
+      ["Yelimni qanday surtamiz?", ["Oz-ozdan, me’yorida", "Ko‘p qilib, to‘kib", "Umuman surtmaymiz"]],
+      ["Dengiz manzarasida nima bo‘lmaydi?", ["Qorbobo va archa", "To‘lqinlar", "Chag‘alaylar"]]
+    ];
+    const ROUNDS = 8;
+    const shuffle = (a) => { a = a.slice(); for (let i = a.length - 1; i > 0; i--) { const r = Math.floor(Math.random() * (i + 1)); [a[i], a[r]] = [a[r], a[i]]; } return a; };
+    let g;
+    function phase(n) { steps.forEach((s, i) => s.classList.toggle("is-phase", i + 1 === n)); }
+    function paintTeams() {
+      teams.forEach((t, i) => {
+        t.querySelector("span").textContent = "⭐ " + g.score[i];
+        t.classList.toggle("is-turn", g.answering === i && !g.over);
+      });
+    }
+    function newGame(msg) {
+      g = { round: 0, score: [0, 0], deck: shuffle(TASKS), answering: 0, starter: 0, task: null, tried: new Set(), busy: false, over: false, resolved: true };
+      caps.forEach((c) => c.classList.remove("is-open", "is-used"));
+      panel.classList.add("hidden");
+      paintTeams();
+      phase(1);
+      feedback.textContent = msg || "🎩 " + NAMES[0] + " jamoasi boshlaydi! Do‘ppilardan birini tanlang.";
+    }
+    function confetti(n) {
+      for (let i = 0; i < n; i++) {
+        const s = document.createElement("span");
+        s.textContent = ["⭐", "🌟", "🎉", "⛵", "🌊"][i % 5];
+        s.style.left = Math.random() * 96 + "%";
+        s.style.animationDuration = 1.8 + Math.random() * 1.6 + "s";
+        s.style.animationDelay = Math.random() * 0.5 + "s";
+        confBox.appendChild(s);
+        setTimeout(() => s.remove(), 4200);
+      }
+    }
+    function head() {
+      panel.querySelector(".dp-round").textContent = "🎩 " + g.round + " / " + ROUNDS + "-do‘ppi";
+      panel.querySelector(".dp-turn").textContent = g.over ? "" : "Javob beradi: " + NAMES[g.answering];
+    }
+    function openCap(cap) {
+      if (g.busy) { feedback.textContent = "⏳ Do‘ppilar aralashtirilmoqda…"; return; }
+      if (g.over) { newGame(); return; }
+      if (!g.resolved) { panel.classList.remove("hidden"); feedback.textContent = "📜 Avval ochilgan topshiriqni bajaring!"; return; }
+      g.round++;
+      g.task = g.deck[(g.round - 1) % g.deck.length];
+      g.answering = g.starter;
+      g.tried = new Set();
+      g.resolved = false;
+      caps.forEach((c) => c.classList.toggle("is-open", c === cap));
+      phase(2);
+      paintTeams();
+      feedback.textContent = "📜 Do‘ppi ostidan topshiriq chiqdi! " + NAMES[g.answering] + " jamoasi, o‘qing va maslahatlashing!";
+      setTimeout(() => {
+        head();
+        panel.querySelector(".dp-text").textContent = g.task[0];
+        why.textContent = "";
+        opts.innerHTML = "";
+        shuffle(g.task[1].map((t, i) => ({ t, ok: i === 0 }))).forEach((o, i) => {
+          const b = document.createElement("button");
+          b.type = "button";
+          b.textContent = "ABC"[i] + ") " + o.t;
+          b.addEventListener("click", () => answer(b, o.ok));
+          opts.appendChild(b);
+        });
+        panel.classList.remove("hidden");
+        phase(3);
+      }, 650);
+    }
+    function finishRound(text) {
+      g.resolved = true;
+      g.starter = 1 - g.starter;
+      why.textContent = text;
+      const b = document.createElement("button");
+      b.type = "button";
+      b.className = "qa-next";
+      if (g.round >= ROUNDS) {
+        g.over = true;
+        paintTeams();
+        head();
+        const [a, c] = g.score;
+        const win = a === c ? "🤝 Do‘stlik g‘alaba qozondi! Durang — " + a + " : " + c + "." : "🏆 " + NAMES[a > c ? 0 : 1] + " jamoasi g‘olib! Hisob " + a + " : " + c + ".";
+        why.textContent = text + " " + win + " Ikkala jamoa ham zo‘r o‘ynadi!";
+        feedback.textContent = win + " Barakalla, bolajonlar!";
+        confetti(30);
+        b.textContent = "↻ Yangi o‘yin";
+        b.addEventListener("click", () => newGame("↻ Yangi o‘yin boshlandi! " + NAMES[0] + " jamoasi do‘ppi tanlaydi."));
+      } else {
+        b.textContent = "Keyingi do‘ppi ➡";
+        b.addEventListener("click", nextRound);
+      }
+      why.appendChild(document.createElement("br"));
+      why.appendChild(b);
+    }
+    function answer(btn, ok) {
+      if (g.resolved) { feedback.textContent = "Bu topshiriq bajarildi. «Keyingi do‘ppi»ni bosing!"; return; }
+      const team = g.answering;
+      if (ok) {
+        btn.classList.add("is-right");
+        g.score[team]++;
+        paintTeams();
+        const pill = teams[team];
+        pill.classList.remove("is-star"); void pill.offsetWidth; pill.classList.add("is-star");
+        phase(4);
+        confetti(10);
+        feedback.textContent = "✅ To‘g‘ri! " + NAMES[team] + " jamoasiga ⭐ yulduzcha!";
+        finishRound("✅ To‘g‘ri javob: «" + g.task[1][0] + "». " + NAMES[team] + " jamoasiga ⭐!");
+        return;
+      }
+      btn.classList.remove("is-wrong"); void btn.offsetWidth; btn.classList.add("is-wrong");
+      g.tried.add(team);
+      if (!g.tried.has(1 - team)) {
+        g.answering = 1 - team;
+        paintTeams();
+        head();
+        feedback.textContent = "🤔 Noto‘g‘ri. Endi " + NAMES[g.answering] + " jamoasi javob beradi!";
+        return;
+      }
+      opts.querySelectorAll("button").forEach((b) => { if (b.textContent.slice(3) === g.task[1][0]) b.classList.add("is-right"); });
+      feedback.textContent = "🙂 Bu safar ikkala jamoa ham topa olmadi. To‘g‘ri javob: «" + g.task[1][0] + "».";
+      finishRound("To‘g‘ri javob: «" + g.task[1][0] + "». Bu safar yulduzcha hech kimga berilmadi.");
+    }
+    function nextRound() {
+      panel.classList.add("hidden");
+      caps.forEach((c) => c.classList.remove("is-open"));
+      g.busy = true;
+      caps.forEach((c, i) => { c.classList.remove("is-mix"); void c.offsetWidth; c.style.animationDelay = (i * 0.12) + "s"; c.classList.add("is-mix"); });
+      feedback.textContent = "🔄 Do‘ppilar aralashtirilmoqda… Topshiriqlar yashirindi!";
+      phase(1);
+      paintTeams();
+      setTimeout(() => {
+        g.busy = false;
+        caps.forEach((c) => c.classList.remove("is-mix"));
+        g.answering = g.starter;
+        paintTeams();
+        feedback.textContent = "🎩 " + NAMES[g.starter] + " jamoasining navbati! Do‘ppilardan birini tanlang.";
+      }, 1300);
+    }
+    caps.forEach((c) => c.addEventListener("click", () => openCap(c)));
+    panel.querySelector(".dp-close").addEventListener("click", () => {
+      panel.classList.add("hidden");
+      if (!g.resolved) feedback.textContent = "📜 Topshiriq kutmoqda — ochiq do‘ppini bosing.";
+      else if (!g.over) nextRound();
+    });
+    teams.forEach((t, i) => t.addEventListener("click", () => {
+      feedback.textContent = NAMES[i] + " jamoasi: ⭐ " + g.score[i] + " ta yulduzcha. " + (g.over ? "O‘yin tugadi — yangi o‘yin uchun do‘ppini bosing." : "Navbatda: " + NAMES[g.resolved ? g.starter : g.answering] + ".");
+    }));
+    page.querySelectorAll(".l2-back, .l2-next, .knowledge-dot").forEach((b) => b.addEventListener("click", () => panel.classList.add("hidden")));
+    newGame();
+  })();
   $("backToQuarters").addEventListener("click",()=>{$("quarterMapScreen").classList.add("hidden");$("quarterScreen").classList.remove("hidden");renderQuarterHub();window.scrollTo(0,0)});
   $("previousQuarter").addEventListener("click",()=>{if(activeQuarter>0)openQuarter(activeMapCourse.quarters[activeQuarter-1].id)});$("nextQuarter").addEventListener("click",()=>{if(activeQuarter<3)openQuarter(activeMapCourse.quarters[activeQuarter+1].id)});
   $("returnToMap").addEventListener("click",()=>{document.body.classList.remove("lesson-intro-active","lesson-problem-active");$("problemSituationScreen").classList.add("hidden");hideKnowledgeScreen();hideSafetyScreen();hideExerciseScreen();$("lessonIntroScreen").classList.add("hidden");$("learningScreen").classList.add("hidden");$("quarterMapScreen").classList.remove("hidden");renderQuarterMap();window.scrollTo(0,0)});
