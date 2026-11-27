@@ -2558,6 +2558,119 @@ document.addEventListener("DOMContentLoaded", () => {
     });
     hunt.addEventListener("click", startGame);
   })();
+  // 3-dars 2-bosqich: stoldagi shakllarni doskadagi chiziqli joylarga surib, kuz manzarasini yaratish
+  (function setupProblemScene() {
+    const scoreEl = document.getElementById("mvScore");
+    if (!scoreEl) return;
+    const scene = scoreEl.parentElement;
+    const page = scene.closest("[data-l2-page]");
+    const feedback = page.querySelector(".l2-feedback");
+    const W = 1671, H = 941;
+    const TYPE = { circle: "doira", tri: "uchburchak", sq: "kvadrat", rect: "to‘g‘ri to‘rtburchak" };
+    const targets = Array.from(scene.querySelectorAll(".mv-target")).map((el) => {
+      const l = parseFloat(el.style.left) / 100 * W, t = parseFloat(el.style.top) / 100 * H;
+      const w = parseFloat(el.style.width) / 100 * W, h = parseFloat(el.style.height) / 100 * H;
+      return { el, key: el.dataset.key, type: el.dataset.type, color: el.dataset.color, name: el.dataset.name, x1: l, y1: t, x2: l + w, y2: t + h, piece: null };
+    });
+    const toScene = (e) => { const r = scene.getBoundingClientRect(); return { x: (e.clientX - r.left) / r.width * W, y: (e.clientY - r.top) / r.height * H }; };
+    const filled = () => targets.filter((t) => t.piece).length;
+    function setBox(p, x1, y1, x2, y2) {
+      p.style.left = ((x1 + x2) / 2 / W * 100) + "%"; p.style.top = ((y1 + y2) / 2 / H * 100) + "%";
+      p.style.width = ((x2 - x1) / W * 100) + "%"; p.style.height = ((y2 - y1) / H * 100) + "%";
+    }
+    function targetAt(x, y) {
+      return targets.filter((t) => x >= t.x1 - 15 && x <= t.x2 + 15 && y >= t.y1 - 15 && y <= t.y2 + 15)
+        .sort((a, b) => (a.x2 - a.x1) * (a.y2 - a.y1) - (b.x2 - b.x1) * (b.y2 - b.y1))[0] || null;
+    }
+    function check(t, src) {
+      if (t.piece) return "Bu joy allaqachon to‘ldirilgan!";
+      if (t.type !== src.dataset.type) return "🤔 " + t.name + " uchun " + TYPE[t.type] + " kerak, bu esa — " + TYPE[src.dataset.type] + ".";
+      if (t.color && t.color !== src.dataset.color) return "🎨 Shakl to‘g‘ri, lekin rangi mos emas! " + t.name + " uchun boshqa rangli " + TYPE[t.type] + " kerak.";
+      return "";
+    }
+    function place(t, src, p) {
+      t.piece = p;
+      p.dataset.key = t.key;
+      p.classList.add("is-placed");
+      setBox(p, t.x1, t.y1, t.x2, t.y2);
+      const n = filled();
+      scoreEl.textContent = "⭐ " + n + " / " + targets.length;
+      if (n === targets.length) {
+        scene.querySelectorAll(".mv-piece").forEach((x) => x.classList.add("is-shine"));
+        feedback.textContent = "🏆 Barakalla! Muammo hal bo‘ldi: doiradan quyosh va daraxt, uchburchakdan tom va archa, kvadratdan devor va deraza, to‘g‘ri to‘rtburchakdan daraxt tanasi yasaldi!";
+      } else {
+        feedback.textContent = "✅ To‘g‘ri! " + t.name + " — " + TYPE[t.type] + "dan yasaladi. Joylashtirildi: " + n + " / " + targets.length;
+      }
+    }
+    function flash(t, msg) {
+      t.el.classList.remove("is-wrong"); void t.el.offsetWidth; t.el.classList.add("is-wrong");
+      setTimeout(() => t.el.classList.remove("is-wrong"), 500);
+      feedback.textContent = msg;
+    }
+    scene.querySelectorAll(".mv-src").forEach((src) => {
+      src.addEventListener("pointerdown", (e) => {
+        e.preventDefault();
+        const id = e.pointerId;
+        const s0 = toScene(e);
+        const r = src.getBoundingClientRect(), sr = scene.getBoundingClientRect();
+        const pw = r.width / sr.width * W * 0.8, ph = r.height / sr.height * H * 0.8;
+        const p = document.createElement("div");
+        p.className = "mv-piece shape-" + src.dataset.type + " is-drag";
+        p.style.setProperty("--c", src.dataset.color);
+        p.style.visibility = "hidden";
+        setBox(p, s0.x - pw / 2, s0.y - ph / 2, s0.x + pw / 2, s0.y + ph / 2);
+        scene.appendChild(p);
+        let moved = false, hover = null;
+        const move = (ev) => {
+          if (ev.pointerId !== id) return;
+          const s = toScene(ev);
+          if (!moved && Math.hypot(s.x - s0.x, s.y - s0.y) < 5) return;
+          moved = true;
+          p.style.visibility = "";
+          p.style.left = (s.x / W * 100) + "%"; p.style.top = (s.y / H * 100) + "%";
+          if (hover) hover.el.classList.remove("is-hover");
+          hover = targetAt(s.x, s.y);
+          if (hover && !hover.piece) hover.el.classList.add("is-hover"); else hover = null;
+        };
+        const up = (ev) => {
+          if (ev.pointerId !== id) return;
+          window.removeEventListener("pointermove", move);
+          window.removeEventListener("pointerup", up);
+          window.removeEventListener("pointercancel", up);
+          if (hover) hover.el.classList.remove("is-hover");
+          p.classList.remove("is-drag");
+          if (!moved) {
+            // bosish: mos keladigan birinchi bo'sh joyga qo'yamiz
+            const t = targets.find((x) => !x.piece && !check(x, src));
+            if (t) { p.style.visibility = ""; place(t, src, p); }
+            else { p.remove(); feedback.textContent = "«" + src.dataset.name + "» uchun bo‘sh joy qolmadi. Boshqa shaklni tanlang!"; }
+            return;
+          }
+          const s = toScene(ev);
+          const t = ev.type === "pointerup" ? targetAt(s.x, s.y) : null;
+          if (!t) { p.remove(); feedback.textContent = "Shaklni doskadagi chiziqli joyga olib boring!"; return; }
+          const err = check(t, src);
+          if (err) { p.remove(); flash(t, err); return; }
+          place(t, src, p);
+        };
+        window.addEventListener("pointermove", move);
+        window.addEventListener("pointerup", up);
+        window.addEventListener("pointercancel", up);
+      });
+    });
+    scene.addEventListener("click", (e) => {
+      const p = e.target.closest && e.target.closest(".mv-piece.is-placed");
+      if (!p) return;
+      const t = targets.find((x) => x.piece === p);
+      if (t) feedback.textContent = "🔷 " + t.name + " — " + TYPE[t.type] + ".";
+    });
+    document.getElementById("mvReset").addEventListener("click", () => {
+      scene.querySelectorAll(".mv-piece").forEach((p) => p.remove());
+      targets.forEach((t) => { t.piece = null; });
+      scoreEl.textContent = "⭐ 0 / " + targets.length;
+      feedback.textContent = "↻ Doska tozalandi. Qaytadan boshlang!";
+    });
+  })();
   $("backToQuarters").addEventListener("click",()=>{$("quarterMapScreen").classList.add("hidden");$("quarterScreen").classList.remove("hidden");renderQuarterHub();window.scrollTo(0,0)});
   $("previousQuarter").addEventListener("click",()=>{if(activeQuarter>0)openQuarter(activeMapCourse.quarters[activeQuarter-1].id)});$("nextQuarter").addEventListener("click",()=>{if(activeQuarter<3)openQuarter(activeMapCourse.quarters[activeQuarter+1].id)});
   $("returnToMap").addEventListener("click",()=>{document.body.classList.remove("lesson-intro-active","lesson-problem-active");$("problemSituationScreen").classList.add("hidden");hideKnowledgeScreen();hideSafetyScreen();hideExerciseScreen();$("lessonIntroScreen").classList.add("hidden");$("learningScreen").classList.add("hidden");$("quarterMapScreen").classList.remove("hidden");renderQuarterMap();window.scrollTo(0,0)});

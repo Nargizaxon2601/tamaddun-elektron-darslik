@@ -780,6 +780,22 @@ body.lesson-problem-active .topbar { display: none; }
 .l2-scene > .scene-hunt { font-size: 1.4cqw; line-height: 1.2; }
 .l2-scene > #sceneHuntScore { white-space: nowrap; font-size: 1.1cqw; }
 .l2-scene > .scene-hunt.is-running { font-size: 1.2cqw; }
+/* 3-dars 2-bosqich: muammoli vaziyat — shakllarni doskaga surish */
+.l2-scene > .l2-drawn-nav.l2-fwd-nav { background: linear-gradient(180deg,#ffc83d,#ff8a00) !important; box-shadow: 0 0 0 .35cqw #fff, 0 .45cqw 0 #b85d00, 0 .8cqw 1.6cqw rgba(0,0,0,.25); }
+.l2-scene > .l2-drawn-nav.l2-fwd-nav::before { content: "➡"; }
+.l2-scene > .mv-src { z-index: 4; border-radius: 1cqw; cursor: grab; touch-action: none; transition: transform .15s, box-shadow .15s, background .15s; }
+.l2-scene > .mv-src:hover, .l2-scene > .mv-src:focus-visible { transform: scale(1.06); background: rgba(255,255,255,.22) !important; box-shadow: 0 0 0 .25cqw #ffb21a; outline: none; }
+.l2-scene > .mv-target { position: absolute; z-index: 2; pointer-events: none; border-radius: .6cqw; transition: box-shadow .2s, background .2s; }
+.l2-scene > .mv-target.is-hover { background: rgba(255,214,64,.28); box-shadow: 0 0 0 .25cqw #ffb21a; }
+.l2-scene > .mv-target.is-wrong { animation: fold-shake .45s; background: rgba(255,82,82,.22); }
+.l2-scene > .mv-score { white-space: nowrap; font-size: 1.1cqw; }
+.l2-scene > .mv-reset { position: absolute; z-index: 6; font-size: 1cqw; line-height: 1.2; justify-content: center; }
+.l2-scene > .mv-piece { position: absolute; z-index: 5; transform: translate(-50%, -50%); cursor: grab; touch-action: none; user-select: none; -webkit-user-select: none; background: var(--c); box-shadow: inset 0 -.3cqw 0 rgba(0,0,0,.12); }
+.l2-scene > .mv-piece.is-drag { z-index: 30; cursor: grabbing; filter: drop-shadow(0 .5cqw .5cqw rgba(0,0,0,.3)); }
+.l2-scene > .mv-piece.is-placed { cursor: pointer; animation: cmp-snap .35s cubic-bezier(.2,.8,.2,1.5); }
+.l2-scene > .mv-piece[data-key="window"] { z-index: 6; }
+.l2-scene > .mv-piece.is-shine { animation: mv-shine 1.4s ease-in-out infinite; }
+@keyframes mv-shine { 50% { filter: brightness(1.18) drop-shadow(0 0 .8cqw rgba(255,214,64,.9)); } }
 @media (max-width: 600px) {
   .lesson-intro-screen { padding: 6px; }
   .lesson-intro-art { width: min(100%, calc((100vh - 12px) * 1.7779)); }
