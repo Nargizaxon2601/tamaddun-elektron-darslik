@@ -3175,9 +3175,8 @@ document.addEventListener("DOMContentLoaded", () => {
   })();
   // 3-dars 8-bosqich: dars yakuni — o'zini baholash va bayram konfettisi
   (function setupLesson3Final() {
-    const rates = Array.from(document.querySelectorAll(".self-rate"));
-    if (!rates.length) return;
-    const scene = rates[0].parentElement;
+    new Set(Array.from(document.querySelectorAll(".self-rate"), (r) => r.parentElement)).forEach((scene) => {
+    const rates = Array.from(scene.querySelectorAll(".self-rate"));
     const page = scene.closest("[data-l2-page]");
     const feedback = page.querySelector(".l2-feedback");
     const box = scene.querySelector(".l3-confetti");
@@ -3214,6 +3213,12 @@ document.addEventListener("DOMContentLoaded", () => {
       if (wasHidden && !hidden) setTimeout(() => confetti(18, ["🎉", "⭐", "🍂", "🏠", "🌳", "☀️"]), 250);
       wasHidden = hidden;
     }).observe(page, { attributes: true, attributeFilter: ["class"] });
+    scene.querySelectorAll(".cheer-btn").forEach((c) => c.addEventListener("click", () => {
+      c.classList.remove("is-pop"); void c.offsetWidth; c.classList.add("is-pop");
+      feedback.textContent = c.dataset.say;
+      confetti(22, ["🏆", "⭐", "🌟", "🎉", "⛵"]);
+    }));
+    });
   })();
   // 4-dars 2-bosqich: «Muammoli vaziyat» — savol kartochkalari, javob tanlash oynasi
   (function setupThinkCards() {
@@ -3279,7 +3284,7 @@ document.addEventListener("DOMContentLoaded", () => {
         score.textContent = "⭐ " + solved.size + " / " + cards.length;
         why.textContent = cur.dataset.why;
         if (solved.size === cards.length) {
-          feedback.textContent = "🏆 Barakalla! Hamma savollarga javob topdingiz. Yechim tayyor: geometrik shakllardan kemacha applikatsiyasini yasaymiz! ➡ Keyingi sahifaga o‘ting.";
+          feedback.textContent = page.dataset.thinkDone || "🏆 Barakalla! Hamma savollarga javob topdingiz. Yechim tayyor: geometrik shakllardan kemacha applikatsiyasini yasaymiz! ➡ Keyingi sahifaga o‘ting.";
           score.classList.add("is-win");
         } else {
           feedback.textContent = cur.dataset.why + " (" + solved.size + " / " + cards.length + ")";

@@ -950,6 +950,10 @@ body.lesson-problem-active .topbar { display: none; }
 .so-panel .qa-options button { font-size: 1.2cqw; padding: .5cqw .9cqw; }
 .so-panel .think-why { font-size: 1.1cqw; }
 .so-panel .qa-next { font-size: 1.2cqw; padding: .5cqw 1.6cqw; }
+/* 4-dars 8-bosqich: rag'batlantirish kubogi */
+.l2-scene > .cheer-btn { z-index: 3; border-radius: 2cqw; transition: transform .2s cubic-bezier(.2,.8,.2,1.4), box-shadow .2s, background .2s; }
+.l2-scene > .cheer-btn:hover, .l2-scene > .cheer-btn:focus-visible { background: rgba(255,240,170,.2) !important; box-shadow: 0 0 0 .3cqw #ffb21a, 0 0 1.8cqw rgba(255,178,26,.8); outline: none; }
+.l2-scene > .cheer-btn.is-pop { animation: ex-beat .5s ease-out; }
 @media (max-width: 600px) {
   .lesson-intro-screen { padding: 6px; }
   .lesson-intro-art { width: min(100%, calc((100vh - 12px) * 1.7779)); }
