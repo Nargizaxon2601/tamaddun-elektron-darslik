@@ -917,6 +917,10 @@ body.lesson-problem-active .topbar { display: none; }
 .dp-panel .qa-next { font-size: 1.2cqw; padding: .5cqw 1.6cqw; }
 .dp-panel .qa-head { align-items: center; gap: 1cqw; }
 .dp-turn { flex: 1; text-align: center; color: #e64b85; }
+/* 4-dars 4-bosqich 1/2: shakl nomlari namunadagi kemacha qismlarini yoritadi */
+.l2-scene > .pic-card.pic-word { z-index: 4; border-radius: .6cqw; }
+.l2-scene > .pic-card.pic-word.is-active { transform: translateY(-2px) scale(1.06); background: rgba(255,214,64,.25) !important; }
+.l2-scene > .pic-mark[data-part="circle"], .l2-scene > .pic-part[data-part="circle"] { border-radius: 50%; }
 @media (max-width: 600px) {
   .lesson-intro-screen { padding: 6px; }
   .lesson-intro-art { width: min(100%, calc((100vh - 12px) * 1.7779)); }

@@ -2758,21 +2758,23 @@ document.addEventListener("DOMContentLoaded", () => {
   })();
   // 3-dars 4-bosqich 2/2: «Manzara tarkibi» kartochkalari namunadagi qismlarni yoritadi (va aksincha)
   (function setupPictureParts() {
-    const cards = Array.from(document.querySelectorAll(".pic-card"));
-    if (!cards.length) return;
-    const scene = cards[0].parentElement;
+    new Set(Array.from(document.querySelectorAll(".pic-card"), (c) => c.parentElement)).forEach((scene) => {
+    const cards = Array.from(scene.querySelectorAll(".pic-card"));
     const page = scene.closest("[data-l2-page]");
     const feedback = page.querySelector(".l2-feedback");
+    const doneMsg = scene.dataset.picDone || " 🎉 Manzaraning hamma qismlarini o‘rgandingiz!";
     const seen = new Set();
-    function show(part) {
+    function show(part, el) {
       scene.querySelectorAll(".pic-mark").forEach((m) => m.classList.toggle("is-on", m.dataset.part === part));
       cards.forEach((c) => c.classList.toggle("is-active", c.dataset.part === part));
       const card = cards.find((c) => c.dataset.part === part);
+      if (!card) { feedback.textContent = el.dataset.say || ""; return; }
       card.classList.add("is-seen");
       seen.add(part);
-      feedback.textContent = card.dataset.say + (seen.size === cards.length ? " 🎉 Manzaraning hamma qismlarini o‘rgandingiz!" : " (" + seen.size + " / " + cards.length + ")");
+      feedback.textContent = card.dataset.say + (seen.size === cards.length ? doneMsg : " (" + seen.size + " / " + cards.length + ")");
     }
-    scene.querySelectorAll(".pic-card, .pic-part").forEach((el) => el.addEventListener("click", () => show(el.dataset.part)));
+    scene.querySelectorAll(".pic-card, .pic-part").forEach((el) => el.addEventListener("click", () => show(el.dataset.part, el)));
+    });
   })();
   // 3-dars 6-bosqich: Amaliy ish — shakllarni ish maydoniga surib, uycha, daraxtlar va quyoshli manzara yaratamiz
   (function setupLandscape() {
