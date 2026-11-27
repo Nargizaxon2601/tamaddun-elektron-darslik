@@ -829,6 +829,28 @@ body.lesson-problem-active .topbar { display: none; }
 .l2-scene > .ex-finish:hover, .l2-scene > .ex-finish:focus-visible { transform: scale(1.02); background: rgba(255,255,255,.14) !important; box-shadow: 0 0 0 .3cqw #fff, 0 0 0 .6cqw rgba(124,77,255,.45); outline: none; }
 .l2-scene > .ex-finish.is-ready { box-shadow: 0 0 0 .4cqw #4cd964, 0 0 2.6cqw .4cqw rgba(76,217,100,.8); animation: mv-shine 1.4s ease-in-out infinite; }
 .l2-scene > .ex-finish.is-cheer { animation: ex-beat .5s ease-out; }
+/* 3-dars 6-bosqich: Amaliy ish — manzara yaratish maydoni */
+.l2-scene > .ls-src, .l2-scene > .ls-fon { z-index: 4; border-radius: 1.2cqw; cursor: grab; touch-action: none; transition: transform .15s, box-shadow .15s, background .15s; }
+.l2-scene > .ls-fon { cursor: pointer; }
+.l2-scene > .ls-src:hover, .l2-scene > .ls-src:focus-visible, .l2-scene > .ls-fon:hover, .l2-scene > .ls-fon:focus-visible { transform: scale(1.04); background: rgba(255,255,255,.22) !important; box-shadow: 0 0 0 .22cqw #ffb21a; outline: none; }
+.l2-scene > .ls-board { position: absolute; z-index: 2; pointer-events: none; border-radius: 1.6cqw; overflow: hidden; transition: box-shadow .3s; }
+.l2-scene > .ls-board.is-win { box-shadow: 0 0 0 .4cqw #4cd964, 0 0 2.4cqw rgba(76,217,100,.8); }
+.ls-bg { position: absolute; inset: 0; opacity: 0; transition: opacity .4s; background: linear-gradient(180deg, #bfe6ff 0%, #e4f5ff 58%, #9be07a 58.2%, #6cc24a 100%); }
+.ls-bg.is-on { opacity: 1; }
+.l2-scene > .ls-ghost { position: absolute; pointer-events: none; border: .15cqw dashed #b9a6ff; background: rgba(142,79,214,.07); transition: opacity .25s, box-shadow .25s, background .25s; }
+.l2-scene > .ls-ghost.shape-tri { border: 0; background: rgba(142,79,214,.18); }
+.l2-scene > .ls-ghost.is-lit { background: rgba(255,200,40,.35); border-color: #ff9d00; box-shadow: 0 0 1.2cqw rgba(255,178,26,.9); animation: mv-shine 1s ease-in-out infinite; }
+.l2-scene.ls-noghost > .ls-ghost:not(.is-lit) { opacity: 0; }
+.l2-scene > .ls-step { z-index: 3; border-radius: 1.2cqw; transition: transform .2s cubic-bezier(.2,.8,.2,1.4), box-shadow .18s, background .18s; }
+.l2-scene > .ls-step:hover, .l2-scene > .ls-step:focus-visible { background: rgba(255,255,255,.18) !important; box-shadow: 0 0 0 .25cqw #fff, 0 0 0 .5cqw rgba(124,77,255,.45); outline: none; }
+.l2-scene > .ls-step.is-on { box-shadow: 0 0 0 .3cqw #ffb21a, 0 0 1.6cqw rgba(255,178,26,.8); }
+.l2-scene > .ls-done { opacity: 0; transform: scale(.4); transition: opacity .25s, transform .3s cubic-bezier(.2,.8,.2,1.5); }
+.l2-scene > .ls-done.is-on { opacity: 1; transform: scale(1); }
+.l2-scene > .ls-tools { justify-content: center; }
+.cmp-piece.ls-piece { transform: none; }
+.cmp-piece.ls-piece.is-snap { animation: ls-snap .35s cubic-bezier(.2,.8,.2,1.5); }
+@keyframes ls-snap { 0% { transform: scale(1.2); } 100% { transform: scale(1); } }
+.l2-scene > .l2-nav-sm::before { font-size: 2.1cqw !important; }
 @media (max-width: 600px) {
   .lesson-intro-screen { padding: 6px; }
   .lesson-intro-art { width: min(100%, calc((100vh - 12px) * 1.7779)); }

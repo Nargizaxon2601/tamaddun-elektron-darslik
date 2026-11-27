@@ -2772,6 +2772,221 @@ document.addEventListener("DOMContentLoaded", () => {
     }
     scene.querySelectorAll(".pic-card, .pic-part").forEach((el) => el.addEventListener("click", () => show(el.dataset.part)));
   })();
+  // 3-dars 6-bosqich: Amaliy ish — shakllarni ish maydoniga surib, uycha, daraxtlar va quyoshli manzara yaratamiz
+  (function setupLandscape() {
+    const board = document.querySelector(".ls-board");
+    if (!board) return;
+    const scene = board.parentElement;
+    const page = scene.closest("[data-l2-page]");
+    const feedback = page.querySelector(".l2-feedback");
+    const W = 1672, H = 941;
+    const B = { x1: 470, y1: 382, x2: 1143, y2: 873 };
+    const SIZE = { sq: [80, 80], rect: [110, 46], tri: [90, 80], circle: [80, 80], half: [110, 55] };
+    const NAMES = { sq: "kvadrat", rect: "to‘g‘ri to‘rtburchak", tri: "uchburchak", circle: "doira", half: "yarimdoira" };
+    const slots = [
+      { id: "wall", step: 1, shape: "sq", cx: 805, cy: 705, w: 180, h: 170, c: "#ffd43b", z: 5, say: "uy devori (kvadrat)" },
+      { id: "roof", step: 1, shape: "tri", cx: 805, cy: 560, w: 230, h: 120, c: "#e53935", z: 6, say: "uy tomi (uchburchak)" },
+      { id: "door", step: 2, shape: "rect", cx: 845, cy: 738, w: 50, h: 104, c: "#8d5a2b", z: 7, say: "eshik (to‘g‘ri to‘rtburchak)" },
+      { id: "window", step: 2, shape: "sq", cx: 763, cy: 680, w: 54, h: 54, c: "#42a5f5", z: 7, say: "deraza (kichik kvadrat)" },
+      { id: "trunkL", step: 3, shape: "rect", cx: 590, cy: 745, w: 28, h: 100, c: "#8d5a2b", z: 5, say: "daraxt tanasi (to‘g‘ri to‘rtburchak)" },
+      { id: "crownL", step: 3, shape: "circle", cx: 590, cy: 640, w: 120, h: 120, c: "#ff8a1f", z: 6, say: "daraxt toji (doira)" },
+      { id: "trunkR", step: 3, shape: "rect", cx: 1040, cy: 752, w: 28, h: 86, c: "#8d5a2b", z: 5, say: "daraxt tanasi (to‘g‘ri to‘rtburchak)" },
+      { id: "crownR", step: 3, shape: "half", cx: 1040, cy: 672, w: 150, h: 76, c: "#ffd43b", z: 6, say: "daraxt toji (yarimdoira)" },
+      { id: "sun", step: 4, shape: "circle", cx: 560, cy: 470, w: 90, h: 90, c: "#ffc928", z: 5, say: "quyosh (doira)" }
+    ];
+    const STEP_SAY = {
+      1: "1-qadam: Uycha shakllarini tayyorlang — devor uchun katta kvadrat, tom uchun uchburchak.",
+      2: "2-qadam: Uycha detallarini yopishtiring — eshik (to‘g‘ri to‘rtburchak) va deraza (kichik kvadrat).",
+      3: "3-qadam: Daraxtlarni joylashtiring — tanasi to‘g‘ri to‘rtburchak, toji doira yoki yarimdoira.",
+      4: "4-qadam: Quyoshni tayyorlab, osmonga — yuqori burchakka qo‘shing (doira).",
+      5: "5-qadam: Barcha qismlarni fon qog‘ozga tartibli yopishtirib, manzara hosil qiling!"
+    };
+    const pct = (v, t) => (v / t * 100) + "%";
+    function place(el, cx, cy, w, h) { el.style.left = pct(cx - w / 2, W); el.style.top = pct(cy - h / 2, H); el.style.width = pct(w, W); el.style.height = pct(h, H); }
+    slots.forEach((s) => {
+      const g = document.createElement("span");
+      g.className = "ls-ghost shape-" + s.shape;
+      g.dataset.step = s.step;
+      place(g, s.cx, s.cy, s.w, s.h);
+      g.style.zIndex = 3;
+      scene.insertBefore(g, board.nextSibling);
+      s.ghost = g; s.piece = null;
+    });
+    const progress = scene.querySelector(".ls-progress");
+    const bg = board.querySelector(".ls-bg");
+    const filled = () => slots.filter((s) => s.piece).length;
+    let won = false;
+    function update(msg) {
+      const n = filled();
+      progress.textContent = "⭐ " + n + " / " + slots.length;
+      [1, 2, 3, 4].forEach((k) => {
+        const ok = slots.filter((s) => s.step === k).every((s) => s.piece);
+        scene.querySelector('.ls-done[data-step="' + k + '"]').classList.toggle("is-on", ok);
+      });
+      const all = n === slots.length;
+      scene.querySelector('.ls-done[data-step="5"]').classList.toggle("is-on", all && bg.classList.contains("is-on"));
+      board.classList.toggle("is-win", all);
+      if (all && !won) {
+        won = true;
+        if (!bg.classList.contains("is-on")) { bg.classList.add("is-on"); scene.querySelector('.ls-done[data-step="5"]').classList.add("is-on"); }
+        feedback.textContent = "🏆 Barakalla! Uycha, daraxtlar va quyoshli manzarangiz tayyor! Siz haqiqiy usta ekansiz!";
+        confetti();
+        return;
+      }
+      if (!all) won = false;
+      if (msg) feedback.textContent = msg;
+    }
+    function confetti() {
+      const box = document.createElement("div");
+      box.className = "final-confetti";
+      for (let i = 0; i < 26; i++) {
+        const s = document.createElement("span");
+        s.textContent = ["🍂", "🍁", "⭐", "🌟", "🎉"][i % 5];
+        s.style.left = (Math.random() * 96) + "%";
+        s.style.animationDuration = (2 + Math.random() * 2) + "s";
+        s.style.animationDelay = (Math.random() * .8) + "s";
+        box.appendChild(s);
+      }
+      scene.appendChild(box);
+      setTimeout(() => box.remove(), 5000);
+    }
+    function toScene(e) {
+      const r = scene.getBoundingClientRect();
+      return { x: (e.clientX - r.left) / r.width * W, y: (e.clientY - r.top) / r.height * H };
+    }
+    function setPos(p, x, y) {
+      p.dataset.x = x; p.dataset.y = y;
+      place(p, x, y, Number(p.dataset.w), Number(p.dataset.h));
+    }
+    function makePiece(shape, color) {
+      const p = document.createElement("div");
+      const [w, h] = SIZE[shape];
+      p.className = "cmp-piece ls-piece shape-" + shape;
+      p.dataset.shape = shape; p.dataset.w = w; p.dataset.h = h;
+      p.style.setProperty("--c", color);
+      p.style.zIndex = 9;
+      p.setAttribute("role", "img");
+      p.setAttribute("aria-label", NAMES[shape]);
+      scene.appendChild(p);
+      p.addEventListener("pointerdown", (e) => { e.preventDefault(); startDrag(p, e, false); });
+      return p;
+    }
+    function release(p) { slots.forEach((s) => { if (s.piece === p) s.piece = null; }); }
+    function snap(p, s) {
+      release(p);
+      s.piece = p;
+      p.dataset.w = s.w; p.dataset.h = s.h;
+      p.style.setProperty("--c", s.c);
+      p.style.zIndex = s.z;
+      setPos(p, s.cx, s.cy);
+      p.classList.remove("is-snap"); void p.offsetWidth; p.classList.add("is-snap");
+    }
+    const cap = (t) => t[0].toUpperCase() + t.slice(1);
+    function drop(p, x, y, fresh) {
+      const inside = x > B.x1 && x < B.x2 && y > B.y1 && y < B.y2;
+      if (!inside) {
+        release(p); p.remove();
+        update(fresh ? "Shaklni ish maydoniga (oq varaqqa) olib boring!" : "🗑 Shakl ish maydonidan olib tashlandi.");
+        return;
+      }
+      const near = slots.filter((s) => s.shape === p.dataset.shape && (!s.piece || s.piece === p) && Math.hypot(s.cx - x, s.cy - y) < Math.max(s.w, s.h) * .55 + 40)
+        .sort((a, b) => Math.hypot(a.cx - x, a.cy - y) - Math.hypot(b.cx - x, b.cy - y));
+      if (near.length) { snap(p, near[0]); update("✅ " + cap(near[0].say) + " o‘z joyiga yopishtirildi!"); return; }
+      release(p);
+      const [w, h] = SIZE[p.dataset.shape];
+      p.dataset.w = w; p.dataset.h = h; p.style.zIndex = 9;
+      setPos(p, x, y);
+      const other = slots.find((s) => !s.piece && Math.hypot(s.cx - x, s.cy - y) < Math.max(s.w, s.h) * .55 + 20);
+      update(other ? "🤔 Bu joyga " + NAMES[p.dataset.shape] + " emas, " + other.say + " kerak!" : "🎨 " + cap(NAMES[p.dataset.shape]) + " ish maydoniga qo‘yildi. Chiziqli joyga yaqin olib borsangiz, yopishib qoladi!");
+    }
+    function startDrag(p, e, fresh, onTap) {
+      const id = e.pointerId;
+      let moved = false;
+      const s0 = toScene(e);
+      const ox = fresh ? 0 : Number(p.dataset.x) - s0.x, oy = fresh ? 0 : Number(p.dataset.y) - s0.y;
+      p.classList.add("is-drag");
+      const move = (ev) => {
+        if (ev.pointerId !== id) return;
+        const s = toScene(ev);
+        if (!moved && Math.hypot(s.x - s0.x, s.y - s0.y) < 4) return;
+        moved = true;
+        p.style.visibility = "";
+        setPos(p, s.x + ox, s.y + oy);
+      };
+      const up = (ev) => {
+        if (ev.pointerId !== id) return;
+        window.removeEventListener("pointermove", move);
+        window.removeEventListener("pointerup", up);
+        window.removeEventListener("pointercancel", up);
+        p.classList.remove("is-drag");
+        if (!moved) { if (onTap && ev.type === "pointerup") onTap(); else if (fresh) p.remove(); return; }
+        if (ev.type === "pointercancel") { drop(p, -1, -1, fresh); return; }
+        drop(p, Number(p.dataset.x), Number(p.dataset.y), fresh);
+      };
+      window.addEventListener("pointermove", move);
+      window.addEventListener("pointerup", up);
+      window.addEventListener("pointercancel", up);
+    }
+    function tapPlace(p, shape) {
+      const s = slots.find((sl) => sl.shape === shape && !sl.piece);
+      p.style.visibility = "";
+      if (s) { snap(p, s); update("✅ " + cap(s.say) + " joyiga qo‘yildi! Uni surib, boshqa joyga ham ko‘chirishingiz mumkin."); }
+      else { p.remove(); update("Bu shakl uchun bo‘sh joy qolmadi. Shaklni surib, xohlagan joyingizga qo‘yishingiz mumkin!"); }
+    }
+    scene.querySelectorAll(".ls-src").forEach((src) => {
+      src.addEventListener("pointerdown", (e) => {
+        e.preventDefault();
+        const s0 = toScene(e);
+        const p = makePiece(src.dataset.shape, src.dataset.color);
+        setPos(p, s0.x, s0.y);
+        p.style.visibility = "hidden";
+        startDrag(p, e, true, () => tapPlace(p, src.dataset.shape));
+      });
+      src.addEventListener("keydown", (e) => {
+        if (e.key !== "Enter" && e.key !== " ") return;
+        e.preventDefault();
+        tapPlace(makePiece(src.dataset.shape, src.dataset.color), src.dataset.shape);
+      });
+    });
+    function toggleFon(on) {
+      const v = bg.classList.toggle("is-on", on);
+      update(v ? "🖼 Asos qog‘oz (fon) ish maydoniga qo‘yildi: osmon va yashil o‘tloq. Endi shakllarni yopishtiramiz!" : "🖼 Fon olib tashlandi.");
+    }
+    scene.querySelector(".ls-fon").addEventListener("click", () => toggleFon());
+    let lit = 0;
+    scene.querySelectorAll(".ls-step").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const k = Number(btn.dataset.step);
+        clearTimeout(lit);
+        scene.querySelectorAll(".ls-step").forEach((b) => b.classList.toggle("is-on", b === btn));
+        slots.forEach((s) => s.ghost.classList.toggle("is-lit", k === 5 ? !s.piece : s.step === k));
+        const left = slots.filter((s) => (k === 5 || s.step === k) && !s.piece);
+        feedback.textContent = STEP_SAY[k] + (left.length ? " Yonib turgan joylarga " + left.map((s) => s.say).join(", ") + " qo‘ying." : " ✅ Bu qadam bajarilgan!");
+        if (k === 5 && !bg.classList.contains("is-on")) feedback.textContent += " Avval «Asos qog‘oz (fon)»ni bosing!";
+        lit = setTimeout(() => { slots.forEach((s) => s.ghost.classList.remove("is-lit")); scene.querySelectorAll(".ls-step").forEach((b) => b.classList.remove("is-on")); }, 4000);
+      });
+    });
+    scene.querySelector(".ls-ghostbtn").addEventListener("click", () => {
+      const off = scene.classList.toggle("ls-noghost");
+      feedback.textContent = off ? "👁 Chiziqlar yashirildi. Endi o‘zingiz joylashtirib ko‘ring!" : "👁 Chiziqlar ko‘rsatildi.";
+    });
+    scene.querySelector(".ls-sample").addEventListener("click", () => {
+      bg.classList.add("is-on");
+      slots.filter((s) => !s.piece).forEach((s, i) => setTimeout(() => {
+        if (s.piece) return;
+        snap(makePiece(s.shape, s.c), s);
+        update("✨ Namuna: " + s.say + "…");
+      }, i * 260));
+    });
+    scene.querySelector(".ls-clear").addEventListener("click", () => {
+      scene.querySelectorAll(".ls-piece").forEach((p) => p.remove());
+      slots.forEach((s) => { s.piece = null; });
+      bg.classList.remove("is-on");
+      won = false;
+      update("🗑 Ish maydoni tozalandi. Qaytadan boshlang!");
+    });
+    update();
+  })();
   $("backToQuarters").addEventListener("click",()=>{$("quarterMapScreen").classList.add("hidden");$("quarterScreen").classList.remove("hidden");renderQuarterHub();window.scrollTo(0,0)});
   $("previousQuarter").addEventListener("click",()=>{if(activeQuarter>0)openQuarter(activeMapCourse.quarters[activeQuarter-1].id)});$("nextQuarter").addEventListener("click",()=>{if(activeQuarter<3)openQuarter(activeMapCourse.quarters[activeQuarter+1].id)});
   $("returnToMap").addEventListener("click",()=>{document.body.classList.remove("lesson-intro-active","lesson-problem-active");$("problemSituationScreen").classList.add("hidden");hideKnowledgeScreen();hideSafetyScreen();hideExerciseScreen();$("lessonIntroScreen").classList.add("hidden");$("learningScreen").classList.add("hidden");$("quarterMapScreen").classList.remove("hidden");renderQuarterMap();window.scrollTo(0,0)});
