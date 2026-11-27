@@ -3618,7 +3618,7 @@ document.addEventListener("DOMContentLoaded", () => {
     newGame();
   })();
   // 5-dars 1-bosqich: «Kamalakni bo'ya» o'yini va «Nega kamalak paydo bo'ladi?» savoli
-  document.querySelectorAll(".rb-svg").forEach((svg) => {
+  document.querySelectorAll(".rb-svg:not(.rf-svg)").forEach((svg) => {
     const scene = svg.parentElement;
     const page = scene.closest("[data-l2-page]");
     const feedback = page.querySelector(".l2-feedback");
@@ -3758,6 +3758,139 @@ document.addEventListener("DOMContentLoaded", () => {
     scene.querySelector(".rb-start").addEventListener("click", startGame);
     scene.querySelector(".rb-ask").addEventListener("click", openQuestion);
     scene.querySelector(".rb-cloud").addEventListener("click", openQuestion);
+  });
+
+  // 5-dars 2-bosqich: kamalakning yo'qolgan ranglarini topish (bosib yoki sudrab)
+  document.querySelectorAll(".rf-svg").forEach((svg) => {
+    const scene = svg.parentElement;
+    const page = scene.closest("[data-l2-page]");
+    const feedback = page.querySelector(".l2-feedback");
+    const slots = Array.from(svg.querySelectorAll(".rf-slot"));
+    const tags = Array.from(scene.querySelectorAll(".rf-tag"));
+    const score = scene.querySelector(".rf-score");
+    const chest = scene.querySelector(".rf-chest");
+    const confBox = scene.querySelector(".rf-confetti");
+    const ORDER = ["qizil", "olovrang", "sariq", "yashil", "havorang", "ko‘k", "binafsha"];
+    const done = new Set();
+    let pick = null, miss = 0, actx = null;
+    function note(i) {
+      try {
+        actx = actx || new (window.AudioContext || window.webkitAudioContext)();
+        const o = actx.createOscillator(), g = actx.createGain();
+        o.frequency.value = [262, 294, 330, 349, 392, 440, 494][i] || 523;
+        o.type = "triangle"; g.gain.setValueAtTime(0.18, actx.currentTime); g.gain.exponentialRampToValueAtTime(0.001, actx.currentTime + 0.5);
+        o.connect(g); g.connect(actx.destination); o.start(); o.stop(actx.currentTime + 0.5);
+      } catch (e) { /* ovozsiz ham ishlaydi */ }
+    }
+    function flash(el, cls) { el.classList.remove(cls); void el.getBoundingClientRect(); el.classList.add(cls); setTimeout(() => el.classList.remove(cls), 700); }
+    function confetti(n) {
+      for (let i = 0; i < n; i++) {
+        const s = document.createElement("span");
+        s.textContent = ["🌈", "⭐", "🎨", "☀️", "🎉"][i % 5];
+        s.style.left = Math.random() * 96 + "%";
+        s.style.animationDuration = 1.8 + Math.random() * 1.6 + "s";
+        s.style.animationDelay = Math.random() * 0.5 + "s";
+        confBox.appendChild(s);
+        setTimeout(() => s.remove(), 4200);
+      }
+    }
+    function setScore() {
+      score.textContent = done.size === slots.length ? "🏆 3 / 3 · ↻ Qaytadan" : "🌈 " + done.size + " / 3 rang" + (miss ? " · xato: " + miss : "");
+      score.classList.toggle("is-win", done.size === slots.length);
+    }
+    function select(tag) {
+      if (tag.classList.contains("is-used")) { feedback.textContent = "✅ «" + tag.dataset.name + "» rangi allaqachon joyiga qo‘yildi."; return; }
+      pick = tag;
+      tags.forEach((t) => t.classList.toggle("is-pick", t === tag));
+      feedback.textContent = "🖌 «" + tag.dataset.name + "» tanlandi. Endi kamalakdagi «?» joyini bosing!";
+    }
+    function drop(tag, slot) {
+      const name = tag.dataset.name;
+      const isMissing = slots.some((s) => s.dataset.name === name);
+      if (done.has(slot.dataset.i)) { feedback.textContent = "✅ Bu joy allaqachon to‘ldirilgan. Boshqa «?» joyini toping!"; return; }
+      if (!isMissing) {
+        miss++; flash(tag, "is-wrong"); flash(slot, "is-wrong");
+        feedback.textContent = "🤔 «" + name + "» rangi kamalakda bor — u yo‘qolmagan! Kamalakka qarab, qaysi ranglar yo‘qligini toping.";
+      } else if (slot.dataset.name !== name) {
+        miss++; flash(tag, "is-wrong"); flash(slot, "is-wrong");
+        const i = ORDER.indexOf(slot.dataset.name);
+        feedback.textContent = "🤔 «" + name + "» bu yerga emas. Bu joy " + ORDER[i - 1] + " va " + (ORDER[i + 1] || "oxiri") + " orasida. Tartib: " + ORDER.join(", ") + ".";
+      } else {
+        done.add(slot.dataset.i);
+        slot.classList.add("is-on"); slot.style.fill = slot.dataset.col;
+        tag.classList.remove("is-pick"); tag.classList.add("is-used");
+        note(ORDER.indexOf(name));
+        if (done.size === slots.length) {
+          feedback.textContent = "🏆 Barakalla! Kamalak qayta tiklandi: " + ORDER.join(", ") + ". Endi muhokama savollariga javob bering!";
+          slots.forEach((s, k) => setTimeout(() => flash(s, "is-flash"), k * 150));
+          confetti(30);
+        } else feedback.textContent = "✅ To‘g‘ri! «" + name + "» o‘z joyiga qaytdi. Yana " + (slots.length - done.size) + " ta rang qoldi!";
+      }
+      pick = null;
+      tags.forEach((t) => t.classList.remove("is-pick"));
+      setScore();
+    }
+    function reset() {
+      done.clear(); miss = 0; pick = null;
+      slots.forEach((s) => { s.classList.remove("is-on"); s.style.fill = ""; });
+      tags.forEach((t) => t.classList.remove("is-used", "is-pick"));
+      setScore();
+      feedback.textContent = "↻ Kamalak yana ranglarini yo‘qotdi! Yo‘qolgan 3 ta rangni toping.";
+    }
+    slots.forEach((slot) => slot.addEventListener("click", () => {
+      if (!pick) { flash(slot, "is-wrong"); feedback.textContent = "👇 Avval pastdagi rang yorlig‘ini tanlang, keyin «?» joyini bosing!"; return; }
+      drop(pick, slot);
+    }));
+    tags.forEach((tag) => {
+      let start = null, ghost = null, moved = false;
+      tag.addEventListener("pointerdown", (e) => {
+        if (tag.classList.contains("is-used")) return;
+        start = { x: e.clientX, y: e.clientY }; moved = false;
+        try { tag.setPointerCapture(e.pointerId); } catch (err) { /* */ }
+      });
+      tag.addEventListener("pointermove", (e) => {
+        if (!start) return;
+        if (!moved && Math.hypot(e.clientX - start.x, e.clientY - start.y) < 8) return;
+        if (!moved) {
+          moved = true; select(tag);
+          ghost = document.createElement("div");
+          ghost.className = "rf-ghost"; ghost.textContent = tag.dataset.name;
+          ghost.style.setProperty("--c", tag.style.getPropertyValue("--c"));
+          document.body.appendChild(ghost);
+        }
+        ghost.style.left = e.clientX + "px"; ghost.style.top = e.clientY + "px";
+        const el = document.elementFromPoint(e.clientX, e.clientY);
+        slots.forEach((s) => s.classList.toggle("is-hover", s === el));
+      });
+      const end = (e) => {
+        if (!start) return;
+        start = null;
+        if (!moved) return;
+        ghost.remove(); ghost = null;
+        slots.forEach((s) => s.classList.remove("is-hover"));
+        const el = document.elementFromPoint(e.clientX, e.clientY);
+        const slot = slots.find((s) => s === el);
+        if (slot) drop(tag, slot); else feedback.textContent = "👆 Rangni kamalakdagi «?» joyiga olib boring!";
+        tag.dataset.dragged = "1";
+      };
+      tag.addEventListener("pointerup", end);
+      tag.addEventListener("pointercancel", end);
+      tag.addEventListener("click", () => {
+        if (tag.dataset.dragged) { delete tag.dataset.dragged; return; }
+        select(tag);
+      });
+    });
+    chest.addEventListener("click", () => {
+      flash(chest, "is-pop");
+      const left = slots.filter((s) => !done.has(s.dataset.i));
+      if (!left.length) { feedback.textContent = "🧰 Sandiqdagi barcha ranglar kamalakka qaytdi! Barakalla!"; confetti(12); return; }
+      const s = left[0];
+      flash(s, "is-hint");
+      const i = ORDER.indexOf(s.dataset.name);
+      feedback.textContent = "🧰 Sehrli sandiq maslahati: yonib turgan joy " + ORDER[i - 1] + " va " + (ORDER[i + 1] || "oxiri") + " orasida. U yerga qaysi rang keladi?";
+    });
+    score.addEventListener("click", () => { if (done.size === slots.length) reset(); });
+    setScore();
   });
 
   // Rasmlar: ochilgan sahifa rasmi darhol, qo'shni sahifalarniki oldindan yuklanadi; yuklanguncha belgi ko'rinadi
