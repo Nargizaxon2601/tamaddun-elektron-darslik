@@ -2987,6 +2987,112 @@ document.addEventListener("DOMContentLoaded", () => {
     });
     update();
   })();
+  // 3-dars 7-bosqich: «Xotira sinovi» — manzara 5 soniya ko'rsatiladi, yashiriladi, so'ng 3 ta savol
+  (function setupMemoryGame() {
+    const startBtn = document.querySelector(".mem-start");
+    if (!startBtn) return;
+    const scene = startBtn.parentElement;
+    const page = scene.closest("[data-l2-page]");
+    const feedback = page.querySelector(".l2-feedback");
+    const cover = scene.querySelector(".mem-cover");
+    const hiddenBtn = scene.querySelector(".mem-hidden");
+    const time = startBtn.querySelector(".mem-time");
+    const score = scene.querySelector(".mem-score");
+    const opts = Array.from(scene.querySelectorAll(".mem-opt"));
+    const solved = new Set();
+    let state = "idle", timer = 0, tries = 0;
+    function setState(s) {
+      state = s;
+      scene.dataset.mem = s;
+      cover.classList.toggle("is-on", s === "hidden");
+      hiddenBtn.classList.toggle("is-on", s === "hidden");
+      startBtn.classList.toggle("is-running", s === "showing");
+    }
+    function tick(n) {
+      if (page.classList.contains("hidden")) { reset(); return; }
+      if (n === 0) {
+        time.textContent = "⏰ Vaqt tugadi!";
+        setState("hidden");
+        feedback.textContent = "🙈 Manzara yashirildi! Endi o‘ngdagi 3 ta savolga javob bering. Eslay olasizmi?";
+        return;
+      }
+      time.textContent = "⏳ " + n + " soniya";
+      feedback.textContent = "👀 Diqqat bilan qarang va yodda saqlang: daraxtlar, uychaning tomi, quyoshning rangi… (" + n + ")";
+      timer = setTimeout(() => tick(n - 1), 1000);
+    }
+    function start() {
+      clearTimeout(timer);
+      setState("showing");
+      tick(5);
+    }
+    function reset(msg) {
+      clearTimeout(timer);
+      solved.clear(); tries = 0;
+      opts.forEach((o) => o.classList.remove("is-right", "is-wrong", "is-dim"));
+      scene.querySelectorAll(".mem-ok").forEach((b) => b.classList.remove("is-on"));
+      score.textContent = "⭐ 0 / 3";
+      time.textContent = "▶ 5 soniya";
+      setState("idle");
+      if (msg) feedback.textContent = msg;
+    }
+    function confetti() {
+      const box = document.createElement("div");
+      box.className = "final-confetti";
+      for (let i = 0; i < 24; i++) {
+        const s = document.createElement("span");
+        s.textContent = ["🧠", "⭐", "🍂", "🎉", "🌟"][i % 5];
+        s.style.left = (Math.random() * 96) + "%";
+        s.style.animationDuration = (2 + Math.random() * 2) + "s";
+        s.style.animationDelay = (Math.random() * .8) + "s";
+        box.appendChild(s);
+      }
+      scene.appendChild(box);
+      setTimeout(() => box.remove(), 5000);
+    }
+    startBtn.addEventListener("click", () => {
+      if (state === "showing") { feedback.textContent = "👀 Hali vaqt bor — manzaraga diqqat bilan qarang!"; return; }
+      if (solved.size) reset();
+      start();
+    });
+    cover.addEventListener("click", () => {
+      feedback.textContent = "🙈 Manzara yashirilgan! Savollarga xotiradan javob bering. Yana ko‘rmoqchi bo‘lsangiz, «↻ Qaytadan»ni bosing.";
+    });
+    hiddenBtn.addEventListener("click", () => {
+      feedback.textContent = state === "hidden"
+        ? "❓ Manzara yashirildi! Eslang: nechta daraxt bor edi? Uychaning tomi qanday edi? Quyosh qaysi rangda edi?"
+        : "❓ Bu yerda manzara yashiriladi. Avval «▶ 5 soniya» tugmasini bosib, manzarani yodda saqlang!";
+    });
+    opts.forEach((o) => {
+      o.addEventListener("click", () => {
+        const q = o.dataset.q;
+        const row = opts.filter((x) => x.dataset.q === q);
+        const pre = state === "idle" ? "💡 Avval «▶ 5 soniya»ni bosib o‘ynasangiz, qiziqroq bo‘ladi! " : "";
+        tries++;
+        if (o.dataset.right) {
+          row.forEach((x) => { x.classList.remove("is-wrong"); x.classList.toggle("is-dim", x !== o); });
+          o.classList.add("is-right");
+          solved.add(q);
+          scene.querySelector('.mem-ok[data-q="' + q + '"]').classList.add("is-on");
+          score.textContent = "⭐ " + solved.size + " / 3";
+          if (solved.size === 3) {
+            clearTimeout(timer);
+            setState("done");
+            time.textContent = "🏆 Ajoyib!";
+            feedback.textContent = "🏆 Ajoyib xotira! 3 ta savolning hammasiga to‘g‘ri javob berdingiz" + (tries === 3 ? " — bitta ham xatosiz!" : "!") + " Manzarani yana bir bor ko‘ring.";
+            confetti();
+            return;
+          }
+          feedback.textContent = pre + "✅ To‘g‘ri! " + ({ 1: "Manzarada 2 ta daraxt bor edi.", 2: "Uychaning tomi uchburchak shaklida edi.", 3: "Quyosh sariq rangda edi." })[q] + " (" + solved.size + " / 3)";
+        } else {
+          o.classList.remove("is-wrong"); void o.offsetWidth; o.classList.add("is-wrong");
+          feedback.textContent = pre + "🤔 «" + o.dataset.name + "» emas. Yana bir eslab ko‘ring!";
+        }
+      });
+    });
+    scene.querySelector(".mem-restart").addEventListener("click", () => reset("↻ O‘yin qaytadan boshlandi. «▶ 5 soniya»ni bosing va manzarani yodda saqlang!"));
+    page.querySelectorAll(".l2-back, .l2-next, .knowledge-dot").forEach((b) => b.addEventListener("click", () => { if (state === "showing") reset(); }));
+    setState("idle");
+  })();
   $("backToQuarters").addEventListener("click",()=>{$("quarterMapScreen").classList.add("hidden");$("quarterScreen").classList.remove("hidden");renderQuarterHub();window.scrollTo(0,0)});
   $("previousQuarter").addEventListener("click",()=>{if(activeQuarter>0)openQuarter(activeMapCourse.quarters[activeQuarter-1].id)});$("nextQuarter").addEventListener("click",()=>{if(activeQuarter<3)openQuarter(activeMapCourse.quarters[activeQuarter+1].id)});
   $("returnToMap").addEventListener("click",()=>{document.body.classList.remove("lesson-intro-active","lesson-problem-active");$("problemSituationScreen").classList.add("hidden");hideKnowledgeScreen();hideSafetyScreen();hideExerciseScreen();$("lessonIntroScreen").classList.add("hidden");$("learningScreen").classList.add("hidden");$("quarterMapScreen").classList.remove("hidden");renderQuarterMap();window.scrollTo(0,0)});
