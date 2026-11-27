@@ -925,6 +925,11 @@ body.lesson-problem-active .topbar { display: none; }
 .l2-scene > .ex-music { z-index: 5; border: .25cqw solid #fff; border-radius: 99px; background: linear-gradient(180deg,#8f6bff,#6a3fd0) !important; color: #fff; font-family: inherit; font-weight: 900; font-size: 1.2cqw; line-height: 1.2; box-shadow: 0 .3cqw 0 #42228f; transition: transform .2s; }
 .l2-scene > .ex-music:hover, .l2-scene > .ex-music:focus-visible { transform: scale(1.06); outline: none; }
 .l2-scene > .ex-music.is-on { background: linear-gradient(180deg,#5fe07a,#26b14a) !important; box-shadow: 0 .3cqw 0 #13762e; animation: l2-bob 1.2s ease-in-out infinite; }
+/* 4-dars 6-bosqich: kemacha amaliy ishi — trapetsiya va to'lqin shakllari, dengiz foni */
+.shape-trap { clip-path: polygon(0 0, 100% 0, 82% 100%, 18% 100%); }
+.shape-wave { clip-path: polygon(0 40%, 8% 15%, 17% 40%, 25% 15%, 33% 40%, 42% 15%, 50% 40%, 58% 15%, 67% 40%, 75% 15%, 83% 40%, 92% 15%, 100% 40%, 100% 100%, 0 100%); }
+.l2-scene > .ls-ghost.shape-trap, .l2-scene > .ls-ghost.shape-wave { border: 0; background: rgba(142,79,214,.18); }
+.l2-scene[data-ls="kema"] .ls-bg { background: linear-gradient(180deg, #6cc6ff 0%, #bfe7ff 60%, #e6f6ff 100%); }
 @media (max-width: 600px) {
   .lesson-intro-screen { padding: 6px; }
   .lesson-intro-art { width: min(100%, calc((100vh - 12px) * 1.7779)); }

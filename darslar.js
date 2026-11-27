@@ -2807,16 +2807,10 @@ document.addEventListener("DOMContentLoaded", () => {
   })();
   // 3-dars 6-bosqich: Amaliy ish — shakllarni ish maydoniga surib, uycha, daraxtlar va quyoshli manzara yaratamiz
   (function setupLandscape() {
-    const board = document.querySelector(".ls-board");
-    if (!board) return;
-    const scene = board.parentElement;
-    const page = scene.closest("[data-l2-page]");
-    const feedback = page.querySelector(".l2-feedback");
-    const W = 1672, H = 941;
-    const B = { x1: 470, y1: 382, x2: 1143, y2: 873 };
-    const SIZE = { sq: [80, 80], rect: [110, 46], tri: [90, 80], circle: [80, 80], half: [110, 55] };
-    const NAMES = { sq: "kvadrat", rect: "to‘g‘ri to‘rtburchak", tri: "uchburchak", circle: "doira", half: "yarimdoira" };
-    const slots = [
+    const LS = {
+      uy: {
+        W: 1672, H: 941, B: { x1: 470, y1: 382, x2: 1143, y2: 873 },
+        slots: [
       { id: "wall", step: 1, shape: "sq", cx: 805, cy: 705, w: 180, h: 170, c: "#ffd43b", z: 5, say: "uy devori (kvadrat)" },
       { id: "roof", step: 1, shape: "tri", cx: 805, cy: 560, w: 230, h: 120, c: "#e53935", z: 6, say: "uy tomi (uchburchak)" },
       { id: "door", step: 2, shape: "rect", cx: 845, cy: 738, w: 50, h: 104, c: "#8d5a2b", z: 7, say: "eshik (to‘g‘ri to‘rtburchak)" },
@@ -2826,14 +2820,60 @@ document.addEventListener("DOMContentLoaded", () => {
       { id: "trunkR", step: 3, shape: "rect", cx: 1040, cy: 752, w: 28, h: 86, c: "#8d5a2b", z: 5, say: "daraxt tanasi (to‘g‘ri to‘rtburchak)" },
       { id: "crownR", step: 3, shape: "half", cx: 1040, cy: 672, w: 150, h: 76, c: "#ffd43b", z: 6, say: "daraxt toji (yarimdoira)" },
       { id: "sun", step: 4, shape: "circle", cx: 560, cy: 470, w: 90, h: 90, c: "#ffc928", z: 5, say: "quyosh (doira)" }
-    ];
-    const STEP_SAY = {
-      1: "1-qadam: Uycha shakllarini tayyorlang — devor uchun katta kvadrat, tom uchun uchburchak.",
-      2: "2-qadam: Uycha detallarini yopishtiring — eshik (to‘g‘ri to‘rtburchak) va deraza (kichik kvadrat).",
-      3: "3-qadam: Daraxtlarni joylashtiring — tanasi to‘g‘ri to‘rtburchak, toji doira yoki yarimdoira.",
-      4: "4-qadam: Quyoshni tayyorlab, osmonga — yuqori burchakka qo‘shing (doira).",
-      5: "5-qadam: Barcha qismlarni fon qog‘ozga tartibli yopishtirib, manzara hosil qiling!"
+  ],
+        steps: [
+          { kind: "slots", say: "1-qadam: Uycha shakllarini tayyorlang — devor uchun katta kvadrat, tom uchun uchburchak." },
+          { kind: "slots", say: "2-qadam: Uycha detallarini yopishtiring — eshik (to‘g‘ri to‘rtburchak) va deraza (kichik kvadrat)." },
+          { kind: "slots", say: "3-qadam: Daraxtlarni joylashtiring — tanasi to‘g‘ri to‘rtburchak, toji doira yoki yarimdoira." },
+          { kind: "slots", say: "4-qadam: Quyoshni tayyorlab, osmonga — yuqori burchakka qo‘shing (doira)." },
+          { kind: "final", say: "5-qadam: Barcha qismlarni fon qog‘ozga tartibli yopishtirib, manzara hosil qiling!" }
+        ],
+        fon: "🖼 Asos qog‘oz (fon) ish maydoniga qo‘yildi: osmon va yashil o‘tloq. Endi shakllarni yopishtiramiz!",
+        fonAsk: " Avval «Asos qog‘oz (fon)»ni bosing!",
+        win: "🏆 Barakalla! Uycha, daraxtlar va quyoshli manzarangiz tayyor! Siz haqiqiy usta ekansiz!",
+        bits: ["🍂", "🍁", "⭐", "🌟", "🎉"]
+      },
+      kema: {
+        W: 1671, H: 941, B: { x1: 520, y1: 285, x2: 1140, y2: 705 },
+        slots: [
+          { id: "sun", step: 3, shape: "circle", cx: 1065, cy: 385, w: 70, h: 70, c: "#ffd43b", z: 5, say: "quyosh (doira)" },
+          { id: "cloud", step: 3, shape: "half", cx: 630, cy: 385, w: 120, h: 50, c: "#ffffff", z: 5, say: "bulut (yarimdoira)" },
+          { id: "mast", step: 3, shape: "rect", cx: 830, cy: 468, w: 14, h: 170, c: "#8d5a2b", z: 5, say: "machta (ingichka to‘g‘ri to‘rtburchak)" },
+          { id: "flag", step: 3, shape: "sq", cx: 857, cy: 398, w: 40, h: 32, c: "#e53935", z: 6, say: "bayroqcha (kvadrat)" },
+          { id: "sail1", step: 3, shape: "tri", cx: 774, cy: 482, w: 100, h: 126, c: "#ff4fa3", z: 6, say: "katta yelkan (uchburchak)" },
+          { id: "sail2", step: 3, shape: "tri", cx: 885, cy: 492, w: 88, h: 106, c: "#3fbf4a", z: 6, say: "kichik yelkan (uchburchak)" },
+          { id: "hull", step: 3, shape: "trap", cx: 830, cy: 580, w: 300, h: 68, c: "#ff8a1f", z: 6, say: "kema korpusi (trapetsiya)" },
+          { id: "p1", step: 3, shape: "circle", cx: 770, cy: 574, w: 28, h: 28, c: "#42a5f5", z: 7, say: "illyuminator (doira)" },
+          { id: "p2", step: 3, shape: "circle", cx: 830, cy: 574, w: 28, h: 28, c: "#42a5f5", z: 7, say: "illyuminator (doira)" },
+          { id: "p3", step: 3, shape: "circle", cx: 890, cy: 574, w: 28, h: 28, c: "#42a5f5", z: 7, say: "illyuminator (doira)" },
+          { id: "wave1", step: 4, shape: "wave", cx: 830, cy: 622, w: 600, h: 60, c: "#2f80ed", z: 8, say: "to‘lqin (qog‘oz tasma)" },
+          { id: "wave2", step: 4, shape: "wave", cx: 830, cy: 668, w: 600, h: 60, c: "#64b5f6", z: 9, say: "to‘lqin (qog‘oz tasma)" }
+        ],
+        steps: [
+          { kind: "bg", say: "1-qadam: Ko‘k kartonni fon sifatida joylashtiring — chapdagi «Ko‘k rangli karton (fon)»ni bosing." },
+          { kind: "any", say: "2-qadam: Shakllarni yelimlamasdan joylashtirib ko‘ring — surib, joyini tanlang." },
+          { kind: "slots", say: "3-qadam: Korpus (trapetsiya), illyuminatorlar (doiralar), machta (to‘g‘ri to‘rtburchak) va yelkanlarni (uchburchaklar) joylashtiring." },
+          { kind: "slots", say: "4-qadam: Qog‘oz tasmalaridan to‘lqinlar yasab, pastki qismga joylashtiring." },
+          { kind: "all", say: "5-qadam: Barcha qismlar to‘g‘ri joylashganini tekshiring." },
+          { kind: "final", say: "6-qadam: Shakllarni ehtiyotkorlik bilan yopishtiring — kemacha tayyor!" }
+        ],
+        fon: "🟦 Ko‘k karton fon sifatida joylashtirildi: osmon va dengiz. Endi shakllarni qo‘yamiz!",
+        fonAsk: " Avval «Ko‘k rangli karton (fon)»ni bosing!",
+        win: "🏆 Barakalla! To‘lqinlar uzra suzayotgan kemachangiz tayyor! Siz haqiqiy usta ekansiz!",
+        bits: ["⛵", "🌊", "⭐", "🌟", "🎉"]
+      }
     };
+    document.querySelectorAll(".ls-board").forEach((board) => {
+    const scene = board.parentElement;
+    const page = scene.closest("[data-l2-page]");
+    const feedback = page.querySelector(".l2-feedback");
+    const C = LS[scene.dataset.ls || "uy"];
+    const W = C.W, H = C.H;
+    const B = C.B;
+    const SIZE = { sq: [80, 80], rect: [110, 46], tri: [90, 80], circle: [80, 80], half: [110, 55], trap: [130, 48], wave: [180, 40] };
+    const NAMES = { sq: "kvadrat", rect: "to‘g‘ri to‘rtburchak", tri: "uchburchak", circle: "doira", half: "yarimdoira", trap: "trapetsiya", wave: "to‘lqin tasmasi" };
+    const slots = C.slots.map((x) => Object.assign({}, x));
+    const NSTEP = C.steps.length;
     const pct = (v, t) => (v / t * 100) + "%";
     function place(el, cx, cy, w, h) { el.style.left = pct(cx - w / 2, W); el.style.top = pct(cy - h / 2, H); el.style.width = pct(w, W); el.style.height = pct(h, H); }
     slots.forEach((s) => {
@@ -2849,32 +2889,36 @@ document.addEventListener("DOMContentLoaded", () => {
     const bg = board.querySelector(".ls-bg");
     const filled = () => slots.filter((s) => s.piece).length;
     let won = false;
+    function stepDone(k) {
+      const st = C.steps[k - 1], on = bg.classList.contains("is-on"), all = filled() === slots.length;
+      if (st.kind === "slots") return slots.filter((s) => s.step === k).every((s) => s.piece);
+      if (st.kind === "bg") return on;
+      if (st.kind === "any") return !!scene.querySelector(".ls-piece");
+      if (st.kind === "all") return all;
+      return all && on;
+    }
     function update(msg) {
       const n = filled();
       progress.textContent = "⭐ " + n + " / " + slots.length;
-      [1, 2, 3, 4].forEach((k) => {
-        const ok = slots.filter((s) => s.step === k).every((s) => s.piece);
-        scene.querySelector('.ls-done[data-step="' + k + '"]').classList.toggle("is-on", ok);
-      });
       const all = n === slots.length;
-      scene.querySelector('.ls-done[data-step="5"]').classList.toggle("is-on", all && bg.classList.contains("is-on"));
       board.classList.toggle("is-win", all);
       if (all && !won) {
         won = true;
-        if (!bg.classList.contains("is-on")) { bg.classList.add("is-on"); scene.querySelector('.ls-done[data-step="5"]').classList.add("is-on"); }
-        feedback.textContent = "🏆 Barakalla! Uycha, daraxtlar va quyoshli manzarangiz tayyor! Siz haqiqiy usta ekansiz!";
+        bg.classList.add("is-on");
+        feedback.textContent = C.win;
         confetti();
-        return;
+      } else {
+        if (!all) won = false;
+        if (msg) feedback.textContent = msg;
       }
-      if (!all) won = false;
-      if (msg) feedback.textContent = msg;
+      for (let k = 1; k <= NSTEP; k++) scene.querySelector('.ls-done[data-step="' + k + '"]').classList.toggle("is-on", stepDone(k));
     }
     function confetti() {
       const box = document.createElement("div");
       box.className = "final-confetti";
       for (let i = 0; i < 26; i++) {
         const s = document.createElement("span");
-        s.textContent = ["🍂", "🍁", "⭐", "🌟", "🎉"][i % 5];
+        s.textContent = C.bits[i % C.bits.length];
         s.style.left = (Math.random() * 96) + "%";
         s.style.animationDuration = (2 + Math.random() * 2) + "s";
         s.style.animationDelay = (Math.random() * .8) + "s";
@@ -2983,7 +3027,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
     function toggleFon(on) {
       const v = bg.classList.toggle("is-on", on);
-      update(v ? "🖼 Asos qog‘oz (fon) ish maydoniga qo‘yildi: osmon va yashil o‘tloq. Endi shakllarni yopishtiramiz!" : "🖼 Fon olib tashlandi.");
+      update(v ? C.fon : "🖼 Fon olib tashlandi.");
     }
     scene.querySelector(".ls-fon").addEventListener("click", () => toggleFon());
     let lit = 0;
@@ -2992,10 +3036,12 @@ document.addEventListener("DOMContentLoaded", () => {
         const k = Number(btn.dataset.step);
         clearTimeout(lit);
         scene.querySelectorAll(".ls-step").forEach((b) => b.classList.toggle("is-on", b === btn));
-        slots.forEach((s) => s.ghost.classList.toggle("is-lit", k === 5 ? !s.piece : s.step === k));
-        const left = slots.filter((s) => (k === 5 || s.step === k) && !s.piece);
-        feedback.textContent = STEP_SAY[k] + (left.length ? " Yonib turgan joylarga " + left.map((s) => s.say).join(", ") + " qo‘ying." : " ✅ Bu qadam bajarilgan!");
-        if (k === 5 && !bg.classList.contains("is-on")) feedback.textContent += " Avval «Asos qog‘oz (fon)»ni bosing!";
+        const kind = C.steps[k - 1].kind;
+        const mine = (s) => kind === "slots" ? s.step === k : (kind === "bg" ? false : !s.piece);
+        slots.forEach((s) => s.ghost.classList.toggle("is-lit", mine(s)));
+        const left = slots.filter((s) => mine(s) && !s.piece);
+        feedback.textContent = C.steps[k - 1].say + (stepDone(k) ? " ✅ Bu qadam bajarilgan!" : (left.length ? " Yonib turgan joylarga " + [...new Set(left.map((s) => s.say))].join(", ") + " qo‘ying." : ""));
+        if ((kind === "final" || kind === "bg") && !bg.classList.contains("is-on")) feedback.textContent += C.fonAsk;
         lit = setTimeout(() => { slots.forEach((s) => s.ghost.classList.remove("is-lit")); scene.querySelectorAll(".ls-step").forEach((b) => b.classList.remove("is-on")); }, 4000);
       });
     });
@@ -3019,6 +3065,7 @@ document.addEventListener("DOMContentLoaded", () => {
       update("🗑 Ish maydoni tozalandi. Qaytadan boshlang!");
     });
     update();
+    });
   })();
   // 3-dars 7-bosqich: «Xotira sinovi» — manzara 5 soniya ko'rsatiladi, yashiriladi, so'ng 3 ta savol
   (function setupMemoryGame() {
